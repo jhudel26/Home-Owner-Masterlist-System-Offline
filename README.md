@@ -81,8 +81,8 @@ Follow these steps to run the application locally on your development machine.
 ### 1. Clone & Install Dependencies
 
 ```bash
-git clone [https://github.com/YOUR_USERNAME/residential-masterlist.git](https://github.com/jhudel26/Home-Owner-Masterlist-System-Offline/)
-cd residential-masterlist
+git clone (https://github.com/jhudel26/Home-Owner-Masterlist-System-Offline/)
+cd Home-Owner-Masterlist-System-Offline
 npm install
 ```
 
@@ -111,7 +111,7 @@ Import the schema into your local MySQL instance:
 
 - **Option A (CLI)**:
   ```bash
-  mysql -u root -p residential_masterlist < installer/database/schema.sql
+  mysql -u root -p Home-Owner-Masterlist-System-Offline < installer/database/schema.sql
   ```
 - **Option B (phpMyAdmin / GUI)**:
   1. Open phpMyAdmin or your MySQL GUI (e.g., DBeaver / HeidiSQL).
