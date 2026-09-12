@@ -1,0 +1,40 @@
+# Dependencies
+node_modules/
+installer/launcher/node_modules/
+installer/scripts/node_modules/
+
+# Next.js build output
+.next/
+
+# Distribution / installer build output
+dist/
+*.exe
+
+# Runtime tools (downloaded by prepare-tools, not committed)
+tools/
+
+# Environment files with secrets
+.env.local
+.env.production
+.env.*.local
+
+# Logs
+*.log
+logs/
+
+# OS files
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Editor
+.vscode/
+*.suo
+*.user
+
+# TypeScript incremental build
+tsconfig.tsbuildinfo
+
+# Backup files created by editors
+*.backup
+*-old.*

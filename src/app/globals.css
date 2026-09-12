@@ -1,0 +1,139 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --bg-app: #f8fafc;
+    --bg-surface: #ffffff;
+    --bg-sidebar: #07162c;
+    --border-subtle: #e2e8f0;
+    --text-primary: #0f172a;
+    --text-muted: #64748b;
+    --brand-primary: #0d9488;
+  }
+
+  .dark {
+    --bg-app: #060c18;
+    --bg-surface: #0e192d;
+    --bg-sidebar: #040914;
+    --border-subtle: #1e2f4d;
+    --text-primary: #f8fafc;
+    --text-muted: #94a3b8;
+    --brand-primary: #14b8a6;
+  }
+
+  body {
+    @apply bg-slate-50 dark:bg-[#060c18] text-slate-900 dark:text-slate-100 antialiased font-sans selection:bg-teal-700 selection:text-white transition-colors duration-200;
+    min-height: 100vh;
+  }
+}
+
+@layer components {
+  .glass-card {
+    @apply bg-white/80 dark:bg-[#0e192d]/80 backdrop-blur-md border border-white/60 dark:border-white/10 shadow-subtle;
+  }
+
+  .glass-panel {
+    @apply bg-slate-900/60 dark:bg-slate-950/70 backdrop-blur-md border border-white/10 text-white shadow-glass;
+  }
+
+  .executive-badge {
+    @apply inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-xs font-semibold tracking-wide border;
+  }
+}
+
+/* Custom scrollbars for data tables and dialogs */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: #f1f5f9;
+}
+
+.dark ::-webkit-scrollbar-track {
+  background: #0a1526;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #cbd5e1;
+  border-radius: 4px;
+}
+
+.dark ::-webkit-scrollbar-thumb {
+  background: #1e2f4d;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #94a3b8;
+}
+
+.dark ::-webkit-scrollbar-thumb:hover {
+  background: #2dd4bf;
+}
+
+/* Page Transition & Top Progress Bar */
+@keyframes topProgress {
+  0% { transform: scaleX(0); }
+  50% { transform: scaleX(0.7); }
+  100% { transform: scaleX(1); }
+}
+
+@keyframes pulseGlow {
+  0%, 100% { opacity: 0.4; transform: scale(1); }
+  50% { opacity: 0.8; transform: scale(1.05); }
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-top-progress {
+  transform-origin: 0% 50%;
+  animation: topProgress 0.8s cubic-bezier(0.4, 0, 0.2, 1) infinite;
+}
+
+.animate-pulse-glow {
+  animation: pulseGlow 4s ease-in-out infinite;
+}
+
+.animate-fade-in {
+  animation: fadeIn 0.3s ease-out forwards;
+}
+
+/* 3D Lamp Swing & Character Float Animations */
+@keyframes lampSwing {
+  0%, 100% {
+    transform: rotate(-3deg);
+  }
+  50% {
+    transform: rotate(3deg);
+  }
+}
+
+@keyframes characterFloat {
+  0%, 100% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-8px);
+  }
+}
+
+.animate-lamp-swing {
+  transform-origin: top center;
+  animation: lampSwing 4s ease-in-out infinite;
+}
+
+.animate-character-float {
+  animation: characterFloat 3.5s ease-in-out infinite;
+}
