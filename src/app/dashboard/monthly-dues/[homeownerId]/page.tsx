@@ -1,4 +1,4 @@
-﻿"use client";
+"use client";
 
 import React, { useState, useEffect } from "react";
 import { useRouter, useParams } from "next/navigation";
@@ -16,6 +16,7 @@ import {
   CheckCircle,
   XCircle,
   ArrowLeft,
+  ArrowRight,
   Calendar,
   Receipt,
   Edit2,
@@ -258,7 +259,7 @@ export default function HomeownerDuesDetailPage() {
         });
         const data = await res.json();
         if (data.success) {
-          success("Amount Updated", `${MONTHS[targetMonth - 1]} dues set to â‚±${numAmount.toFixed(2)}.`);
+          success("Amount Updated", `${MONTHS[targetMonth - 1]} dues set to ₱${numAmount.toFixed(2)}.`);
           setIsAmountModalOpen(false);
           fetchMonthlyDues();
         } else {
@@ -279,7 +280,7 @@ export default function HomeownerDuesDetailPage() {
         });
         const data = await res.json();
         if (data.success) {
-          success("Amount Set", `${MONTHS[targetMonth - 1]} dues set to â‚±${numAmount.toFixed(2)}.`);
+          success("Amount Set", `${MONTHS[targetMonth - 1]} dues set to ₱${numAmount.toFixed(2)}.`);
           setIsAmountModalOpen(false);
           fetchMonthlyDues();
         } else {
@@ -349,11 +350,11 @@ export default function HomeownerDuesDetailPage() {
           <span>Back to Dues List</span>
         </Button>
         <PageHeader
-          title={`${homeowner.full_name} â€” Account Ledger`}
+          title={`${homeowner.full_name} - Account Ledger`}
           description={`Track monthly dues payments and receipts for ${homeowner.full_name}`}
           icon={
             <span className="inline-flex items-center justify-center h-7 w-7 rounded-xl bg-emerald-50 dark:bg-emerald-950/50 text-emerald-700 dark:text-emerald-400 font-bold text-base border border-emerald-200 dark:border-emerald-800/60 shadow-xs">
-              â‚±
+              ₱
             </span>
           }
         />
@@ -469,8 +470,9 @@ export default function HomeownerDuesDetailPage() {
           <button
             onClick={() => setSelectedYear(selectedYear + 1)}
             className="p-2 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 hover:bg-slate-100 dark:hover:bg-slate-700 transition-colors"
+            aria-label="Next year"
           >
-            <span className="text-slate-600 dark:text-slate-400 font-bold">â†’</span>
+            <ArrowRight className="h-4 w-4 text-slate-600 dark:text-slate-400" />
           </button>
         </div>
       </div>
@@ -485,7 +487,7 @@ export default function HomeownerDuesDetailPage() {
             </span>
           </div>
           <div className="text-2xl font-black text-emerald-700 dark:text-emerald-300 font-mono">
-            â‚±{totals.paid.toFixed(2)}
+            ₱{totals.paid.toFixed(2)}
           </div>
         </div>
 
@@ -497,7 +499,7 @@ export default function HomeownerDuesDetailPage() {
             </span>
           </div>
           <div className="text-2xl font-black text-amber-700 dark:text-amber-300 font-mono">
-            â‚±{totals.unpaid.toFixed(2)}
+            ₱{totals.unpaid.toFixed(2)}
           </div>
         </div>
 
@@ -509,7 +511,7 @@ export default function HomeownerDuesDetailPage() {
             </span>
           </div>
           <div className="text-2xl font-black text-slate-800 dark:text-slate-200 font-mono">
-            â‚±{totals.total.toFixed(2)}
+            ₱{totals.total.toFixed(2)}
           </div>
         </div>
       </div>
@@ -551,7 +553,7 @@ export default function HomeownerDuesDetailPage() {
 
                     <div className="flex items-center gap-1">
                       <span className="text-xs font-mono font-bold text-slate-900 dark:text-slate-100">
-                        â‚±{amount.toFixed(2)}
+                        ₱{amount.toFixed(2)}
                       </span>
                       {canManageDues && (
                         <button
@@ -671,10 +673,10 @@ export default function HomeownerDuesDetailPage() {
         <form onSubmit={handleSaveMonthAmount} className="space-y-4">
           <div>
             <label className="block text-xs font-bold uppercase text-slate-700 dark:text-slate-300 mb-1.5">
-              Dues Amount (PHP â‚±)
+              Dues Amount (PHP ₱)
             </label>
             <div className="relative">
-              <span className="absolute left-3.5 top-1/2 -translate-y-1/2 font-bold text-emerald-600">â‚±</span>
+              <span className="absolute left-3.5 top-1/2 -translate-y-1/2 font-bold text-emerald-600">₱</span>
               <Input
                 type="number"
                 step="0.01"

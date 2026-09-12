@@ -262,7 +262,7 @@ export default function SetupPage() {
                 <input
                   type={showPassword ? "text" : "password"}
                   required
-                  placeholder="â€¢â€¢â€¢â€¢â€¢â€¢â€¢â€¢"
+                  placeholder="••••••••"
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                   className="w-full h-11 pl-10 pr-10 rounded-xl border border-slate-600 bg-[#0a1b38]/50 text-sm text-white placeholder:text-slate-500 focus:outline-none focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 transition-all"
@@ -288,7 +288,7 @@ export default function SetupPage() {
                 <input
                   type={showConfirmPassword ? "text" : "password"}
                   required
-                  placeholder="â€¢â€¢â€¢â€¢â€¢â€¢â€¢â€¢"
+                  placeholder="••••••••"
                   value={confirmPassword}
                   onChange={(e) => setConfirmPassword(e.target.value)}
                   className="w-full h-11 pl-10 pr-10 rounded-xl border border-slate-600 bg-[#0a1b38]/50 text-sm text-white placeholder:text-slate-500 focus:outline-none focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 transition-all"

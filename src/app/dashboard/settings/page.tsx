@@ -192,8 +192,8 @@ export default function SettingsPage() {
         success(
           "Settings Saved",
           updateUnpaid
-            ? `Standard dues set to â‚±${num.toFixed(2)} and existing unpaid dues updated.`
-            : `Standard monthly dues rate updated to â‚±${num.toFixed(2)}.`
+            ? `Standard dues set to ₱${num.toFixed(2)} and existing unpaid dues updated.`
+            : `Standard monthly dues rate updated to ₱${num.toFixed(2)}.`
         );
       } else {
         toastError("Save Failed", data.error || "Could not update dues settings.");
@@ -396,11 +396,11 @@ export default function SettingsPage() {
             <form onSubmit={handleSaveDuesSettings} className="space-y-5">
               <div>
                 <label className="block text-xs font-bold uppercase tracking-wider text-slate-600 dark:text-slate-300 mb-2">
-                  Monthly Dues Amount (PHP â‚±)
+                  Monthly Dues Amount (PHP ₱)
                 </label>
                 <div className="relative max-w-xs">
                   <span className="absolute left-3.5 top-1/2 -translate-y-1/2 text-base font-bold text-emerald-600 dark:text-emerald-400">
-                    â‚±
+                    ₱
                   </span>
                   <Input
                     type="number"
@@ -429,7 +429,7 @@ export default function SettingsPage() {
                   <span className="font-bold text-slate-900 dark:text-slate-100 block">
                     Update all currently unpaid monthly dues records
                   </span>
-                  Check this to also adjust unpaid dues in past or current months to â‚±{parseFloat(duesAmount || "0").toFixed(2)}. Existing paid records will not be altered.
+                  Check this to also adjust unpaid dues in past or current months to ₱{parseFloat(duesAmount || "0").toFixed(2)}. Existing paid records will not be altered.
                 </label>
               </div>
 

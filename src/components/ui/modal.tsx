@@ -1,4 +1,4 @@
-﻿"use client";
+"use client";
 
 import React, { useEffect } from "react";
 import { X } from "lucide-react";
@@ -9,6 +9,7 @@ interface ModalProps {
   onClose: () => void;
   title: string;
   description?: string;
+  icon?: React.ReactNode;
   children: React.ReactNode;
   maxWidth?: "sm" | "md" | "lg" | "xl" | "2xl" | "3xl" | "4xl";
 }
@@ -18,6 +19,7 @@ export function Modal({
   onClose,
   title,
   description,
+  icon,
   children,
   maxWidth = "lg",
 }: ModalProps) {
@@ -69,18 +71,26 @@ export function Modal({
         )}
       >
         {/* Header */}
-        <div className="flex items-start justify-between border-b border-slate-100 dark:border-slate-800/80 px-6 py-4.5 bg-slate-50/70 dark:bg-[#091424]/70">
-          <div>
-            <h3 id="modal-title" className="text-lg font-bold text-slate-900 dark:text-slate-100 font-sans tracking-tight">
-              {title}
-            </h3>
-            {description && (
-              <p id="modal-description" className="text-xs text-slate-500 dark:text-slate-400 mt-0.5 leading-relaxed">{description}</p>
+        <div className="flex items-center justify-between border-b border-slate-100 dark:border-slate-800/80 px-6 py-5 bg-slate-50/70 dark:bg-[#091424]/70">
+          <div className="flex items-center gap-3.5 min-w-0">
+            {icon && (
+              <div className="shrink-0 flex items-center justify-center">
+                {icon}
+              </div>
             )}
+            <div className="min-w-0">
+              <h3 id="modal-title" className="text-xl font-bold text-slate-900 dark:text-slate-100 font-sans tracking-tight leading-tight">
+                {title}
+              </h3>
+              {description && (
+                <p id="modal-description" className="text-sm text-slate-500 dark:text-slate-400 mt-0.5 leading-relaxed">{description}</p>
+              )}
+            </div>
           </div>
           <button
             onClick={onClose}
-            className="rounded-full p-1.5 text-slate-400 hover:text-slate-700 dark:hover:text-slate-200 hover:bg-slate-200/60 dark:hover:bg-slate-800 transition-colors"
+            className="rounded-full p-2 text-slate-400 hover:text-slate-700 dark:hover:text-slate-200 hover:bg-slate-200/60 dark:hover:bg-slate-800 transition-colors shrink-0 ml-3"
+            aria-label="Close dialog"
           >
             <X className="h-5 w-5" />
             <span className="sr-only">Close</span>
@@ -88,7 +98,7 @@ export function Modal({
         </div>
 
         {/* Body */}
-        <div className="px-6 py-5.5 max-h-[75vh] overflow-y-auto">{children}</div>
+        <div className="px-6 py-6 max-h-[75vh] overflow-y-auto">{children}</div>
       </div>
     </div>
   );

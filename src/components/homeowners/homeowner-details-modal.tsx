@@ -1,6 +1,7 @@
-﻿"use client";
+"use client";
 
 import React, { useState } from "react";
+import Image from "next/image";
 import { Homeowner } from "@/types/database";
 import { Modal } from "@/components/ui/modal";
 import { OwnershipBadge, StatusBadge } from "@/components/ui/badge";
@@ -68,8 +69,19 @@ export function HomeownerDetailsModal({
     <Modal
       isOpen={isOpen}
       onClose={onClose}
-      title="Homeowner Resident Dossier"
+      title="Homeowner Resident Record"
       description="Official St. Joseph Village 6 Phase 4 residential record"
+      icon={
+        <div className="h-11 w-11 rounded-xl bg-white dark:bg-[#0e192d] p-1 border border-slate-200/80 dark:border-white/10 shadow-xs flex items-center justify-center shrink-0">
+          <Image
+            src="/icon.png"
+            alt="HOA Logo"
+            width={40}
+            height={40}
+            className="h-full w-full object-contain"
+          />
+        </div>
+      }
       maxWidth="4xl"
     >
       <div className="space-y-6">
@@ -130,7 +142,7 @@ export function HomeownerDetailsModal({
                 </div>
                 <p className="text-sm font-bold text-slate-900 dark:text-slate-100">{formatDate(homeowner.birthdate)}</p>
                 <p className="text-xs text-emerald-600 dark:text-emerald-400 font-semibold mt-0.5">
-                  {homeowner.age ? `${homeowner.age} years old` : "â€”"}
+                  {homeowner.age ? `${homeowner.age} years old` : "—"}
                 </p>
               </div>
 
@@ -139,7 +151,7 @@ export function HomeownerDetailsModal({
                   <User className="h-3.5 w-3.5 text-slate-700 dark:text-slate-300" />
                   <span>Gender</span>
                 </div>
-                <p className="text-sm font-bold text-slate-900 dark:text-slate-100">{homeowner.gender || "â€”"}</p>
+                <p className="text-sm font-bold text-slate-900 dark:text-slate-100">{homeowner.gender || "—"}</p>
                 <p className="text-xs text-slate-400 dark:text-slate-500 mt-0.5">Registered Identity</p>
               </div>
 
@@ -305,7 +317,7 @@ export function HomeownerDetailsModal({
             className="text-slate-600 dark:text-slate-300 gap-1.5 text-xs"
           >
             <Printer className="h-4 w-4 text-slate-500 dark:text-slate-400" />
-            <span>Print Dossier</span>
+            <span>Print Record</span>
           </Button>
 
           <div className="flex items-center gap-2">

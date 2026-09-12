@@ -318,7 +318,7 @@ export function MonthlyDuesTable({
         });
         const data = await res.json();
         if (data.success) {
-          success("Amount Updated", `Dues amount set to â‚±${numAmount.toFixed(2)}.`);
+          success("Amount Updated", `Dues amount set to ₱${numAmount.toFixed(2)}.`);
           setIsAmountModalOpen(false);
           onDataChange();
         } else {
@@ -339,7 +339,7 @@ export function MonthlyDuesTable({
         });
         const data = await res.json();
         if (data.success) {
-          success("Amount Set", `Dues amount set to â‚±${numAmount.toFixed(2)}.`);
+          success("Amount Set", `Dues amount set to ₱${numAmount.toFixed(2)}.`);
           setIsAmountModalOpen(false);
           onDataChange();
         } else {
@@ -641,7 +641,7 @@ export function MonthlyDuesTable({
                           <div>
                             <span className="text-[10px] uppercase font-bold text-slate-400 block">Assessment</span>
                             <span className="text-sm font-extrabold text-slate-900 dark:text-slate-100 font-mono">
-                              â‚±{amount.toFixed(2)}
+                              ₱{amount.toFixed(2)}
                             </span>
                           </div>
                           {canManageDues && (
@@ -868,7 +868,7 @@ export function MonthlyDuesTable({
 
                         <td className="py-3.5 px-4 text-center">
                           <div className="flex items-center justify-center gap-1">
-                            <span className="font-bold text-xs text-slate-500 dark:text-slate-400">â‚±</span>
+                            <span className="font-bold text-xs text-slate-500 dark:text-slate-400">₱</span>
                             <span className="font-mono font-bold text-slate-900 dark:text-slate-100">
                               {amount.toFixed(2)}
                             </span>
@@ -1034,10 +1034,10 @@ export function MonthlyDuesTable({
         <form onSubmit={handleSaveCustomAmount} className="space-y-4">
           <div>
             <label className="block text-xs font-bold uppercase text-slate-700 dark:text-slate-300 mb-1.5">
-              Dues Amount (PHP â‚±)
+              Dues Amount (PHP ₱)
             </label>
             <div className="relative">
-              <span className="absolute left-3.5 top-1/2 -translate-y-1/2 font-bold text-emerald-600">â‚±</span>
+              <span className="absolute left-3.5 top-1/2 -translate-y-1/2 font-bold text-emerald-600">₱</span>
               <Input
                 type="number"
                 step="0.01"
@@ -1050,7 +1050,7 @@ export function MonthlyDuesTable({
               />
             </div>
             <p className="text-[11px] text-slate-500 mt-1">
-              Standard rate is â‚±{standardRate.toFixed(2)}. Adjust if special discount, penalty, or custom fee applies.
+              Standard rate is ₱{standardRate.toFixed(2)}. Adjust if special discount, penalty, or custom fee applies.
             </p>
           </div>
 
