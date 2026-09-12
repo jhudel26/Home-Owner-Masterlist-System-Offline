@@ -38,7 +38,7 @@ export default function ErrorBoundary({
         </div>
 
         <div className="flex flex-col sm:flex-row items-center justify-center gap-3 pt-2">
-          <Button variant="primary" size="sm" onClick={() => reset()} className="w-full sm:w-auto gap-2 bg-teal-600 hover:bg-teal-700">
+          <Button variant="primary" size="sm" onClick={() => reset()} className="w-full sm:w-auto gap-2 bg-emerald-600 hover:bg-emerald-700">
             <RefreshCw className="h-4 w-4" />
             <span>Try Again</span>
           </Button>
@@ -51,3 +51,4 @@ export default function ErrorBoundary({
     </div>
   );
 }
+

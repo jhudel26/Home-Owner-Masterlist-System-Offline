@@ -95,22 +95,22 @@ export default function LoginPage() {
   };
 
   return (
-    <div className="relative min-h-screen bg-[#1f3151] text-white flex flex-col justify-between overflow-x-hidden font-sans selection:bg-teal-500 selection:text-white">
+    <div className="relative min-h-screen bg-[#1f3151] text-white flex flex-col justify-between overflow-x-hidden font-sans selection:bg-emerald-500 selection:text-white">
       {/* Loading state while checking setup */}
       {checkingSetup && (
         <div className="absolute inset-0 z-50 flex items-center justify-center bg-[#1f3151]">
-          <div className="h-8 w-8 border-2 border-teal-400/30 border-t-teal-400 rounded-full animate-spin" />
+          <div className="h-8 w-8 border-2 border-emerald-400/30 border-t-emerald-400 rounded-full animate-spin" />
         </div>
       )}
 
       {/* Top Header / Brand Identity */}
       <header className="relative w-full max-w-7xl mx-auto px-6 sm:px-12 pt-8 flex items-center justify-between z-20">
         <div className="flex items-center gap-3">
-          <div className="h-9 w-9 rounded-xl bg-teal-500/20 border border-teal-400/30 flex items-center justify-center text-teal-300 shadow-md shadow-teal-900/30">
+          <div className="h-9 w-9 rounded-xl bg-emerald-500/20 border border-emerald-400/30 flex items-center justify-center text-emerald-400 shadow-md shadow-emerald-950/40">
             <Home className="h-5 w-5" />
           </div>
           <div>
-            <span className="text-xs font-bold tracking-wider uppercase text-teal-300 block">
+            <span className="text-xs font-bold tracking-wider uppercase text-emerald-400 block">
               St. Joseph Village 6 Phase 4
             </span>
             <span className="text-[10px] text-slate-400 font-medium tracking-wide">
@@ -120,7 +120,7 @@ export default function LoginPage() {
         </div>
 
         <div className="hidden sm:flex items-center gap-2 px-3 py-1.5 rounded-full bg-[#0a1b38]/80 border border-slate-700/60 text-xs text-slate-300">
-          <span className="h-2 w-2 rounded-full bg-teal-400 animate-pulse" />
+          <span className="h-2 w-2 rounded-full bg-emerald-400 animate-pulse" />
           <span>Official Board Portal</span>
         </div>
       </header>
@@ -144,8 +144,8 @@ export default function LoginPage() {
               </div>
             </div>
             <div>
-              <span className="inline-flex items-center gap-1 text-[11px] font-semibold tracking-wider uppercase text-teal-400 bg-teal-950/60 px-2.5 py-0.5 rounded-full border border-teal-800/50">
-                <Shield className="h-3 w-3 text-teal-300" />
+              <span className="inline-flex items-center gap-1 text-[11px] font-semibold tracking-wider uppercase text-emerald-400 bg-emerald-950/60 px-2.5 py-0.5 rounded-full border border-emerald-800/50">
+                <Shield className="h-3 w-3 text-emerald-400" />
                 Authorized Only
               </span>
             </div>
@@ -189,7 +189,7 @@ export default function LoginPage() {
                 <button
                   type="button"
                   onClick={() => setIsResetOpen(true)}
-                  className="text-xs text-teal-300 hover:text-teal-200 transition-colors"
+                  className="text-xs text-emerald-400 hover:text-emerald-300 transition-colors"
                 >
                   Forgot password?
                 </button>
@@ -351,7 +351,7 @@ export default function LoginPage() {
         </p>
         <p className="flex items-center gap-1.5 font-medium">
           <span>Developed by</span>
-          <span className="text-teal-300 font-semibold">Jhudel</span>
+          <span className="text-emerald-400 font-semibold">Jhudel</span>
         </p>
       </footer>
 
@@ -376,7 +376,7 @@ export default function LoginPage() {
                 placeholder="president@sjv6phase4.com"
                 value={resetEmail}
                 onChange={(e) => setResetEmail(e.target.value)}
-                className="w-full h-11 pl-10 pr-3.5 rounded-xl border border-slate-300 text-sm text-slate-900 focus:outline-none focus:border-teal-600 focus:ring-1 focus:ring-teal-600"
+                className="w-full h-11 pl-10 pr-3.5 rounded-xl border border-slate-300 text-sm text-slate-900 focus:outline-none focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500"
               />
             </div>
           </div>
@@ -384,7 +384,7 @@ export default function LoginPage() {
             <Button variant="outline" size="sm" type="button" onClick={() => setIsResetOpen(false)}>
               Cancel
             </Button>
-            <Button variant="primary" size="sm" type="submit" isLoading={resetLoading} className="gap-1.5 bg-teal-700 hover:bg-teal-800">
+            <Button variant="primary" size="sm" type="submit" isLoading={resetLoading} className="gap-1.5 bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-700 hover:to-teal-700 shadow-md shadow-emerald-600/30">
               <KeyRound className="h-4 w-4" />
               <span>Send Reset Link</span>
             </Button>
@@ -394,6 +394,7 @@ export default function LoginPage() {
     </div>
   );
 }
+
 
 
 

@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import React, { useState } from "react";
 import Link from "next/link";
@@ -96,13 +96,13 @@ export default function DashboardPage() {
       <div className="flex-1 min-w-0 overflow-x-hidden p-4 sm:p-6 lg:p-8 space-y-8">
         {/* Executive Welcome Hero Banner */}
         <div className="relative overflow-hidden rounded-3xl bg-gradient-to-r from-[#0f3460] via-[#1a4d7a] to-[#1e5c96] dark:from-[#040d1c] dark:via-[#07162c] dark:to-[#0c2340] text-white p-7 sm:p-9 shadow-glass border border-white/10 transition-colors duration-300">
-          <div className="absolute -right-16 -top-16 w-80 h-80 bg-teal-500/10 rounded-full blur-3xl pointer-events-none" />
-          <div className="absolute right-1/3 -bottom-16 w-64 h-64 bg-teal-400/10 rounded-full blur-3xl pointer-events-none" />
+          <div className="absolute -right-16 -top-16 w-80 h-80 bg-emerald-500/10 rounded-full blur-3xl pointer-events-none" />
+          <div className="absolute right-1/3 -bottom-16 w-64 h-64 bg-emerald-400/10 rounded-full blur-3xl pointer-events-none" />
 
           <div className="relative z-10 flex flex-col md:flex-row md:items-center md:justify-between gap-6">
             <div className="space-y-2">
-              <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/10 backdrop-blur-md border border-white/15 text-xs text-teal-300 font-medium">
-                <Sparkles className="h-3.5 w-3.5 text-teal-400" />
+              <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/10 backdrop-blur-md border border-white/15 text-xs text-emerald-300 font-medium">
+                <Sparkles className="h-3.5 w-3.5 text-emerald-400" />
                 <span>St. Joseph Village 6 Phase 4 &bull; Executive Portal</span>
               </div>
               <h1 className="text-2xl sm:text-3xl font-extrabold tracking-tight font-sans">
@@ -120,7 +120,7 @@ export default function DashboardPage() {
                   onClick={() => setIsBackupOpen(true)}
                   className="inline-flex items-center gap-2 h-10 px-3.5 rounded-lg bg-white/20 hover:bg-white/30 active:scale-[0.98] text-white border border-white/30 text-xs font-semibold backdrop-blur-md transition-all shadow-sm"
                 >
-                  <Database className="h-4 w-4 text-teal-300" />
+                  <Database className="h-4 w-4 text-emerald-300" />
                   <span>Backup / Restore</span>
                 </button>
               )}
@@ -131,7 +131,7 @@ export default function DashboardPage() {
                   onClick={handleExport}
                   className="inline-flex items-center gap-2 h-10 px-4 rounded-lg bg-white/20 hover:bg-white/30 active:scale-[0.98] text-white border border-white/30 text-xs font-semibold backdrop-blur-md transition-all shadow-sm"
                 >
-                  <FileSpreadsheet className="h-4 w-4 text-teal-300" />
+                  <FileSpreadsheet className="h-4 w-4 text-emerald-300" />
                   <span>Export Masterlist</span>
                 </button>
               )}
@@ -140,7 +140,7 @@ export default function DashboardPage() {
                 <Link href="/dashboard/homeowners/new">
                   <button
                     type="button"
-                    className="inline-flex items-center gap-2 h-10 px-4 rounded-lg bg-teal-500 hover:bg-teal-400 active:scale-[0.98] text-white border border-teal-300/40 shadow-lg shadow-teal-950/40 text-xs font-bold transition-all"
+                    className="inline-flex items-center gap-2 h-10 px-4 rounded-lg bg-emerald-600 hover:bg-emerald-500 active:scale-[0.98] text-white border border-emerald-300/40 shadow-lg shadow-emerald-950/40 text-xs font-bold transition-all"
                   >
                     <UserPlus className="h-4 w-4" />
                     <span>Register Homeowner</span>
@@ -156,9 +156,9 @@ export default function DashboardPage() {
           <StatCard
             title="Total Homeowners"
             value={totalHomeowners}
-            subtitle={`${activeHomeowners} Active • ${inactiveHomeowners} Archived`}
+            subtitle={`${activeHomeowners} Active â€¢ ${inactiveHomeowners} Archived`}
             icon={Building}
-            variant="teal"
+            variant="emerald"
             badgeText={`${totalHomeowners} Units`}
             progressPercent={activePercent}
           />
@@ -175,7 +175,7 @@ export default function DashboardPage() {
           <StatCard
             title="Occupancy Profile"
             value={`${ownerPercent}%`}
-            subtitle={`${ownersCount} Owners • ${rentersCount} Renters`}
+            subtitle={`${ownersCount} Owners â€¢ ${rentersCount} Renters`}
             icon={Home}
             variant="navy"
             progressPercent={ownerPercent}
@@ -204,7 +204,7 @@ export default function DashboardPage() {
         <DemographicsCharts homeowners={homeowners} />
       </div>
 
-      {/* Right: Activity Sidebar — visible only on xl+ screens */}
+      {/* Right: Activity Sidebar â€” visible only on xl+ screens */}
       <aside className="hidden xl:flex flex-col w-72 2xl:w-80 shrink-0 border-l border-slate-200/80 dark:border-[#1e2f4d]/80 bg-white dark:bg-[#0e192d] self-stretch">
         <div className="sticky top-0 h-screen overflow-y-auto p-4">
           <RecentActivity logs={activityLogs} />

@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import React, { useEffect } from "react";
 import { X } from "lucide-react";
@@ -53,7 +53,7 @@ export function Modal({
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-6 overflow-y-auto">
       {/* Backdrop */}
       <div
-        className="fixed inset-0 bg-slate-950/70 dark:bg-black/80 backdrop-blur-sm transition-opacity animate-in fade-in"
+        className="fixed inset-0 bg-slate-950/75 dark:bg-black/85 backdrop-blur-md transition-opacity animate-in fade-in duration-200"
         onClick={onClose}
       />
 
@@ -64,23 +64,23 @@ export function Modal({
         aria-labelledby="modal-title"
         aria-describedby={description ? "modal-description" : undefined}
         className={cn(
-          "relative w-full bg-white dark:bg-[#0e192d] text-slate-900 dark:text-slate-100 rounded-2xl shadow-elevated border border-slate-200 dark:border-[#1e2f4d] overflow-hidden z-10 my-8 transition-all animate-in zoom-in-95 duration-200",
+          "relative w-full bg-white/95 dark:bg-[#0e192d]/95 backdrop-blur-2xl text-slate-900 dark:text-slate-100 rounded-3xl shadow-2xl border border-slate-200/90 dark:border-white/10 overflow-hidden z-10 my-8 transition-all animate-in zoom-in-95 duration-200",
           maxWidthClasses[maxWidth]
         )}
       >
         {/* Header */}
-        <div className="flex items-start justify-between border-b border-slate-100 dark:border-slate-800 px-6 py-4 bg-slate-50/50 dark:bg-[#091424]/60">
+        <div className="flex items-start justify-between border-b border-slate-100 dark:border-slate-800/80 px-6 py-4.5 bg-slate-50/70 dark:bg-[#091424]/70">
           <div>
-            <h3 id="modal-title" className="text-lg font-bold text-slate-900 dark:text-slate-100 font-sans">
+            <h3 id="modal-title" className="text-lg font-bold text-slate-900 dark:text-slate-100 font-sans tracking-tight">
               {title}
             </h3>
             {description && (
-              <p id="modal-description" className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">{description}</p>
+              <p id="modal-description" className="text-xs text-slate-500 dark:text-slate-400 mt-0.5 leading-relaxed">{description}</p>
             )}
           </div>
           <button
             onClick={onClose}
-            className="rounded-lg p-1.5 text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors"
+            className="rounded-full p-1.5 text-slate-400 hover:text-slate-700 dark:hover:text-slate-200 hover:bg-slate-200/60 dark:hover:bg-slate-800 transition-colors"
           >
             <X className="h-5 w-5" />
             <span className="sr-only">Close</span>
@@ -88,7 +88,7 @@ export function Modal({
         </div>
 
         {/* Body */}
-        <div className="px-6 py-5 max-h-[75vh] overflow-y-auto">{children}</div>
+        <div className="px-6 py-5.5 max-h-[75vh] overflow-y-auto">{children}</div>
       </div>
     </div>
   );

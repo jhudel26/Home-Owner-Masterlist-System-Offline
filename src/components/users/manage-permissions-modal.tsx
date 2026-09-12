@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import React, { useState, useEffect } from "react";
 import { Profile, UserPermissions } from "@/types/database";
@@ -86,7 +86,7 @@ export function ManagePermissionsModal({
         {/* User Info Bar */}
         <div className="flex items-center justify-between p-4 rounded-2xl bg-slate-50 dark:bg-[#0a1526] border border-slate-200 dark:border-[#1e2f4d]">
           <div className="flex items-center gap-3">
-            <div className="h-10 w-10 rounded-xl bg-[#07162c] text-teal-300 border border-teal-500/20 font-bold flex items-center justify-center text-sm shadow-xs">
+            <div className="h-10 w-10 rounded-xl bg-[#07162c] text-emerald-300 border border-emerald-500/20 font-bold flex items-center justify-center text-sm shadow-xs">
               {targetUser.full_name.charAt(0)}
             </div>
             <div>
@@ -98,11 +98,11 @@ export function ManagePermissionsModal({
         </div>
 
         {isSuperAdmin ? (
-          <div className="p-4 rounded-2xl bg-teal-50/80 dark:bg-teal-950/40 border border-teal-200 dark:border-teal-800/60 text-teal-950 dark:text-teal-200 flex items-start gap-3 shadow-xs">
-            <ShieldAlert className="h-5 w-5 text-teal-700 dark:text-teal-400 shrink-0 mt-0.5" />
+          <div className="p-4 rounded-2xl bg-emerald-50/80 dark:bg-emerald-950/40 border border-emerald-200 dark:border-emerald-800/60 text-emerald-950 dark:text-emerald-200 flex items-start gap-3 shadow-xs">
+            <ShieldAlert className="h-5 w-5 text-emerald-700 dark:text-emerald-400 shrink-0 mt-0.5" />
             <div className="text-xs space-y-1">
               <p className="font-bold">Super Admin Full Inherent Authority</p>
-              <p className="text-teal-800 dark:text-teal-300 leading-relaxed">
+              <p className="text-emerald-800 dark:text-emerald-300 leading-relaxed">
                 As the HOA President (Super Admin), this account inherently commands all 8 permissions. Permissions cannot be revoked for the Super Admin to preserve system continuity.
               </p>
             </div>
@@ -125,9 +125,9 @@ export function ManagePermissionsModal({
                 variant="outline"
                 size="sm"
                 onClick={grantAll}
-                className="h-7 text-xs text-teal-800 dark:text-teal-300 border-teal-300 dark:border-teal-800/60 hover:bg-teal-50 dark:hover:bg-teal-950/40 gap-1 font-semibold"
+                className="h-7 text-xs text-emerald-800 dark:text-emerald-300 border-emerald-300 dark:border-emerald-800/60 hover:bg-emerald-50 dark:hover:bg-emerald-950/40 gap-1 font-semibold"
               >
-                <Sparkles className="h-3 w-3 text-teal-600 dark:text-teal-400" />
+                <Sparkles className="h-3 w-3 text-emerald-600 dark:text-emerald-400" />
                 <span>Grant Full Access</span>
               </Button>
             </div>
@@ -136,7 +136,7 @@ export function ManagePermissionsModal({
 
         {/* Homeowner Permissions Group */}
         <div className="space-y-2">
-          <h4 className="text-xs font-bold uppercase tracking-wider text-teal-900 dark:text-teal-300">
+          <h4 className="text-xs font-bold uppercase tracking-wider text-emerald-900 dark:text-emerald-300">
             Homeowner Masterlist Capabilities
           </h4>
           <div className="divide-y divide-slate-100 dark:divide-[#1e2f4d] rounded-2xl border border-slate-200 dark:border-[#1e2f4d] p-3.5 bg-white dark:bg-[#0e192d]">
@@ -183,7 +183,7 @@ export function ManagePermissionsModal({
               size="sm"
               onClick={handleSave}
               isLoading={saving}
-              className="gap-1.5 font-bold shadow-sm bg-teal-700 hover:bg-teal-800 text-white"
+              className="gap-1.5 font-bold shadow-sm bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-700 hover:to-teal-700 text-white shadow-sm shadow-emerald-600/30"
             >
               <Check className="h-4 w-4" />
               <span>Apply Security Permissions</span>
@@ -194,3 +194,4 @@ export function ManagePermissionsModal({
     </Modal>
   );
 }
+

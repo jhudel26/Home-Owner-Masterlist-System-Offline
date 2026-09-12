@@ -84,9 +84,9 @@ export function BackupRestoreModal({ isOpen, onClose }: BackupRestoreModalProps)
     >
       <div className="space-y-6">
         {/* Section 1: Export Backup */}
-        <div className="p-5 rounded-2xl border border-slate-200/80 dark:border-[#1e2f4d] bg-white dark:bg-[#0c182c] space-y-3">
+        <div className="p-5 rounded-3xl border border-slate-200/80 dark:border-[#1e2f4d] bg-white dark:bg-[#0c182c] shadow-subtle space-y-4">
           <div className="flex items-center gap-3">
-            <div className="w-9 h-9 rounded-xl bg-teal-100 dark:bg-teal-950/60 text-teal-600 dark:text-teal-400 flex items-center justify-center">
+            <div className="w-10 h-10 rounded-2xl bg-emerald-100 dark:bg-emerald-950/60 text-emerald-600 dark:text-emerald-400 flex items-center justify-center shadow-inner">
               <Download className="h-5 w-5" />
             </div>
             <div>
@@ -100,7 +100,7 @@ export function BackupRestoreModal({ isOpen, onClose }: BackupRestoreModalProps)
             variant="outline"
             size="sm"
             onClick={handleExportBackup}
-            className="w-full gap-2 border-teal-300 dark:border-teal-700 text-teal-800 dark:text-teal-200"
+            className="w-full gap-2 border-emerald-300 dark:border-emerald-800 text-emerald-800 dark:text-emerald-300 hover:bg-emerald-50 dark:hover:bg-emerald-950/40"
           >
             <Download className="h-4 w-4" />
             <span>Download Database Snapshot</span>
@@ -108,9 +108,9 @@ export function BackupRestoreModal({ isOpen, onClose }: BackupRestoreModalProps)
         </div>
 
         {/* Section 2: Restore from Backup */}
-        <div className="p-5 rounded-2xl border border-amber-200/80 dark:border-amber-900/50 bg-amber-50/30 dark:bg-amber-950/20 space-y-4">
+        <div className="p-5 rounded-3xl border border-amber-200/80 dark:border-amber-900/50 bg-amber-50/40 dark:bg-amber-950/20 shadow-subtle space-y-4">
           <div className="flex items-center gap-3">
-            <div className="w-9 h-9 rounded-xl bg-amber-100 dark:bg-amber-950/60 text-amber-600 dark:text-amber-400 flex items-center justify-center">
+            <div className="w-10 h-10 rounded-2xl bg-amber-100 dark:bg-amber-950/60 text-amber-600 dark:text-amber-400 flex items-center justify-center shadow-inner">
               <Upload className="h-5 w-5" />
             </div>
             <div>
@@ -123,7 +123,7 @@ export function BackupRestoreModal({ isOpen, onClose }: BackupRestoreModalProps)
 
           <div
             onClick={() => fileInputRef.current?.click()}
-            className="border border-dashed border-amber-300 dark:border-amber-800 rounded-xl p-4 text-center cursor-pointer hover:bg-amber-100/40 dark:hover:bg-amber-950/40 transition-colors"
+            className="border-2 border-dashed border-amber-300 dark:border-amber-800/80 rounded-2xl p-5 text-center cursor-pointer hover:bg-amber-100/50 dark:hover:bg-amber-950/40 transition-colors"
           >
             <input
               ref={fileInputRef}
@@ -132,8 +132,11 @@ export function BackupRestoreModal({ isOpen, onClose }: BackupRestoreModalProps)
               onChange={handleFileSelect}
               className="hidden"
             />
-            <p className="text-xs font-medium text-amber-900 dark:text-amber-200">
-              {restoreFileName ? restoreFileName : "Select .json backup file"}
+            <p className="text-xs font-semibold text-amber-900 dark:text-amber-200">
+              {restoreFileName ? restoreFileName : "Select .json backup file to restore"}
+            </p>
+            <p className="text-[11px] text-amber-700/80 dark:text-amber-400/70 mt-1">
+              Click to browse or drop file here
             </p>
           </div>
 
@@ -144,7 +147,7 @@ export function BackupRestoreModal({ isOpen, onClose }: BackupRestoreModalProps)
                 size="sm"
                 onClick={handleApplyRestore}
                 isLoading={isRestoring}
-                className="w-full gap-2 bg-amber-600 hover:bg-amber-700 text-white"
+                className="w-full gap-2 bg-gradient-to-r from-amber-600 to-amber-700 hover:from-amber-700 hover:to-amber-800 text-white shadow-md shadow-amber-600/20"
               >
                 <ShieldCheck className="h-4 w-4" />
                 <span>Confirm & Apply Restore</span>

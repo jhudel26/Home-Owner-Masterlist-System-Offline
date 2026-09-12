@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import React, { useState, useEffect, useRef } from "react";
 import { PageHeader } from "@/components/layout/page-header";
@@ -192,8 +192,8 @@ export default function SettingsPage() {
         success(
           "Settings Saved",
           updateUnpaid
-            ? `Standard dues set to ₱${num.toFixed(2)} and existing unpaid dues updated.`
-            : `Standard monthly dues rate updated to ₱${num.toFixed(2)}.`
+            ? `Standard dues set to â‚±${num.toFixed(2)} and existing unpaid dues updated.`
+            : `Standard monthly dues rate updated to â‚±${num.toFixed(2)}.`
         );
       } else {
         toastError("Save Failed", data.error || "Could not update dues settings.");
@@ -223,7 +223,7 @@ export default function SettingsPage() {
         title="System Settings & Database"
         description="Export/Import SQL database backups, configure monthly dues rates, and view HOA details"
         icon={
-          <span className="inline-flex items-center justify-center h-8 w-8 rounded-xl bg-teal-50 dark:bg-teal-950/50 text-teal-700 dark:text-teal-400 border border-teal-200 dark:border-teal-800/60 shadow-xs">
+          <span className="inline-flex items-center justify-center h-8 w-8 rounded-xl bg-emerald-50 dark:bg-emerald-950/50 text-emerald-700 dark:text-emerald-400 border border-emerald-200 dark:border-emerald-800/60 shadow-xs">
             <Sliders className="h-4 w-4" />
           </span>
         }
@@ -235,7 +235,7 @@ export default function SettingsPage() {
           onClick={() => setActiveTab("database")}
           className={`flex items-center gap-2 px-4 py-2.5 rounded-xl text-xs font-semibold transition-all ${
             activeTab === "database"
-              ? "bg-teal-600 text-white shadow-sm"
+              ? "bg-emerald-600 text-white shadow-sm shadow-emerald-600/30"
               : "text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800"
           }`}
         >
@@ -247,7 +247,7 @@ export default function SettingsPage() {
           onClick={() => setActiveTab("dues")}
           className={`flex items-center gap-2 px-4 py-2.5 rounded-xl text-xs font-semibold transition-all ${
             activeTab === "dues"
-              ? "bg-teal-600 text-white shadow-sm"
+              ? "bg-emerald-600 text-white shadow-sm shadow-emerald-600/30"
               : "text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800"
           }`}
         >
@@ -259,7 +259,7 @@ export default function SettingsPage() {
           onClick={() => setActiveTab("hoa")}
           className={`flex items-center gap-2 px-4 py-2.5 rounded-xl text-xs font-semibold transition-all ${
             activeTab === "hoa"
-              ? "bg-teal-600 text-white shadow-sm"
+              ? "bg-emerald-600 text-white shadow-sm shadow-emerald-600/30"
               : "text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800"
           }`}
         >
@@ -275,7 +275,7 @@ export default function SettingsPage() {
           <div className="rounded-3xl border border-slate-200/80 dark:border-[#1e2f4d] bg-white dark:bg-[#0e192d] p-6 shadow-subtle flex flex-col justify-between">
             <div>
               <div className="flex items-center gap-3.5 mb-4">
-                <div className="w-12 h-12 rounded-2xl bg-teal-50 dark:bg-teal-950/60 text-teal-600 dark:text-teal-400 flex items-center justify-center border border-teal-200 dark:border-teal-800/60 shadow-xs">
+                <div className="w-12 h-12 rounded-2xl bg-emerald-50 dark:bg-emerald-950/60 text-emerald-600 dark:text-emerald-400 flex items-center justify-center border border-emerald-200 dark:border-emerald-800/60 shadow-xs">
                   <Download className="h-6 w-6" />
                 </div>
                 <div>
@@ -351,7 +351,7 @@ export default function SettingsPage() {
 
               <div
                 onClick={() => sqlInputRef.current?.click()}
-                className="border-2 border-dashed border-slate-300 dark:border-slate-700 hover:border-teal-500 dark:hover:border-teal-400 rounded-2xl p-6 text-center cursor-pointer bg-slate-50/60 dark:bg-[#0c182c] transition-all hover:bg-slate-100/60"
+                className="border-2 border-dashed border-slate-300 dark:border-slate-700 hover:border-emerald-500 dark:hover:border-emerald-400 rounded-2xl p-6 text-center cursor-pointer bg-slate-50/60 dark:bg-[#0c182c] transition-all hover:bg-slate-100/60"
               >
                 <FileCode className="h-8 w-8 text-slate-400 mx-auto mb-2" />
                 <p className="text-xs font-bold text-slate-800 dark:text-slate-200">
@@ -380,7 +380,7 @@ export default function SettingsPage() {
         <div className="max-w-2xl">
           <div className="rounded-3xl border border-slate-200/80 dark:border-[#1e2f4d] bg-white dark:bg-[#0e192d] p-6 shadow-subtle space-y-6">
             <div className="flex items-center gap-3.5">
-              <div className="w-12 h-12 rounded-2xl bg-teal-50 dark:bg-teal-950/60 text-teal-600 dark:text-teal-400 flex items-center justify-center border border-teal-200 dark:border-teal-800/60 shadow-xs">
+              <div className="w-12 h-12 rounded-2xl bg-emerald-50 dark:bg-emerald-950/60 text-emerald-600 dark:text-emerald-400 flex items-center justify-center border border-emerald-200 dark:border-emerald-800/60 shadow-xs">
                 <DollarSign className="h-6 w-6" />
               </div>
               <div>
@@ -396,11 +396,11 @@ export default function SettingsPage() {
             <form onSubmit={handleSaveDuesSettings} className="space-y-5">
               <div>
                 <label className="block text-xs font-bold uppercase tracking-wider text-slate-600 dark:text-slate-300 mb-2">
-                  Monthly Dues Amount (PHP ₱)
+                  Monthly Dues Amount (PHP â‚±)
                 </label>
                 <div className="relative max-w-xs">
-                  <span className="absolute left-3.5 top-1/2 -translate-y-1/2 text-base font-bold text-teal-600 dark:text-teal-400">
-                    ₱
+                  <span className="absolute left-3.5 top-1/2 -translate-y-1/2 text-base font-bold text-emerald-600 dark:text-emerald-400">
+                    â‚±
                   </span>
                   <Input
                     type="number"
@@ -423,13 +423,13 @@ export default function SettingsPage() {
                   id="updateUnpaid"
                   checked={updateUnpaid}
                   onChange={(e) => setUpdateUnpaid(e.target.checked)}
-                  className="mt-1 h-4 w-4 rounded border-slate-300 text-teal-600 focus:ring-teal-500 cursor-pointer"
+                  className="mt-1 h-4 w-4 rounded border-slate-300 text-emerald-600 focus:ring-emerald-500 cursor-pointer"
                 />
                 <label htmlFor="updateUnpaid" className="text-xs text-slate-700 dark:text-slate-300 cursor-pointer">
                   <span className="font-bold text-slate-900 dark:text-slate-100 block">
                     Update all currently unpaid monthly dues records
                   </span>
-                  Check this to also adjust unpaid dues in past or current months to ₱{parseFloat(duesAmount || "0").toFixed(2)}. Existing paid records will not be altered.
+                  Check this to also adjust unpaid dues in past or current months to â‚±{parseFloat(duesAmount || "0").toFixed(2)}. Existing paid records will not be altered.
                 </label>
               </div>
 
@@ -452,7 +452,7 @@ export default function SettingsPage() {
         <div className="max-w-2xl space-y-6">
           <div className="rounded-3xl border border-slate-200/80 dark:border-[#1e2f4d] bg-white dark:bg-[#0e192d] p-6 shadow-subtle space-y-6">
             <div className="flex items-center gap-5">
-              <div className="relative h-20 w-20 rounded-2xl overflow-hidden border-2 border-teal-500/30 shadow-md shrink-0 bg-[#07162c] flex items-center justify-center">
+              <div className="relative h-20 w-20 rounded-2xl overflow-hidden border-2 border-emerald-500/30 shadow-md shrink-0 bg-[#07162c] flex items-center justify-center">
                 <img
                   src="/icon.png"
                   alt="HOA Logo"
@@ -463,7 +463,7 @@ export default function SettingsPage() {
                 />
               </div>
               <div>
-                <span className="text-[10px] font-bold uppercase tracking-widest text-teal-600 dark:text-teal-400">
+                <span className="text-[10px] font-bold uppercase tracking-widest text-emerald-600 dark:text-emerald-400">
                   Official Community Emblem
                 </span>
                 <h3 className="text-lg font-extrabold text-slate-900 dark:text-slate-100">
@@ -560,3 +560,4 @@ export default function SettingsPage() {
     </div>
   );
 }
+

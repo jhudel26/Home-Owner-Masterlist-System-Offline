@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import React, { useState, useMemo } from "react";
 import { Profile, UserPermissions, UserRole } from "@/types/database";
@@ -100,7 +100,7 @@ export function UserTable({ profiles }: UserTableProps) {
       {/* 4 Summary Mini-Cards */}
       <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
         <div className="p-4 rounded-2xl border border-slate-200/80 dark:border-[#1e2f4d] bg-white dark:bg-[#0e192d] shadow-subtle flex items-center gap-3">
-          <div className="p-2.5 rounded-xl bg-teal-50 dark:bg-teal-950/60 text-teal-700 dark:text-teal-300 border border-teal-200/60 dark:border-teal-800/60">
+          <div className="p-2.5 rounded-xl bg-emerald-50 dark:bg-emerald-950/60 text-emerald-700 dark:text-emerald-300 border border-emerald-200/60 dark:border-emerald-800/60">
             <ShieldCheck className="h-5 w-5" />
           </div>
           <div>
@@ -120,7 +120,7 @@ export function UserTable({ profiles }: UserTableProps) {
         </div>
 
         <div className="p-4 rounded-2xl border border-slate-200/80 dark:border-[#1e2f4d] bg-white dark:bg-[#0e192d] shadow-subtle flex items-center gap-3">
-          <div className="p-2.5 rounded-xl bg-teal-50 dark:bg-teal-950/60 text-teal-700 dark:text-teal-300 border border-teal-200/60 dark:border-teal-800/60">
+          <div className="p-2.5 rounded-xl bg-emerald-50 dark:bg-emerald-950/60 text-emerald-700 dark:text-emerald-300 border border-emerald-200/60 dark:border-emerald-800/60">
             <UserCheck className="h-5 w-5" />
           </div>
           <div>
@@ -149,7 +149,7 @@ export function UserTable({ profiles }: UserTableProps) {
             placeholder="Search accounts by name, email, or role..."
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
-            className="w-full pl-10 pr-4 py-2 text-sm rounded-2xl border border-slate-200 dark:border-[#1e2f4d] bg-slate-50/70 dark:bg-[#0c182c] focus:bg-white dark:focus:bg-[#0e192d] focus:border-teal-600 dark:focus:border-teal-400 focus:outline-none focus:ring-2 focus:ring-teal-600/20 transition-all text-slate-900 dark:text-slate-100 placeholder:text-slate-400 dark:placeholder:text-slate-500"
+            className="w-full pl-10 pr-4 py-2 text-sm rounded-2xl border border-slate-200 dark:border-[#1e2f4d] bg-slate-50/70 dark:bg-[#0c182c] focus:bg-white dark:focus:bg-[#0e192d] focus:border-emerald-500 dark:focus:border-emerald-400 focus:outline-none focus:ring-2 focus:ring-emerald-500/20 transition-all text-slate-900 dark:text-slate-100 placeholder:text-slate-400 dark:placeholder:text-slate-500"
           />
         </div>
 
@@ -158,7 +158,7 @@ export function UserTable({ profiles }: UserTableProps) {
             size="sm"
             variant="primary"
             onClick={() => setIsCreateOpen(true)}
-            className="gap-1.5 h-10 px-4 font-bold shadow-sm bg-teal-700 hover:bg-teal-800 text-white"
+            className="gap-1.5 h-10 px-4 font-bold shadow-sm bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-700 hover:to-teal-700 text-white shadow-sm shadow-emerald-600/30"
           >
             <UserPlus className="h-4 w-4" />
             <span>Create New Account</span>
@@ -196,7 +196,7 @@ export function UserTable({ profiles }: UserTableProps) {
                       {/* Member */}
                       <td className="py-4 px-5">
                         <div className="flex items-center gap-3">
-                          <div className="h-10 w-10 rounded-2xl bg-gradient-to-br from-[#07162c] to-[#040d1c] text-teal-300 border border-teal-500/20 flex items-center justify-center font-bold text-sm shadow-xs shrink-0">
+                          <div className="h-10 w-10 rounded-2xl bg-gradient-to-br from-[#07162c] to-[#040d1c] text-emerald-300 border border-emerald-500/20 flex items-center justify-center font-bold text-sm shadow-xs shrink-0">
                             {user.full_name.charAt(0)}
                           </div>
                           <div>
@@ -219,7 +219,7 @@ export function UserTable({ profiles }: UserTableProps) {
                       {/* Permissions badge count */}
                       <td className="py-4 px-4 text-center">
                         <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 border border-slate-200 dark:border-slate-700">
-                          <ShieldCheck className="h-3.5 w-3.5 text-teal-700 dark:text-teal-400" />
+                          <ShieldCheck className="h-3.5 w-3.5 text-emerald-700 dark:text-emerald-400" />
                           {isSuperAdmin ? `Full Access (All ${Object.keys(PERMISSION_DEFINITIONS).length})` : `${activeCount} / ${Object.keys(PERMISSION_DEFINITIONS).length} Granted`}
                         </span>
                       </td>
@@ -285,3 +285,4 @@ export function UserTable({ profiles }: UserTableProps) {
     </div>
   );
 }
+

@@ -1,4 +1,4 @@
-import type { Config } from "tailwindcss";
+﻿import type { Config } from "tailwindcss";
 
 const config: Config = {
   darkMode: "class",
@@ -8,6 +8,11 @@ const config: Config = {
   theme: {
     extend: {
       colors: {
+        slate: {
+          850: "#0f172a",
+          900: "#0b1324",
+          950: "#060c18",
+        },
         navy: {
           50: "#f0f5fa",
           100: "#e0ebf5",
@@ -34,6 +39,19 @@ const config: Config = {
           900: "#134e4a",
           950: "#042f2e",
         },
+        emerald: {
+          50: "#ecfdf5",
+          100: "#d1fae5",
+          200: "#a7f3d0",
+          300: "#6ee7b7",
+          400: "#34d399",
+          500: "#10b981",
+          600: "#059669",
+          700: "#047857",
+          800: "#065f46",
+          900: "#064e3b",
+          950: "#022c22",
+        },
       },
       fontFamily: {
         sans: ["var(--font-sans)", "Inter", "system-ui", "-apple-system", "sans-serif"],
@@ -42,9 +60,11 @@ const config: Config = {
       boxShadow: {
         subtle: "0 1px 3px 0 rgba(7, 22, 44, 0.05), 0 1px 2px -1px rgba(7, 22, 44, 0.05)",
         card: "0 4px 6px -1px rgba(7, 22, 44, 0.06), 0 2px 4px -2px rgba(7, 22, 44, 0.04)",
-        elevated: "0 10px 20px -3px rgba(7, 22, 44, 0.08), 0 4px 6px -4px rgba(7, 22, 44, 0.04)",
+        elevated: "0 10px 25px -3px rgba(7, 22, 44, 0.1), 0 4px 10px -4px rgba(7, 22, 44, 0.06)",
         glass: "0 8px 32px 0 rgba(7, 22, 44, 0.12)",
+        "glass-elevated": "0 12px 40px 0 rgba(0, 0, 0, 0.25), inset 0 1px 0 0 rgba(255, 255, 255, 0.1)",
         tealGlow: "0 0 20px -2px rgba(13, 148, 136, 0.3)",
+        emeraldGlow: "0 0 24px -2px rgba(16, 185, 129, 0.35)",
         navyGlow: "0 0 20px -2px rgba(7, 22, 44, 0.4)",
       },
       animation: {

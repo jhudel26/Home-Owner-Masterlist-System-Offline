@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import React, { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
@@ -391,7 +391,7 @@ export function HomeownerForm({ initialData, onSubmit, isEditing = false }: Home
       <div className="rounded-3xl border border-slate-200/80 dark:border-[#1e2f4d] bg-white dark:bg-[#0e192d] p-6 sm:p-8 shadow-subtle space-y-6">
         <div className="flex items-center justify-between pb-4 border-b border-slate-100 dark:border-[#1e2f4d]">
           <div className="flex items-center gap-3">
-            <div className="flex h-10 w-10 items-center justify-center rounded-2xl bg-teal-50 dark:bg-teal-950/60 text-teal-800 dark:text-teal-300 border border-teal-200/60 dark:border-teal-800/60 shadow-xs">
+            <div className="flex h-10 w-10 items-center justify-center rounded-2xl bg-emerald-50 dark:bg-emerald-950/60 text-emerald-800 dark:text-emerald-300 border border-emerald-200/60 dark:border-emerald-800/60 shadow-xs">
               <User className="h-5 w-5" />
             </div>
             <div>
@@ -410,7 +410,7 @@ export function HomeownerForm({ initialData, onSubmit, isEditing = false }: Home
                 <span className="text-xs font-mono font-bold text-emerald-900 dark:text-emerald-300">{initialData.hoa_number}</span>
               </div>
             )}
-            <span className="text-[11px] font-bold uppercase tracking-wider text-teal-800 dark:text-teal-300 bg-teal-50 dark:bg-teal-950/60 px-2.5 py-1 rounded-lg border border-teal-200 dark:border-teal-800/60">
+            <span className="text-[11px] font-bold uppercase tracking-wider text-emerald-800 dark:text-emerald-300 bg-emerald-50 dark:bg-emerald-950/60 px-2.5 py-1 rounded-lg border border-emerald-200 dark:border-emerald-800/60">
               Step 1 of 4
             </span>
           </div>
@@ -433,7 +433,7 @@ export function HomeownerForm({ initialData, onSubmit, isEditing = false }: Home
                 <User className="h-10 w-10 text-slate-400" />
               </div>
             )}
-            <label className="absolute bottom-0 right-0 bg-teal-600 hover:bg-teal-700 text-white p-2 rounded-full cursor-pointer">
+            <label className="absolute bottom-0 right-0 bg-emerald-600 hover:bg-emerald-700 shadow-sm shadow-emerald-600/30 text-white p-2 rounded-full cursor-pointer">
               <Upload className="h-4 w-4" />
               <input type="file" accept="image/*" onChange={handlePhotoUpload} className="hidden" />
             </label>
@@ -612,13 +612,13 @@ export function HomeownerForm({ initialData, onSubmit, isEditing = false }: Home
         </div>
 
         {/* Phase 4 Address Quick Builder */}
-        <div className="md:col-span-2 p-4 rounded-2xl bg-teal-50/40 dark:bg-teal-950/30 border border-teal-200/70 dark:border-teal-800/60 space-y-3">
+        <div className="md:col-span-2 p-4 rounded-2xl bg-emerald-50/40 dark:bg-emerald-950/30 border border-emerald-200/70 dark:border-emerald-800/60 space-y-3">
           <div className="flex items-center justify-between">
-            <div className="flex items-center gap-2 text-xs font-bold text-teal-900 dark:text-teal-200 uppercase tracking-wider">
-              <MapPin className="h-4 w-4 text-teal-700 dark:text-teal-500" />
+            <div className="flex items-center gap-2 text-xs font-bold text-emerald-900 dark:text-emerald-200 uppercase tracking-wider">
+              <MapPin className="h-4 w-4 text-emerald-600 dark:text-emerald-400" />
               <span>Phase 4 Address Quick Builder</span>
             </div>
-            <span className="text-[10px] text-teal-700 dark:text-teal-400 font-medium">Format: Home #, Blk, Lot, Brgy</span>
+            <span className="text-[10px] text-emerald-600 dark:text-emerald-400 font-medium">Format: Home #, Blk, Lot, Brgy</span>
           </div>
           <div className="grid grid-cols-1 sm:grid-cols-4 gap-3">
             <div>
@@ -782,7 +782,7 @@ export function HomeownerForm({ initialData, onSubmit, isEditing = false }: Home
                 onDragEnd={handleDragEnd}
                 className={`flex flex-col sm:flex-row items-start sm:items-center gap-3 p-3.5 rounded-2xl border transition-all ${
                   draggedIndex === index
-                    ? "border-teal-500 bg-teal-50/40 dark:bg-teal-950/30 scale-[0.99] opacity-75"
+                    ? "border-emerald-500 bg-emerald-50/40 dark:bg-emerald-950/30 scale-[0.99] opacity-75"
                     : "border-slate-200 dark:border-[#1e2f4d] bg-slate-50/60 dark:bg-[#0a1526] hover:border-slate-300 dark:hover:border-slate-600"
                 }`}
               >
@@ -797,7 +797,7 @@ export function HomeownerForm({ initialData, onSubmit, isEditing = false }: Home
                       disabled={index === 0}
                       onClick={() => moveMember(index, "up")}
                       aria-label={`Move ${member.member_name || "member"} up`}
-                      className="p-0.5 text-slate-400 hover:text-teal-600 disabled:opacity-20 transition-colors"
+                      className="p-0.5 text-slate-400 hover:text-emerald-600 disabled:opacity-20 transition-colors"
                     >
                       <ChevronUp className="h-3 w-3" />
                     </button>
@@ -806,7 +806,7 @@ export function HomeownerForm({ initialData, onSubmit, isEditing = false }: Home
                       disabled={index === members.length - 1}
                       onClick={() => moveMember(index, "down")}
                       aria-label={`Move ${member.member_name || "member"} down`}
-                      className="p-0.5 text-slate-400 hover:text-teal-600 disabled:opacity-20 transition-colors"
+                      className="p-0.5 text-slate-400 hover:text-emerald-600 disabled:opacity-20 transition-colors"
                     >
                       <ChevronDown className="h-3 w-3" />
                     </button>
@@ -1055,3 +1055,4 @@ export function HomeownerForm({ initialData, onSubmit, isEditing = false }: Home
     </form>
   );
 }
+

@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import React, { useState } from "react";
 import { Modal } from "@/components/ui/modal";
@@ -119,11 +119,11 @@ export function ExportMonthlyDuesModal({
     >
       <div className="space-y-6">
         {/* Banner */}
-        <div className="flex items-start gap-3 p-3.5 rounded-2xl bg-teal-50/70 dark:bg-teal-950/30 border border-teal-200 dark:border-teal-800/60 text-teal-950 dark:text-teal-200 text-xs">
-          <FileSpreadsheet className="h-5 w-5 text-teal-600 dark:text-teal-400 shrink-0 mt-0.5" />
+        <div className="flex items-start gap-3 p-3.5 rounded-2xl bg-emerald-50/70 dark:bg-emerald-950/30 border border-emerald-200 dark:border-emerald-800/60 text-emerald-950 dark:text-emerald-200 text-xs">
+          <FileSpreadsheet className="h-5 w-5 text-emerald-600 dark:text-emerald-400 shrink-0 mt-0.5" />
           <div className="space-y-1">
             <p className="font-bold">Multi-Year Workbook Format</p>
-            <p className="text-teal-800 dark:text-teal-300 leading-relaxed">
+            <p className="text-emerald-800 dark:text-emerald-300 leading-relaxed">
               Each selected year will be generated as its own individual worksheet in the workbook, containing all 12 monthly columns with Paid/Unpaid status indicators, totals, and collection rates.
             </p>
           </div>
@@ -142,13 +142,13 @@ export function ExportMonthlyDuesModal({
               onClick={() => setDurationType("current")}
               className={`p-3.5 rounded-xl border text-left transition-all flex items-start justify-between ${
                 durationType === "current"
-                  ? "border-teal-600 dark:border-teal-400 bg-teal-50/50 dark:bg-teal-950/30 ring-2 ring-teal-600/20"
+                  ? "border-emerald-600 dark:border-emerald-400 bg-emerald-50/50 dark:bg-emerald-950/30 ring-2 ring-emerald-600/20"
                   : "border-slate-200 dark:border-[#1e2f4d] bg-white dark:bg-[#0c182c] hover:bg-slate-50 dark:hover:bg-[#101f38]"
               }`}
             >
               <div>
                 <div className="flex items-center gap-1.5 font-bold text-xs text-slate-900 dark:text-slate-100">
-                  <Calendar className="h-3.5 w-3.5 text-teal-600 dark:text-teal-400" />
+                  <Calendar className="h-3.5 w-3.5 text-emerald-600 dark:text-emerald-400" />
                   <span>Current Year ({currentYear})</span>
                 </div>
                 <p className="text-[11px] text-slate-500 dark:text-slate-400 mt-1">
@@ -156,7 +156,7 @@ export function ExportMonthlyDuesModal({
                 </p>
               </div>
               {durationType === "current" && (
-                <Check className="h-4 w-4 text-teal-600 dark:text-teal-400 shrink-0 mt-0.5" />
+                <Check className="h-4 w-4 text-emerald-600 dark:text-emerald-400 shrink-0 mt-0.5" />
               )}
             </button>
 
@@ -166,7 +166,7 @@ export function ExportMonthlyDuesModal({
               onClick={() => setDurationType("previous")}
               className={`p-3.5 rounded-xl border text-left transition-all flex items-start justify-between ${
                 durationType === "previous"
-                  ? "border-teal-600 dark:border-teal-400 bg-teal-50/50 dark:bg-teal-950/30 ring-2 ring-teal-600/20"
+                  ? "border-emerald-600 dark:border-emerald-400 bg-emerald-50/50 dark:bg-emerald-950/30 ring-2 ring-emerald-600/20"
                   : "border-slate-200 dark:border-[#1e2f4d] bg-white dark:bg-[#0c182c] hover:bg-slate-50 dark:hover:bg-[#101f38]"
               }`}
             >
@@ -180,7 +180,7 @@ export function ExportMonthlyDuesModal({
                 </p>
               </div>
               {durationType === "previous" && (
-                <Check className="h-4 w-4 text-teal-600 dark:text-teal-400 shrink-0 mt-0.5" />
+                <Check className="h-4 w-4 text-emerald-600 dark:text-emerald-400 shrink-0 mt-0.5" />
               )}
             </button>
 
@@ -190,7 +190,7 @@ export function ExportMonthlyDuesModal({
               onClick={() => setDurationType("last3")}
               className={`p-3.5 rounded-xl border text-left transition-all flex items-start justify-between ${
                 durationType === "last3"
-                  ? "border-teal-600 dark:border-teal-400 bg-teal-50/50 dark:bg-teal-950/30 ring-2 ring-teal-600/20"
+                  ? "border-emerald-600 dark:border-emerald-400 bg-emerald-50/50 dark:bg-emerald-950/30 ring-2 ring-emerald-600/20"
                   : "border-slate-200 dark:border-[#1e2f4d] bg-white dark:bg-[#0c182c] hover:bg-slate-50 dark:hover:bg-[#101f38]"
               }`}
             >
@@ -204,7 +204,7 @@ export function ExportMonthlyDuesModal({
                 </p>
               </div>
               {durationType === "last3" && (
-                <Check className="h-4 w-4 text-teal-600 dark:text-teal-400 shrink-0 mt-0.5" />
+                <Check className="h-4 w-4 text-emerald-600 dark:text-emerald-400 shrink-0 mt-0.5" />
               )}
             </button>
 
@@ -214,13 +214,13 @@ export function ExportMonthlyDuesModal({
               onClick={() => setDurationType("custom")}
               className={`p-3.5 rounded-xl border text-left transition-all flex items-start justify-between ${
                 durationType === "custom"
-                  ? "border-teal-600 dark:border-teal-400 bg-teal-50/50 dark:bg-teal-950/30 ring-2 ring-teal-600/20"
+                  ? "border-emerald-600 dark:border-emerald-400 bg-emerald-50/50 dark:bg-emerald-950/30 ring-2 ring-emerald-600/20"
                   : "border-slate-200 dark:border-[#1e2f4d] bg-white dark:bg-[#0c182c] hover:bg-slate-50 dark:hover:bg-[#101f38]"
               }`}
             >
               <div>
                 <div className="flex items-center gap-1.5 font-bold text-xs text-slate-900 dark:text-slate-100">
-                  <Calendar className="h-3.5 w-3.5 text-teal-600 dark:text-teal-400" />
+                  <Calendar className="h-3.5 w-3.5 text-emerald-600 dark:text-emerald-400" />
                   <span>Custom Year Range</span>
                 </div>
                 <p className="text-[11px] text-slate-500 dark:text-slate-400 mt-1">
@@ -228,7 +228,7 @@ export function ExportMonthlyDuesModal({
                 </p>
               </div>
               {durationType === "custom" && (
-                <Check className="h-4 w-4 text-teal-600 dark:text-teal-400 shrink-0 mt-0.5" />
+                <Check className="h-4 w-4 text-emerald-600 dark:text-emerald-400 shrink-0 mt-0.5" />
               )}
             </button>
           </div>
@@ -247,7 +247,7 @@ export function ExportMonthlyDuesModal({
                   <select
                     value={customStartYear}
                     onChange={(e) => setCustomStartYear(parseInt(e.target.value))}
-                    className="w-full text-xs rounded-xl border border-slate-200 dark:border-[#1e2f4d] bg-white dark:bg-[#0c182c] px-3 py-2 text-slate-800 dark:text-slate-200 font-medium focus:outline-none focus:border-teal-600"
+                    className="w-full text-xs rounded-xl border border-slate-200 dark:border-[#1e2f4d] bg-white dark:bg-[#0c182c] px-3 py-2 text-slate-800 dark:text-slate-200 font-medium focus:outline-none focus:border-emerald-500"
                   >
                     {availableYears.map((yr) => (
                       <option key={yr} value={yr}>
@@ -266,7 +266,7 @@ export function ExportMonthlyDuesModal({
                   <select
                     value={customEndYear}
                     onChange={(e) => setCustomEndYear(parseInt(e.target.value))}
-                    className="w-full text-xs rounded-xl border border-slate-200 dark:border-[#1e2f4d] bg-white dark:bg-[#0c182c] px-3 py-2 text-slate-800 dark:text-slate-200 font-medium focus:outline-none focus:border-teal-600"
+                    className="w-full text-xs rounded-xl border border-slate-200 dark:border-[#1e2f4d] bg-white dark:bg-[#0c182c] px-3 py-2 text-slate-800 dark:text-slate-200 font-medium focus:outline-none focus:border-emerald-500"
                   >
                     {availableYears.map((yr) => (
                       <option key={yr} value={yr}>
@@ -293,7 +293,7 @@ export function ExportMonthlyDuesModal({
                   name="scope"
                   checked={!useFilteredList}
                   onChange={() => setUseFilteredList(false)}
-                  className="text-teal-600 focus:ring-teal-500"
+                  className="text-emerald-600 focus:ring-emerald-500"
                 />
                 <span>All Homeowners ({homeowners.length})</span>
               </label>
@@ -303,7 +303,7 @@ export function ExportMonthlyDuesModal({
                   name="scope"
                   checked={useFilteredList}
                   onChange={() => setUseFilteredList(true)}
-                  className="text-teal-600 focus:ring-teal-500"
+                  className="text-emerald-600 focus:ring-emerald-500"
                 />
                 <span>Current Filter Results ({filteredHomeowners?.length})</span>
               </label>
@@ -314,11 +314,11 @@ export function ExportMonthlyDuesModal({
         {/* Selected Sheets Preview Summary */}
         <div className="p-3.5 rounded-xl border border-slate-200 dark:border-[#1e2f4d] bg-slate-50 dark:bg-[#0a1526] text-xs flex items-center justify-between">
           <span className="text-slate-500 dark:text-slate-400 font-medium">Sheets to be generated:</span>
-          <div className="flex items-center gap-1.5 font-mono font-bold text-teal-800 dark:text-teal-300 flex-wrap justify-end">
+          <div className="flex items-center gap-1.5 font-mono font-bold text-emerald-800 dark:text-emerald-300 flex-wrap justify-end">
             {selectedYears.map((yr) => (
               <span
                 key={yr}
-                className="px-2 py-0.5 rounded-md bg-white dark:bg-teal-950/60 border border-teal-200 dark:border-teal-800 text-[11px]"
+                className="px-2 py-0.5 rounded-md bg-white dark:bg-emerald-950/60 border border-emerald-200 dark:border-emerald-800 text-[11px]"
               >
                 Dues {yr}
               </span>
@@ -344,7 +344,7 @@ export function ExportMonthlyDuesModal({
             size="sm"
             onClick={handleExport}
             disabled={isExporting || selectedYears.length === 0}
-            className="gap-2 text-xs bg-teal-800 hover:bg-teal-900 text-white font-semibold"
+            className="gap-2 text-xs bg-emerald-700 hover:bg-emerald-800 shadow-sm shadow-emerald-700/30 text-white font-semibold"
           >
             {isExporting ? (
               <>
@@ -353,7 +353,7 @@ export function ExportMonthlyDuesModal({
               </>
             ) : (
               <>
-                <FileSpreadsheet className="h-4 w-4 text-teal-200" />
+                <FileSpreadsheet className="h-4 w-4 text-emerald-200" />
                 <span>Download Excel Report ({selectedYears.length} Sheet{selectedYears.length > 1 ? "s" : ""})</span>
               </>
             )}
@@ -363,3 +363,4 @@ export function ExportMonthlyDuesModal({
     </Modal>
   );
 }
+

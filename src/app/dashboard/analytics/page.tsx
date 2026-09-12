@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { useEffect, useState } from "react";
 
@@ -221,7 +221,7 @@ function AnalyticsRow({
 
           <div className="mt-2 h-1.5 overflow-hidden rounded-full bg-slate-100 dark:bg-slate-800">
             <div
-              className="h-full rounded-full bg-teal-500 transition-all duration-500"
+              className="h-full rounded-full bg-emerald-500 transition-all duration-500"
               style={{
                 width: `${Math.min(
                   percentage,
@@ -655,7 +655,7 @@ export default function AnalyticsPage() {
       <div className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
         <div>
           <div className="flex items-center gap-3">
-            <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-teal-600 text-white shadow-sm">
+            <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-emerald-600 text-white shadow-sm">
               <BarChart3 className="h-6 w-6" />
             </div>
 
@@ -687,7 +687,7 @@ export default function AnalyticsPage() {
                   className={`rounded-md px-3 py-1.5 text-sm font-medium transition ${
                     selectedDays ===
                     days
-                      ? "bg-teal-600 text-white shadow-sm"
+                      ? "bg-emerald-600 text-white shadow-sm"
                       : "text-slate-600 hover:bg-slate-100 dark:text-slate-300 dark:hover:bg-slate-800"
                   }`}
                 >
@@ -726,11 +726,11 @@ export default function AnalyticsPage() {
       {analyticsData.since &&
         analyticsData.until && (
           <p className="text-xs text-slate-500 dark:text-slate-400">
-            Local Analytics ·{" "}
+            Local Analytics Â·{" "}
             {formatDate(
               analyticsData.since
             )}{" "}
-            –{" "}
+            â€“{" "}
             {formatDate(
               analyticsData.until
             )}
@@ -766,20 +766,20 @@ export default function AnalyticsPage() {
 
                 <p className="mt-2 text-3xl font-bold text-slate-900 dark:text-white">
                   {analyticsData.loading
-                    ? "—"
+                    ? "â€”"
                     : formatNumber(
                         analyticsData.pageViews
                       )}
                 </p>
               </div>
 
-              <div className="rounded-xl bg-teal-50 p-3 text-teal-600 dark:bg-teal-950/40 dark:text-teal-400">
+              <div className="rounded-xl bg-emerald-50 p-3 text-emerald-600 dark:bg-emerald-950/40 dark:text-emerald-400">
                 <Activity className="h-5 w-5" />
               </div>
             </div>
 
-            <div className="mt-4 h-1 rounded-full bg-teal-100 dark:bg-teal-950">
-              <div className="h-full w-2/3 rounded-full bg-teal-500" />
+            <div className="mt-4 h-1 rounded-full bg-emerald-100 dark:bg-emerald-950">
+              <div className="h-full w-2/3 rounded-full bg-emerald-500" />
             </div>
           </div>
         </Card>
@@ -794,7 +794,7 @@ export default function AnalyticsPage() {
 
                 <p className="mt-2 text-3xl font-bold text-slate-900 dark:text-white">
                   {analyticsData.loading
-                    ? "—"
+                    ? "â€”"
                     : formatNumber(
                         analyticsData.visitors
                       )}
@@ -879,12 +879,12 @@ export default function AnalyticsPage() {
             }
             title="Traffic Over Time"
             description="Real daily page views and visitors from the local analytics database"
-            iconClass="bg-teal-50 text-teal-600 dark:bg-teal-950/40 dark:text-teal-400"
+            iconClass="bg-emerald-50 text-emerald-600 dark:bg-emerald-950/40 dark:text-emerald-400"
           />
 
           <div className="flex items-center gap-4 text-xs">
             <div className="flex items-center gap-2">
-              <span className="h-2.5 w-2.5 rounded-full bg-teal-500" />
+              <span className="h-2.5 w-2.5 rounded-full bg-emerald-500" />
               <span className="text-slate-600 dark:text-slate-300">
                 Page Views
               </span>
@@ -973,7 +973,7 @@ export default function AnalyticsPage() {
                 />
 
                 {/* =================================================
-                    PAGE VIEWS — KEEP THIS
+                    PAGE VIEWS â€” KEEP THIS
                 ================================================= */}
 
                 <Line
@@ -992,7 +992,7 @@ export default function AnalyticsPage() {
                 />
 
                 {/* =================================================
-                    VISITORS — KEEP THIS TOO
+                    VISITORS â€” KEEP THIS TOO
                 ================================================= */}
 
                 <Line
@@ -1020,7 +1020,7 @@ export default function AnalyticsPage() {
               Page Views
             </p>
 
-            <p className="mt-1 text-lg font-semibold text-teal-600 dark:text-teal-400">
+            <p className="mt-1 text-lg font-semibold text-emerald-600 dark:text-emerald-400">
               {formatNumber(
                 analyticsData.pageViews
               )}
@@ -1099,7 +1099,7 @@ export default function AnalyticsPage() {
             }
             title="Pages"
             description="Most visited routes"
-            iconClass="bg-teal-50 text-teal-600 dark:bg-teal-950/40 dark:text-teal-400"
+            iconClass="bg-emerald-50 text-emerald-600 dark:bg-emerald-950/40 dark:text-emerald-400"
           />
         </div>
 

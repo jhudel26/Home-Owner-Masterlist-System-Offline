@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import React, { useEffect, useState } from "react";
 import { useRouter, usePathname } from "next/navigation";
@@ -44,7 +44,7 @@ export default function DashboardLayout({
         <div className="relative w-full max-w-sm rounded-2xl border border-white/10 bg-[#0d1522]/90 backdrop-blur-2xl shadow-2xl p-7 text-center space-y-6">
           <div className="relative flex items-center justify-center mx-auto">
             <div className="w-16 h-16 rounded-full border-2 border-emerald-500/20 border-t-emerald-400 animate-spin" />
-            <div className="absolute w-10 h-10 rounded-full border-2 border-teal-500/30 border-b-teal-300 animate-spin [animation-direction:reverse]" />
+            <div className="absolute w-10 h-10 rounded-full border-2 border-emerald-500/30 border-b-emerald-300 animate-spin [animation-direction:reverse]" />
           </div>
 
           <div className="space-y-1.5">
@@ -71,7 +71,7 @@ export default function DashboardLayout({
             </div>
             <div className="flex items-center justify-between text-slate-400">
               <span>Registry Availability</span>
-              <span className="text-teal-400">Checking...</span>
+              <span className="text-emerald-400">Checking...</span>
             </div>
           </div>
         </div>
@@ -88,7 +88,7 @@ export default function DashboardLayout({
       {/* Top Route Navigation Progress Bar */}
       {isNavigating && (
         <div className="fixed top-0 left-0 right-0 h-1 bg-emerald-950 z-50 overflow-hidden">
-          <div className="h-full bg-gradient-to-r from-emerald-500 via-teal-400 to-emerald-300 animate-top-progress" />
+          <div className="h-full bg-gradient-to-r from-emerald-600 via-emerald-400 to-teal-300 animate-top-progress" />
         </div>
       )}
 
@@ -112,4 +112,5 @@ export default function DashboardLayout({
     </div>
   );
 }
+
 
