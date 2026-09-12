@@ -81,7 +81,7 @@ Follow these steps to run the application locally on your development machine.
 ### 1. Clone & Install Dependencies
 
 ```bash
-git clone https://github.com/YOUR_USERNAME/residential-masterlist.git
+git clone [https://github.com/YOUR_USERNAME/residential-masterlist.git](https://github.com/jhudel26/Home-Owner-Masterlist-System-Offline/)
 cd residential-masterlist
 npm install
 ```
