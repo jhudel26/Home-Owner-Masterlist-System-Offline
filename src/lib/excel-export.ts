@@ -1,4 +1,4 @@
-import ExcelJS from "exceljs";
+﻿import ExcelJS from "exceljs";
 import { Homeowner, MonthlyDue } from "@/types/database";
 import { formatDate } from "./utils";
 
@@ -450,6 +450,10 @@ export async function exportMonthlyDuesReportToExcel(
       const ownership = ho.ownership_type ? ho.ownership_type.toUpperCase() : "OWNER";
 
       let hoPaidMonths = 0;
+      let hoTotalPaid = 0;
+      let hoTotalUnpaid = 0;
+      const sampleDue = dues.find((d) => d.year === year && Number(d.amount) > 0) || dues.find((d) => Number(d.amount) > 0);
+      const standardMonthlyAmount = sampleDue ? Number(sampleDue.amount) : 100;
 
       // Base Info Cells
       const infoCells = [
@@ -486,13 +490,17 @@ export async function exportMonthlyDuesReportToExcel(
         const colIdx = 6 + m; // column 7 is Jan
         const monthCell = row.getCell(colIdx);
 
+        const dueAmount = due && due.amount !== undefined && !isNaN(Number(due.amount)) ? Number(due.amount) : standardMonthlyAmount;
+
         if (isPaid) {
           hoPaidMonths++;
+          hoTotalPaid += dueAmount;
           monthlyPaidCounts[m - 1]++;
           monthCell.value = "PAID";
           monthCell.font = { name: "Arial", size: 8.5, bold: true, color: { argb: "FF166534" } }; // Dark Green
           monthCell.fill = { type: "pattern", pattern: "solid", fgColor: { argb: "FFDCFCE7" } }; // Mint Light Green
         } else {
+          hoTotalUnpaid += dueAmount;
           monthCell.value = "UNPAID";
           monthCell.font = { name: "Arial", size: 8.5, bold: true, color: { argb: "FF991B1B" } }; // Dark Red
           monthCell.fill = { type: "pattern", pattern: "solid", fgColor: { argb: "FFFEE2E2" } }; // Soft Red
@@ -508,9 +516,6 @@ export async function exportMonthlyDuesReportToExcel(
       }
 
       // Summary Columns for this Homeowner
-      const hoUnpaidMonths = 12 - hoPaidMonths;
-      const hoTotalPaid = hoPaidMonths * 100;
-      const hoTotalUnpaid = hoUnpaidMonths * 100;
       totalPaidAll += hoTotalPaid;
       totalUnpaidAll += hoTotalUnpaid;
 
@@ -647,3 +652,4 @@ export async function exportMonthlyDuesReportToExcel(
   anchor.click();
   window.URL.revokeObjectURL(url);
 }
+

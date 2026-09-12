@@ -1,11 +1,10 @@
-import { NextRequest, NextResponse } from "next/server";
+﻿import { NextRequest, NextResponse } from "next/server";
 import { randomUUID } from "crypto";
 import { dbExecute, dbQuery } from "@/lib/db/mysql";
 import { hasPermission } from "@/lib/permissions";
 import { getErrorMessage } from "@/lib/error-utils";
-import { publicProfile } from "@/lib/auth/local-auth";
-import { cookies } from "next/headers";
-import type { Homeowner, ActivityLog, HouseholdMember, Profile } from "@/types/database";
+import { getCurrentUser } from "@/lib/auth/local-auth";
+import type { ActivityLog } from "@/types/database";
 import { writeFile, mkdir } from "fs/promises";
 import { existsSync } from "fs";
 import path from "path";
@@ -27,55 +26,13 @@ async function saveUploadedFile(file: File | null): Promise<string | null> {
   const buffer = Buffer.from(bytes);
 
   const uniqueSuffix = `${Date.now()}-${Math.random().toString(36).substring(2, 9)}`;
-  const filename = `${uniqueSuffix}-${file.name}`;
+  const safeName = path.basename(file.name).replace(/[^a-zA-Z0-9.-]/g, '_');
+  const filename = `${uniqueSuffix}-${safeName}`;
   const filepath = path.join(uploadsDir, filename);
 
   await writeFile(filepath, buffer);
 
   return `/uploads/${filename}`;
-}
-
-async function getCurrentUser(): Promise<Profile | null> {
-  try {
-    const cookieStore = await cookies();
-    const sessionCookie = cookieStore.get("session");
-
-    if (!sessionCookie) return null;
-
-    const session = await dbQuery<any>(
-      "SELECT s.*, p.id, p.full_name, p.email, p.role, p.permissions, p.status, p.created_at, p.updated_at FROM sessions s JOIN profiles p ON s.user_id = p.id WHERE s.id = ? AND s.expires_at > NOW()",
-      [sessionCookie.value]
-    );
-
-    if (!session) return null;
-
-    // Handle both array and object formats from MySQL
-    const sessionData = Array.isArray(session) ? session[0] : session;
-    if (!sessionData) return null;
-
-    // Parse permissions if they're stored as JSON string
-    let permissions = sessionData.permissions;
-    if (typeof permissions === 'string') {
-      try {
-        permissions = JSON.parse(permissions);
-      } catch {
-        permissions = {};
-      }
-    }
-
-    return {
-      id: sessionData.id,
-      full_name: sessionData.full_name,
-      email: sessionData.email,
-      role: sessionData.role,
-      permissions: permissions,
-      status: sessionData.status,
-      created_at: sessionData.created_at,
-      updated_at: sessionData.updated_at
-    };
-  } catch {
-    return null;
-  }
 }
 
 export async function GET(request: NextRequest, { params }: { params: Promise<{ id: string }> }) {
@@ -318,10 +275,14 @@ export async function PUT(request: NextRequest, { params }: { params: Promise<{ 
       }
     }
 
+    // Retrieve homeowner name for activity logging
+    const currentHO = await dbQuery<any>("SELECT full_name FROM homeowners WHERE id = ?", [id]);
+    const hoName = updates.full_name || (currentHO && currentHO[0]?.full_name) || "a homeowner";
+
     const activityId = randomUUID();
     await dbExecute(
       "INSERT INTO activity_logs (id, user_id, user_name, action, details) VALUES (?, ?, ?, ?, ?)",
-      [activityId, actor.id, actor.full_name, "UPDATED_HOMEOWNER", JSON.stringify({ homeowner_id: id, updates })]
+      [activityId, actor.id, actor.full_name, "UPDATED_HOMEOWNER", JSON.stringify({ homeowner_id: id, name: hoName, full_name: hoName, updates })]
     );
 
     const updatedHomeowner = await dbQuery<any>(
@@ -366,6 +327,10 @@ export async function DELETE(request: NextRequest, { params }: { params: Promise
 
     const { id } = await params;
 
+    // Retrieve name before deletion for activity logging
+    const currentHO = await dbQuery<any>("SELECT full_name FROM homeowners WHERE id = ?", [id]);
+    const hoName = (currentHO && currentHO[0]?.full_name) || "a homeowner";
+
     // Try soft delete with is_active, fallback to hard delete if column doesn't exist
     try {
       await dbExecute("UPDATE homeowners SET is_active = 0, updated_at = UTC_TIMESTAMP() WHERE id = ?", [id]);
@@ -377,7 +342,7 @@ export async function DELETE(request: NextRequest, { params }: { params: Promise
     const activityId = randomUUID();
     await dbExecute(
       "INSERT INTO activity_logs (id, user_id, user_name, action, details) VALUES (?, ?, ?, ?, ?)",
-      [activityId, actor.id, actor.full_name, "DELETED_HOMEOWNER", JSON.stringify({ homeowner_id: id })]
+      [activityId, actor.id, actor.full_name, "DELETED_HOMEOWNER", JSON.stringify({ homeowner_id: id, name: hoName, full_name: hoName })]
     );
 
     const activity = await dbQuery<ActivityLog>("SELECT * FROM activity_logs WHERE id = ?", [activityId]);

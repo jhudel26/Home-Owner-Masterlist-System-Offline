@@ -1,64 +1,33 @@
-import { NextRequest, NextResponse } from "next/server";
-import { cookies } from "next/headers";
+﻿import { NextRequest, NextResponse } from "next/server";
 import { randomUUID } from "crypto";
 import { dbQuery, dbExecute } from "@/lib/db/mysql";
 import { hasPermission } from "@/lib/permissions";
-import type { Profile } from "@/types/database";
+import { getCurrentUser } from "@/lib/auth/local-auth";
 
 export const dynamic = "force-dynamic";
 
+let settingsTableEnsured = false;
+
 async function ensureSettingsTable(): Promise<void> {
-  await dbExecute(`
-    CREATE TABLE IF NOT EXISTS system_settings (
-      setting_key   VARCHAR(100) PRIMARY KEY,
-      setting_value TEXT NOT NULL,
-      updated_at    TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
-    ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-  `);
-
-  await dbExecute(`
-    INSERT IGNORE INTO system_settings (setting_key, setting_value) VALUES 
-      ('monthly_dues_amount', '100.00'),
-      ('hoa_name', 'St. Joseph Village 6 Phase 4 HOA'),
-      ('hoa_currency', '₱');
-  `);
-}
-
-async function getCurrentUser(): Promise<Profile | null> {
+  if (settingsTableEnsured) return;
   try {
-    const cookieStore = await cookies();
-    const sessionCookie = cookieStore.get("session");
-    if (!sessionCookie) return null;
+    await dbExecute(`
+      CREATE TABLE IF NOT EXISTS system_settings (
+        setting_key   VARCHAR(100) PRIMARY KEY,
+        setting_value TEXT NOT NULL,
+        updated_at    TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+      ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+    `);
 
-    const session = await dbQuery<any>(
-      "SELECT s.*, p.id, p.full_name, p.email, p.role, p.permissions, p.status, p.created_at, p.updated_at FROM sessions s JOIN profiles p ON s.user_id = p.id WHERE s.id = ? AND s.expires_at > NOW()",
-      [sessionCookie.value]
-    );
-
-    const sessionData = Array.isArray(session) ? session[0] : session;
-    if (!sessionData) return null;
-
-    let permissions = sessionData.permissions;
-    if (typeof permissions === "string") {
-      try {
-        permissions = JSON.parse(permissions);
-      } catch {
-        permissions = {};
-      }
-    }
-
-    return {
-      id: sessionData.id,
-      full_name: sessionData.full_name,
-      email: sessionData.email,
-      role: sessionData.role,
-      permissions,
-      status: sessionData.status,
-      created_at: sessionData.created_at,
-      updated_at: sessionData.updated_at,
-    };
-  } catch {
-    return null;
+    await dbExecute(`
+      INSERT IGNORE INTO system_settings (setting_key, setting_value) VALUES 
+        ('monthly_dues_amount', '100.00'),
+        ('hoa_name', 'St. Joseph Village 6 Phase 4 HOA'),
+        ('hoa_currency', '₱');
+    `);
+    settingsTableEnsured = true;
+  } catch (error) {
+    console.error("Failed to ensure system_settings table:", error);
   }
 }
 
@@ -84,16 +53,14 @@ export async function GET() {
     return NextResponse.json({ success: true, settings });
   } catch (error: any) {
     console.error("Error fetching settings:", error);
-    return NextResponse.json(
-      {
-        success: true,
-        settings: {
-          monthly_dues_amount: "100.00",
-          hoa_name: "St. Joseph Village 6 Phase 4 HOA",
-          hoa_currency: "₱",
-        },
-      }
-    );
+    return NextResponse.json({
+      success: true,
+      settings: {
+        monthly_dues_amount: "100.00",
+        hoa_name: "St. Joseph Village 6 Phase 4 HOA",
+        hoa_currency: "₱",
+      },
+    });
   }
 }
 

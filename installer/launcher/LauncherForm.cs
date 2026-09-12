@@ -8,6 +8,16 @@ using System.Net;
 using System.Net.Sockets;
 using System.Threading;
 using System.Collections.Generic;
+using System.Reflection;
+
+[assembly: AssemblyTitle("Residential Masterlist Server Controller")]
+[assembly: AssemblyDescription("Residential Masterlist Server Controller")]
+[assembly: AssemblyCompany("Eru Studio")]
+[assembly: AssemblyProduct("Residential Masterlist")]
+[assembly: AssemblyCopyright("Copyright © Eru Studio. All rights reserved.")]
+[assembly: AssemblyTrademark("Eru Studio")]
+[assembly: AssemblyVersion("1.0.0.0")]
+[assembly: AssemblyFileVersion("1.0.0.0")]
 
 namespace ResidentialMasterlist.Launcher
 {

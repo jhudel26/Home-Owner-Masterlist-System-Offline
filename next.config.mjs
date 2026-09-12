@@ -3,8 +3,8 @@ const nextConfig = {
   output: "standalone",
   poweredByHeader: false,
   // Dev-only: allowed origins for local network dev access
-  ...(process.env.NODE_ENV !== "production" && {
-    allowedDevOrigins: ["100.109.191.75"],
+  ...(process.env.NODE_ENV !== "production" && process.env.ALLOWED_DEV_ORIGINS && {
+    allowedDevOrigins: process.env.ALLOWED_DEV_ORIGINS.split(",").map((s) => s.trim()),
   }),
   // Allow serving uploaded images from the persistent data directory
   images: {

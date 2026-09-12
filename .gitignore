@@ -1,40 +1,37 @@
-# Dependencies
-node_modules/
-installer/launcher/node_modules/
-installer/scripts/node_modules/
+﻿# dependencies
+/node_modules
+/.pnp
+.pnp.js
 
-# Next.js build output
-.next/
+# testing
+/coverage
 
-# Distribution / installer build output
-dist/
-*.exe
+# next.js
+/.next/
+/out/
 
-# Runtime tools (downloaded by prepare-tools, not committed)
-tools/
+# production builds & installer outputs
+/dist
+tools/node.exe
+tools/mariadb/
 
-# Environment files with secrets
-.env.local
-.env.production
-.env.*.local
+# uploads
+/public/uploads/*
+!/public/uploads/.gitkeep
 
-# Logs
-*.log
-logs/
-
-# OS files
+# misc
 .DS_Store
-Thumbs.db
-desktop.ini
+*.pem
+*.log
 
-# Editor
-.vscode/
-*.suo
-*.user
+# debug logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
 
-# TypeScript incremental build
-tsconfig.tsbuildinfo
+# local env files
+.env*.local
+.env
 
-# Backup files created by editors
-*.backup
-*-old.*
+# typescript
+*.tsbuildinfo

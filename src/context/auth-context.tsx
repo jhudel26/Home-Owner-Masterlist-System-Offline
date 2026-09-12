@@ -11,13 +11,13 @@ interface AuthContextType {
   setCurrentUser: (user: Profile | null) => void;
   allProfiles: Profile[];
   setAllProfiles: React.Dispatch<React.SetStateAction<Profile[]>>;
+  fetchProfiles: () => Promise<void>;
   isLoading: boolean;
   setIsLoading: (loading: boolean) => void;
   loadingStage: string;
   setLoadingStage: (stage: string) => void;
   isLocalDatabaseActive: boolean;
   setIsLocalDatabaseActive: (active: boolean) => void;
-  switchDemoRole: (role: UserRole) => void;
   logout: () => Promise<void>;
   updateUserPermissions: (userId: string, permissions: UserPermissions) => Promise<{ success: boolean; error?: string }>;
   updateUserStatus: (userId: string, status: "Active" | "Inactive") => Promise<{ success: boolean; error?: string }>;
@@ -30,58 +30,42 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [currentUser, setCurrentUser] = useState<Profile | null>(null);
   const [allProfiles, setAllProfiles] = useState<Profile[]>([]);
   const [isLoading, setIsLoading] = useState(true);
-  const [loadingStage, setLoadingStage] = useState("Connecting to local MySQL database...");
+  const [loadingStage, setLoadingStage] = useState("Connecting to local database...");
   const [isLocalDatabaseActive, setIsLocalDatabaseActive] = useState(true);
 
   const loadAuth = useCallback(async () => {
-    setLoadingStage("Verifying local account session...");
+    setLoadingStage("Verifying session...");
     try {
       const response = await fetch("/api/auth/me", { cache: "no-store" });
       const result = await response.json();
-      if (!response.ok) throw new Error(result.error || "Local database unavailable");
-      setAllProfiles(Array.isArray(result.profiles) ? result.profiles : []);
+      if (!response.ok) throw new Error(result.error || "Database unavailable");
       setCurrentUser(result.authenticated ? result.currentUser : null);
       setLoadingStage("Ready");
     } catch (error) {
-      console.error("Local authentication initialization failed:", error);
+      console.error("Authentication initialization failed:", error);
       setCurrentUser(null);
-      setLoadingStage("Start XAMPP MySQL and refresh the page.");
+      setLoadingStage("Database unavailable. Please check your MySQL service.");
     } finally {
       setIsLoading(false);
     }
   }, []);
 
-  // Restore auth state from sessionStorage on mount (survives Fast Refresh)
-  useEffect(() => {
+  const fetchProfiles = useCallback(async () => {
     try {
-      const savedUser = sessionStorage.getItem('auth_user');
-      if (savedUser) {
-        setCurrentUser(JSON.parse(savedUser));
-        // Don't set isLoading false here - let loadAuth handle it
+      const response = await fetch("/api/users", { cache: "no-store" });
+      if (!response.ok) return;
+      const result = await response.json();
+      if (Array.isArray(result.profiles)) {
+        setAllProfiles(result.profiles);
       }
     } catch (error) {
-      console.error("Failed to restore auth state:", error);
+      console.error("Failed to load user accounts:", error);
     }
   }, []);
 
-  // Save auth state to sessionStorage whenever it changes
   useEffect(() => {
-    if (currentUser) {
-      sessionStorage.setItem('auth_user', JSON.stringify(currentUser));
-    } else {
-      sessionStorage.removeItem('auth_user');
-    }
-  }, [currentUser]);
-
-  // Only run loadAuth once on mount
-  useEffect(() => {
-    loadAuth();
-  }, []);
-
-  const switchDemoRole = useCallback((role: UserRole) => {
-    const found = allProfiles.find((p) => p.role === role);
-    if (found) setCurrentUser(found);
-  }, [allProfiles]);
+    void loadAuth();
+  }, [loadAuth]);
 
   const logout = useCallback(async () => {
     try { await fetch("/api/auth/logout", { method: "POST" }); } catch (error) { console.error(error); }
@@ -125,7 +109,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     } catch (error) { return { success: false, error: getErrorMessage(error) }; }
   }, []);
 
-  return <AuthContext.Provider value={{ currentUser, setCurrentUser, allProfiles, setAllProfiles, isLoading, setIsLoading, loadingStage, setLoadingStage, isLocalDatabaseActive, setIsLocalDatabaseActive, switchDemoRole, logout, updateUserPermissions, updateUserStatus, createUser }}>{children}</AuthContext.Provider>;
+  return <AuthContext.Provider value={{ currentUser, setCurrentUser, allProfiles, setAllProfiles, fetchProfiles, isLoading, setIsLoading, loadingStage, setLoadingStage, isLocalDatabaseActive, setIsLocalDatabaseActive, logout, updateUserPermissions, updateUserStatus, createUser }}>{children}</AuthContext.Provider>;
 }
 
 export function useAuth() {

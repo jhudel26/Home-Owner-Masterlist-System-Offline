@@ -50,6 +50,7 @@ export async function POST(request: NextRequest) {
       can_view_dashboard_stats: true,
       can_backup_restore: true,
       can_view_analytics: true,
+      can_manage_monthly_dues: true,
     });
 
     await dbExecute(

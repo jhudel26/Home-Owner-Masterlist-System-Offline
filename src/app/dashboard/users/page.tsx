@@ -1,6 +1,6 @@
 "use client";
 
-import React from "react";
+import React, { useEffect } from "react";
 import { useApp } from "@/context/app-context";
 import { hasPermission } from "@/lib/permissions";
 import { PageHeader } from "@/components/layout/page-header";
@@ -8,8 +8,14 @@ import { UserTable } from "@/components/users/user-table";
 import { ShieldAlert } from "lucide-react";
 
 export default function UsersManagementPage() {
-  const { currentUser, allProfiles } = useApp();
+  const { currentUser, allProfiles, fetchProfiles } = useApp();
   const canManage = hasPermission(currentUser, "can_manage_users");
+
+  useEffect(() => {
+    if (canManage) {
+      void fetchProfiles();
+    }
+  }, [canManage, fetchProfiles]);
 
   if (!canManage) {
     return (

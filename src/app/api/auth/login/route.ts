@@ -1,7 +1,8 @@
 import { NextRequest, NextResponse } from "next/server";
 import { randomUUID } from "crypto";
 import { dbQuery, dbExecute } from "@/lib/db/mysql";
-import { verifyPassword, publicProfile } from "@/lib/auth/local-auth";
+import { verifyPassword } from "@/lib/auth/local-auth";
+import { rateLimit, getClientIp } from "@/lib/rate-limit";
 import { cookies } from "next/headers";
 import type { Profile, UserRole, UserPermissions } from "@/types/database";
 import { DEFAULT_PERMISSIONS_BY_ROLE } from "@/lib/permissions";
@@ -10,6 +11,16 @@ export const dynamic = "force-dynamic";
 
 export async function POST(request: NextRequest) {
   try {
+    // Rate limiting: 10 attempts per minute per IP
+    const clientIp = getClientIp(request.headers);
+    const rateCheck = rateLimit(`login_${clientIp}`, { limit: 10, windowMs: 60 * 1000 });
+    if (!rateCheck.allowed) {
+      return NextResponse.json(
+        { error: `Too many login attempts. Please try again in ${rateCheck.retryAfterSeconds} seconds.` },
+        { status: 429 }
+      );
+    }
+
     const body = await request.json();
     const { email, password } = body;
 
@@ -46,52 +57,28 @@ export async function POST(request: NextRequest) {
 
     // Set session cookie
     const cookieStore = await cookies();
+    const isProduction = process.env.NODE_ENV === "production";
+    const isLocalhost = request.nextUrl.hostname === "localhost" || request.nextUrl.hostname === "127.0.0.1";
+
     cookieStore.set("session", sessionId, {
       httpOnly: true,
-      secure: false, // Set to false for localhost development
+      secure: isProduction && !isLocalhost,
       sameSite: "lax",
       expires: expiresAt,
       path: "/",
       maxAge: 60 * 60 * 24 * 7, // 7 days
     });
 
-    // Get all profiles for demo role switching
-    const allProfiles = await dbQuery<any>(
-      "SELECT id, full_name, email, role, permissions, status, created_at, updated_at FROM profiles WHERE status = 'Active' ORDER BY created_at ASC"
-    );
-
-    // Parse permissions for all profiles with error handling
-    const parsedProfiles = allProfiles.map(profile => {
-      const profileData = typeof profile === 'object' && '0' in profile ? profile[0] : profile;
-      let parsedPermissions = profileData.permissions;
-      if (typeof parsedPermissions === 'string') {
-        try {
-          parsedPermissions = JSON.parse(parsedPermissions);
-        } catch {
-          console.error(`Failed to parse permissions for profile ${profileData.id}:`, parsedPermissions?.substring(0, 100));
-          parsedPermissions = DEFAULT_PERMISSIONS_BY_ROLE[profileData.role as UserRole] || DEFAULT_PERMISSIONS_BY_ROLE.user;
-        }
-      }
-      return {
-        id: profileData.id,
-        full_name: profileData.full_name,
-        email: profileData.email,
-        role: profileData.role,
-        permissions: parsedPermissions,
-        status: profileData.status,
-        created_at: profileData.created_at,
-        updated_at: profileData.updated_at
-      };
-    });
-
     // Parse permissions for current user
     let userPermissions: UserPermissions = profile.permissions;
-    if (typeof (userPermissions as any) === 'string') {
+    if (typeof (userPermissions as any) === "string") {
       try {
         userPermissions = JSON.parse(userPermissions as unknown as string);
       } catch {
-        userPermissions = DEFAULT_PERMISSIONS_BY_ROLE[profile.role] || DEFAULT_PERMISSIONS_BY_ROLE.user;
+        userPermissions = DEFAULT_PERMISSIONS_BY_ROLE[profile.role as UserRole] || DEFAULT_PERMISSIONS_BY_ROLE.user;
       }
+    } else if (!userPermissions) {
+      userPermissions = DEFAULT_PERMISSIONS_BY_ROLE[profile.role as UserRole] || DEFAULT_PERMISSIONS_BY_ROLE.user;
     }
 
     const userPublic = {
@@ -102,17 +89,31 @@ export async function POST(request: NextRequest) {
       permissions: userPermissions,
       status: profile.status,
       created_at: profile.created_at,
-      updated_at: profile.updated_at
+      updated_at: profile.updated_at,
     };
+
+    // Log login activity
+    try {
+      await dbExecute(
+        "INSERT INTO activity_logs (id, user_id, user_name, action, details) VALUES (?, ?, ?, ?, ?)",
+        [
+          randomUUID(),
+          profile.id,
+          profile.full_name,
+          "LOGGED_IN",
+          JSON.stringify({ email: profile.email, role: profile.role }),
+        ]
+      );
+    } catch (_) {}
 
     return NextResponse.json({
       success: true,
       user: userPublic,
       profile: userPublic,
-      profiles: parsedProfiles
     });
   } catch (error) {
     console.error("Login error:", error);
     return NextResponse.json({ error: "Login failed" }, { status: 500 });
   }
 }
+

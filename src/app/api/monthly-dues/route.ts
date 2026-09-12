@@ -1,10 +1,20 @@
-import { NextRequest, NextResponse } from 'next/server';
+﻿import { NextRequest, NextResponse } from 'next/server';
 import { randomUUID } from 'crypto';
 import { dbQuery, dbExecute } from '@/lib/db/mysql';
+import { getCurrentUser } from '@/lib/auth/local-auth';
+import { hasPermission } from '@/lib/permissions';
+
+export const dynamic = "force-dynamic";
 
 // GET /api/monthly-dues - Get monthly dues with optional filtering
 export async function GET(request: NextRequest) {
   try {
+    const actor = await getCurrentUser();
+    if (!actor) return NextResponse.json({ success: false, error: "Unauthorized" }, { status: 401 });
+    if (!hasPermission(actor, "can_manage_monthly_dues") && !hasPermission(actor, "can_view_homeowner")) {
+      return NextResponse.json({ success: false, error: "Permission denied" }, { status: 403 });
+    }
+
     const searchParams = request.nextUrl.searchParams;
     const homeownerId = searchParams.get('homeowner_id');
     const year = searchParams.get('year');
@@ -73,6 +83,12 @@ export async function GET(request: NextRequest) {
 // POST /api/monthly-dues - Create new monthly due record
 export async function POST(request: NextRequest) {
   try {
+    const actor = await getCurrentUser();
+    if (!actor) return NextResponse.json({ success: false, error: "Unauthorized" }, { status: 401 });
+    if (!hasPermission(actor, "can_manage_monthly_dues")) {
+      return NextResponse.json({ success: false, error: "Permission denied" }, { status: 403 });
+    }
+
     const body = await request.json();
     let { homeowner_id, year, month, amount, status = 'unpaid', official_receipt_number, payment_date, created_by } = body;
 
@@ -100,7 +116,7 @@ export async function POST(request: NextRequest) {
       VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
     `;
 
-    await dbExecute(query, [id, homeowner_id, year, month, amount, status, official_receipt_number || null, payment_date || null, created_by || null]);
+    await dbExecute(query, [id, homeowner_id, year, month, amount, status, official_receipt_number || null, payment_date || null, created_by || actor.id]);
 
     return NextResponse.json({ success: true, id });
   } catch (error: any) {
@@ -121,6 +137,12 @@ export async function POST(request: NextRequest) {
 // PATCH /api/monthly-dues - Update monthly due record
 export async function PATCH(request: NextRequest) {
   try {
+    const actor = await getCurrentUser();
+    if (!actor) return NextResponse.json({ success: false, error: "Unauthorized" }, { status: 401 });
+    if (!hasPermission(actor, "can_manage_monthly_dues")) {
+      return NextResponse.json({ success: false, error: "Permission denied" }, { status: 403 });
+    }
+
     const body = await request.json();
     const { id, status, amount, official_receipt_number, payment_date } = body;
 

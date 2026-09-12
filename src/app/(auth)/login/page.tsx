@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import React, { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
@@ -15,7 +15,6 @@ import {
   Eye,
   EyeOff,
   ArrowRight,
-  ShieldAlert,
 } from "lucide-react";
 
 export default function LoginPage() {
@@ -85,27 +84,14 @@ export default function LoginPage() {
     }
   };
 
-  const handlePasswordReset = async (e: React.FormEvent) => {
+  const handlePasswordReset = (e: React.FormEvent) => {
     e.preventDefault();
-    if (!resetEmail) return;
-
-    setResetLoading(true);
-    try {
-      const response = await fetch("/api/auth/reset-request", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email: resetEmail.trim() }),
-      });
-      const result = await response.json();
-      if (!response.ok) throw new Error(result.error || "Unable to process reset request.");
-      info("Offline Password Reset", result.message || "Contact the Super Admin to reset the password.");
-      setIsResetOpen(false);
-      setResetEmail("");
-    } catch (err: any) {
-      toastError("Reset Failed", err.message);
-    } finally {
-      setResetLoading(false);
-    }
+    info(
+      "Password Reset Notice",
+      "For security in this HOA Board portal, passwords can be reset by the Super Admin (President) under Settings > Account Management."
+    );
+    setIsResetOpen(false);
+    setResetEmail("");
   };
 
   return (
@@ -408,5 +394,6 @@ export default function LoginPage() {
     </div>
   );
 }
+
 
 

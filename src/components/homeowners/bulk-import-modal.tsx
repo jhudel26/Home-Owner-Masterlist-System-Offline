@@ -360,14 +360,20 @@ export function BulkImportModal({ isOpen, onClose }: BulkImportModalProps) {
           });
         }
 
+        const rawOwnership = (d.ownership_type || "").toString().toLowerCase().trim();
+        const normOwnership: OwnershipType = rawOwnership === "renter" ? "renter" : "owner";
+
+        const rawGender = (d.gender || "").toString().toLowerCase().trim();
+        const normGender: GenderType = rawGender === "female" ? "female" : rawGender === "other" ? "other" : "male";
+
         const hoRecord: Omit<Homeowner, "id" | "created_at" | "updated_at"> = {
           first_name: d.first_name || "",
           middle_name: d.middle_name,
           last_name: d.last_name || "",
           suffix: d.suffix,
           full_name: [d.first_name, d.middle_name, d.last_name, d.suffix].filter(Boolean).join(" "),
-          ownership_type: (d.ownership_type as OwnershipType) || "Owner",
-          gender: (d.gender as GenderType) || "Male",
+          ownership_type: normOwnership,
+          gender: normGender,
           birthdate: d.birthdate || "",
           age: d.birthdate ? calculateAge(d.birthdate) : undefined,
           tenure_date: d.tenure_date,

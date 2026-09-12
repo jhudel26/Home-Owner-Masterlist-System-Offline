@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import React, { useState, useMemo, useEffect, useRef } from "react";
 import Link from "next/link";
@@ -46,7 +46,7 @@ interface HomeownerTableProps {
 
 export function HomeownerTable({ homeowners }: HomeownerTableProps) {
   const router = useRouter();
-  const { currentUser, deleteHomeowner } = useApp();
+  const { currentUser, deleteHomeowner, setHomeowners } = useApp();
   const { success, error: toastError } = useToast();
   const searchInputRef = useRef<HTMLInputElement>(null);
 
@@ -537,8 +537,12 @@ export function HomeownerTable({ homeowners }: HomeownerTableProps) {
                                         checked ? "Status Activated" : "Status Archived",
                                         `${ho.full_name} has been ${checked ? "activated" : "archived"}.`
                                       );
-                                      // Update local state to reflect the change without reload
-                                      ho.is_active = checked ? 1 : 0;
+                                      // Update state immutably without mutating props
+                                      setHomeowners((prev) =>
+                                        prev.map((item) =>
+                                          item.id === ho.id ? { ...item, is_active: checked ? 1 : 0 } : item
+                                        )
+                                      );
                                     } else {
                                       toastError("Update Failed", data.error || "Could not update status");
                                     }
@@ -853,3 +857,4 @@ export function HomeownerTable({ homeowners }: HomeownerTableProps) {
     </div>
   );
 }
+

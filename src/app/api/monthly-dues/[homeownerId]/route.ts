@@ -1,6 +1,10 @@
-import { NextRequest, NextResponse } from 'next/server';
+﻿import { NextRequest, NextResponse } from 'next/server';
 import { randomUUID } from 'crypto';
 import { dbQuery, dbExecute } from '@/lib/db/mysql';
+import { getCurrentUser } from '@/lib/auth/local-auth';
+import { hasPermission } from '@/lib/permissions';
+
+export const dynamic = "force-dynamic";
 
 // GET /api/monthly-dues/[homeownerId] - Get all monthly dues for a specific homeowner
 export async function GET(
@@ -8,6 +12,12 @@ export async function GET(
   { params }: { params: Promise<{ homeownerId: string }> }
 ) {
   try {
+    const actor = await getCurrentUser();
+    if (!actor) return NextResponse.json({ success: false, error: "Unauthorized" }, { status: 401 });
+    if (!hasPermission(actor, "can_manage_monthly_dues") && !hasPermission(actor, "can_view_homeowner")) {
+      return NextResponse.json({ success: false, error: "Permission denied" }, { status: 403 });
+    }
+
     const { homeownerId } = await params;
     const searchParams = request.nextUrl.searchParams;
     const year = searchParams.get('year');
@@ -45,6 +55,12 @@ export async function POST(
   { params }: { params: Promise<{ homeownerId: string }> }
 ) {
   try {
+    const actor = await getCurrentUser();
+    if (!actor) return NextResponse.json({ success: false, error: "Unauthorized" }, { status: 401 });
+    if (!hasPermission(actor, "can_manage_monthly_dues")) {
+      return NextResponse.json({ success: false, error: "Permission denied" }, { status: 403 });
+    }
+
     const { homeownerId } = await params;
     const body = await request.json();
     const { year, months, amount = 100.00, created_by } = body;
@@ -66,7 +82,7 @@ export async function POST(
           INSERT INTO monthly_dues (id, homeowner_id, year, month, amount, status, created_by)
           VALUES (?, ?, ?, ?, ?, 'unpaid', ?)
         `;
-        await dbExecute(query, [id, homeownerId, year, month, amount, created_by || null]);
+        await dbExecute(query, [id, homeownerId, year, month, amount, created_by || actor.id]);
         createdRecords.push({ id, year, month });
       } catch (error: any) {
         if (error.code === 'ER_DUP_ENTRY') {

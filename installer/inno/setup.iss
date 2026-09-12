@@ -13,7 +13,7 @@
 
 #define AppName        "Residential Masterlist"
 #define AppVersion     "1.0.0"
-#define AppPublisher   "St. Joseph Village 6 Phase 4 HOA"
+#define AppPublisher   "Eru Studio"
 #define AppURL         "http://127.0.0.1:3000"
 #define AppExeName     "launcher.exe"
 #define ServiceName    "RMLauncher"
@@ -26,6 +26,12 @@ AppName={#AppName}
 AppVersion={#AppVersion}
 AppPublisher={#AppPublisher}
 AppPublisherURL={#AppURL}
+AppCopyright=Copyright (C) Eru Studio
+VersionInfoCompany=Eru Studio
+VersionInfoDescription=Residential Masterlist Setup
+VersionInfoVersion=1.0.0.0
+VersionInfoCopyright=Copyright (C) Eru Studio
+VersionInfoProductName=Residential Masterlist
 DefaultDirName={autopf}\{#AppName}
 DefaultGroupName={#AppName}
 AllowNoIcons=no

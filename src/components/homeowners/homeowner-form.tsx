@@ -984,7 +984,7 @@ export function HomeownerForm({ initialData, onSubmit, isEditing = false }: Home
               </div>
               <div>
                 <p className="text-sm font-semibold text-slate-900 dark:text-slate-100">GA Proxy Photo</p>
-                <p className="text-xs text-slate-500 dark:text-slate-400">Upload proxy's photo (JPG, PNG) - Max 5MB</p>
+                <p className="text-xs text-slate-500 dark:text-slate-400">Upload proxy&apos;s photo (JPG, PNG) - Max 5MB</p>
               </div>
             </div>
           </div>

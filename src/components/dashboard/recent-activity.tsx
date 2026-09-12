@@ -1,9 +1,9 @@
-"use client";
+﻿"use client";
 
 import React from "react";
 import { ActivityLog } from "@/types/database";
 import { formatDateTime } from "@/lib/utils";
-import { Clock, UserPlus, Edit3, Trash2, FileSpreadsheet, ShieldAlert, Sparkles } from "lucide-react";
+import { Clock, UserPlus, Edit3, Trash2, FileSpreadsheet, ShieldAlert, Sparkles, Settings, RefreshCw } from "lucide-react";
 
 interface RecentActivityProps {
   logs: ActivityLog[];
@@ -20,10 +20,11 @@ export function RecentActivity({ logs }: RecentActivityProps) {
           tagColor: "bg-teal-100/80 text-teal-800",
         };
       case "UPDATED_HOMEOWNER":
+      case "UPDATED_STATUS":
         return {
           icon: <Edit3 className="h-4 w-4 text-sky-600" />,
           bgColor: "bg-sky-50 border-sky-200",
-          tag: "Updated",
+          tag: action === "UPDATED_STATUS" ? "Status" : "Updated",
           tagColor: "bg-sky-100/80 text-sky-800",
         };
       case "DELETED_HOMEOWNER":
@@ -39,6 +40,27 @@ export function RecentActivity({ logs }: RecentActivityProps) {
           bgColor: "bg-teal-50 border-teal-200",
           tag: "Export",
           tagColor: "bg-teal-100/80 text-teal-800",
+        };
+      case "UPDATED_MONTHLY_DUES":
+        return {
+          icon: <FileSpreadsheet className="h-4 w-4 text-emerald-600" />,
+          bgColor: "bg-emerald-50 border-emerald-200",
+          tag: "Dues",
+          tagColor: "bg-emerald-100/80 text-emerald-800",
+        };
+      case "RESTORED_BACKUP":
+        return {
+          icon: <RefreshCw className="h-4 w-4 text-indigo-600" />,
+          bgColor: "bg-indigo-50 border-indigo-200",
+          tag: "Restore",
+          tagColor: "bg-indigo-100/80 text-indigo-800",
+        };
+      case "UPDATED_SETTINGS":
+        return {
+          icon: <Settings className="h-4 w-4 text-violet-600" />,
+          bgColor: "bg-violet-50 border-violet-200",
+          tag: "Settings",
+          tagColor: "bg-violet-100/80 text-violet-800",
         };
       case "SYSTEM_INITIALIZED":
         return {
@@ -58,15 +80,26 @@ export function RecentActivity({ logs }: RecentActivityProps) {
   };
 
   const formatActionText = (log: ActivityLog) => {
+    const hoName = log.details?.name || log.details?.full_name || "a homeowner";
+    const hoAddress = log.details?.address || log.details?.street_name || "Phase 4";
+
     switch (log.action) {
       case "CREATED_HOMEOWNER":
-        return `registered new homeowner "${log.details?.name || "Unknown"}" at ${log.details?.address || "Phase 4"}`;
+        return `registered new homeowner "${hoName !== "a homeowner" ? hoName : "Unknown"}" at ${hoAddress}`;
       case "UPDATED_HOMEOWNER":
-        return `updated records for "${log.details?.name || "a homeowner"}"`;
+        return `updated records for "${hoName}"`;
       case "DELETED_HOMEOWNER":
-        return `archived homeowner "${log.details?.name || "a homeowner"}"`;
+        return `archived homeowner "${hoName}"`;
+      case "UPDATED_STATUS":
+        return `${log.details?.is_active ? "activated" : "archived"} status for "${hoName}"`;
+      case "UPDATED_MONTHLY_DUES":
+        return "updated monthly dues payment records";
       case "EXPORTED_EXCEL":
-        return `exported the official homeowner masterlist (.xlsx)`;
+        return "exported the official homeowner masterlist (.xlsx)";
+      case "RESTORED_BACKUP":
+        return `restored database backup (${log.details?.count ?? 0} homeowners)`;
+      case "UPDATED_SETTINGS":
+        return "updated system configuration and dues settings";
       case "UPDATED_USER_PERMISSIONS":
         return `modified access privileges for ${log.details?.target_user || "user"}`;
       case "SYSTEM_INITIALIZED":
