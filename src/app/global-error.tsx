@@ -30,7 +30,7 @@ export default function GlobalError({
           </div>
           <button
             onClick={() => reset()}
-            className="px-5 py-2.5 bg-teal-600 hover:bg-teal-500 rounded-xl text-sm font-semibold transition-all inline-flex items-center gap-2"
+            className="px-5 py-2.5 bg-emerald-600 hover:bg-emerald-500 shadow-md shadow-emerald-600/30 rounded-xl text-sm font-semibold transition-all inline-flex items-center gap-2"
           >
             <RefreshCw className="h-4 w-4" />
             Reload Application
@@ -40,3 +40,4 @@ export default function GlobalError({
     </html>
   );
 }
+

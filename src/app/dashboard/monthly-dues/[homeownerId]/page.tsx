@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import React, { useState, useEffect } from "react";
 import { useRouter, useParams } from "next/navigation";
@@ -258,7 +258,7 @@ export default function HomeownerDuesDetailPage() {
         });
         const data = await res.json();
         if (data.success) {
-          success("Amount Updated", `${MONTHS[targetMonth - 1]} dues set to ₱${numAmount.toFixed(2)}.`);
+          success("Amount Updated", `${MONTHS[targetMonth - 1]} dues set to â‚±${numAmount.toFixed(2)}.`);
           setIsAmountModalOpen(false);
           fetchMonthlyDues();
         } else {
@@ -279,7 +279,7 @@ export default function HomeownerDuesDetailPage() {
         });
         const data = await res.json();
         if (data.success) {
-          success("Amount Set", `${MONTHS[targetMonth - 1]} dues set to ₱${numAmount.toFixed(2)}.`);
+          success("Amount Set", `${MONTHS[targetMonth - 1]} dues set to â‚±${numAmount.toFixed(2)}.`);
           setIsAmountModalOpen(false);
           fetchMonthlyDues();
         } else {
@@ -329,7 +329,7 @@ export default function HomeownerDuesDetailPage() {
   if (isLoading || !homeowner) {
     return (
       <div className="flex items-center justify-center py-16">
-        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-teal-600"></div>
+        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-emerald-600"></div>
       </div>
     );
   }
@@ -349,11 +349,11 @@ export default function HomeownerDuesDetailPage() {
           <span>Back to Dues List</span>
         </Button>
         <PageHeader
-          title={`${homeowner.full_name} — Account Ledger`}
+          title={`${homeowner.full_name} â€” Account Ledger`}
           description={`Track monthly dues payments and receipts for ${homeowner.full_name}`}
           icon={
-            <span className="inline-flex items-center justify-center h-7 w-7 rounded-xl bg-teal-50 dark:bg-teal-950/50 text-teal-700 dark:text-teal-400 font-bold text-base border border-teal-200 dark:border-teal-800/60 shadow-xs">
-              ₱
+            <span className="inline-flex items-center justify-center h-7 w-7 rounded-xl bg-emerald-50 dark:bg-emerald-950/50 text-emerald-700 dark:text-emerald-400 font-bold text-base border border-emerald-200 dark:border-emerald-800/60 shadow-xs">
+              â‚±
             </span>
           }
         />
@@ -368,7 +368,7 @@ export default function HomeownerDuesDetailPage() {
               <img
                 src={homeowner.photo_path}
                 alt={homeowner.full_name || "Homeowner"}
-                className="h-20 w-20 rounded-2xl object-cover border-2 border-teal-500/30 shadow-md"
+                className="h-20 w-20 rounded-2xl object-cover border-2 border-emerald-500/30 shadow-md"
                 onError={(e) => {
                   e.currentTarget.style.display = "none";
                   const fb = e.currentTarget.parentElement?.querySelector(".fb-avatar") as HTMLElement;
@@ -377,7 +377,7 @@ export default function HomeownerDuesDetailPage() {
               />
             ) : null}
             <div
-              className={`fb-avatar h-20 w-20 rounded-2xl bg-gradient-to-br from-[#07162c] to-[#0c2340] text-teal-300 font-bold text-2xl items-center justify-center border border-teal-500/30 shadow-md ${
+              className={`fb-avatar h-20 w-20 rounded-2xl bg-gradient-to-br from-[#07162c] to-[#0c2340] text-emerald-300 font-bold text-2xl items-center justify-center border border-emerald-500/30 shadow-md ${
                 homeowner.photo_path && isValidImageUrl(homeowner.photo_path) ? "hidden" : "flex"
               }`}
             >
@@ -391,7 +391,7 @@ export default function HomeownerDuesDetailPage() {
                 {homeowner.full_name}
               </h3>
               {homeowner.hoa_number && (
-                <span className="text-xs font-mono font-bold px-2.5 py-0.5 rounded-full bg-teal-50 dark:bg-teal-950/60 text-teal-700 dark:text-teal-300 border border-teal-200 dark:border-teal-800/60">
+                <span className="text-xs font-mono font-bold px-2.5 py-0.5 rounded-full bg-teal-50 dark:bg-teal-950/60 text-teal-700 dark:text-emerald-300 border border-teal-200 dark:border-teal-800/60">
                   {homeowner.hoa_number}
                 </span>
               )}
@@ -399,7 +399,7 @@ export default function HomeownerDuesDetailPage() {
             </div>
 
             <p className="text-xs text-slate-600 dark:text-slate-400 flex items-center gap-1.5 mt-0.5">
-              <Home className="h-3.5 w-3.5 text-teal-600 dark:text-teal-400" />
+              <Home className="h-3.5 w-3.5 text-emerald-600 dark:text-emerald-400" />
               <span>{homeowner.street_name || homeowner.address}</span>
               <span className="text-slate-300 dark:text-slate-700">&bull;</span>
               <span>Block {homeowner.block_number}, Lot {homeowner.lot_number}</span>
@@ -433,7 +433,7 @@ export default function HomeownerDuesDetailPage() {
             }}
           />
           <div>
-            <span className="text-[10px] font-bold uppercase tracking-wider text-teal-600 dark:text-teal-400 block">
+            <span className="text-[10px] font-bold uppercase tracking-wider text-emerald-600 dark:text-emerald-400 block">
               Association
             </span>
             <span className="text-xs font-extrabold text-slate-800 dark:text-slate-200 block">
@@ -470,7 +470,7 @@ export default function HomeownerDuesDetailPage() {
             onClick={() => setSelectedYear(selectedYear + 1)}
             className="p-2 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 hover:bg-slate-100 dark:hover:bg-slate-700 transition-colors"
           >
-            <span className="text-slate-600 dark:text-slate-400 font-bold">→</span>
+            <span className="text-slate-600 dark:text-slate-400 font-bold">â†’</span>
           </button>
         </div>
       </div>
@@ -485,7 +485,7 @@ export default function HomeownerDuesDetailPage() {
             </span>
           </div>
           <div className="text-2xl font-black text-emerald-700 dark:text-emerald-300 font-mono">
-            ₱{totals.paid.toFixed(2)}
+            â‚±{totals.paid.toFixed(2)}
           </div>
         </div>
 
@@ -497,7 +497,7 @@ export default function HomeownerDuesDetailPage() {
             </span>
           </div>
           <div className="text-2xl font-black text-amber-700 dark:text-amber-300 font-mono">
-            ₱{totals.unpaid.toFixed(2)}
+            â‚±{totals.unpaid.toFixed(2)}
           </div>
         </div>
 
@@ -509,7 +509,7 @@ export default function HomeownerDuesDetailPage() {
             </span>
           </div>
           <div className="text-2xl font-black text-slate-800 dark:text-slate-200 font-mono">
-            ₱{totals.total.toFixed(2)}
+            â‚±{totals.total.toFixed(2)}
           </div>
         </div>
       </div>
@@ -551,13 +551,13 @@ export default function HomeownerDuesDetailPage() {
 
                     <div className="flex items-center gap-1">
                       <span className="text-xs font-mono font-bold text-slate-900 dark:text-slate-100">
-                        ₱{amount.toFixed(2)}
+                        â‚±{amount.toFixed(2)}
                       </span>
                       {canManageDues && (
                         <button
                           onClick={() => openEditAmountModal(monthNum)}
                           title="Edit month amount"
-                          className="p-1 rounded text-slate-400 hover:text-teal-600"
+                          className="p-1 rounded text-slate-400 hover:text-emerald-600"
                         >
                           <Edit2 className="h-3 w-3" />
                         </button>
@@ -671,10 +671,10 @@ export default function HomeownerDuesDetailPage() {
         <form onSubmit={handleSaveMonthAmount} className="space-y-4">
           <div>
             <label className="block text-xs font-bold uppercase text-slate-700 dark:text-slate-300 mb-1.5">
-              Dues Amount (PHP ₱)
+              Dues Amount (PHP â‚±)
             </label>
             <div className="relative">
-              <span className="absolute left-3.5 top-1/2 -translate-y-1/2 font-bold text-teal-600">₱</span>
+              <span className="absolute left-3.5 top-1/2 -translate-y-1/2 font-bold text-emerald-600">â‚±</span>
               <Input
                 type="number"
                 step="0.01"
@@ -715,3 +715,4 @@ export default function HomeownerDuesDetailPage() {
     </div>
   );
 }
+

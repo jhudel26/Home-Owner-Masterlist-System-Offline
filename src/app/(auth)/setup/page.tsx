@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import React, { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
@@ -106,15 +106,15 @@ export default function SetupPage() {
 
   if (step === "success") {
     return (
-      <div className="relative min-h-screen bg-[#1f3151] text-white flex flex-col justify-between overflow-x-hidden font-sans selection:bg-teal-500 selection:text-white">
+      <div className="relative min-h-screen bg-[#1f3151] text-white flex flex-col justify-between overflow-x-hidden font-sans selection:bg-emerald-500 selection:text-white">
         {/* Top Header */}
         <header className="relative w-full max-w-7xl mx-auto px-6 sm:px-12 pt-8 flex items-center justify-between z-20">
           <div className="flex items-center gap-3">
-            <div className="h-9 w-9 rounded-xl bg-teal-500/20 border border-teal-400/30 flex items-center justify-center text-teal-300 shadow-md shadow-teal-900/30">
+            <div className="h-9 w-9 rounded-xl bg-emerald-500/20 border border-emerald-400/30 flex items-center justify-center text-emerald-400 shadow-md shadow-emerald-950/40">
               <Home className="h-5 w-5" />
             </div>
             <div>
-              <span className="text-xs font-bold tracking-wider uppercase text-teal-300 block">
+              <span className="text-xs font-bold tracking-wider uppercase text-emerald-400 block">
                 St. Joseph Village 6 Phase 4
               </span>
               <span className="text-[10px] text-slate-400 font-medium tracking-wide">
@@ -128,7 +128,7 @@ export default function SetupPage() {
         <main className="relative w-full max-w-7xl mx-auto px-6 sm:px-12 py-10 my-auto z-10">
           <div className="max-w-md mx-auto text-center space-y-8">
             <div className="flex justify-center">
-              <div className="h-24 w-24 rounded-full bg-teal-500/20 border-2 border-teal-400/30 flex items-center justify-center text-teal-300 shadow-lg shadow-teal-900/40">
+              <div className="h-24 w-24 rounded-full bg-emerald-500/20 border-2 border-emerald-400/30 flex items-center justify-center text-emerald-400 shadow-lg shadow-emerald-950/50">
                 <CheckCircle className="h-12 w-12" />
               </div>
             </div>
@@ -157,7 +157,7 @@ export default function SetupPage() {
           </p>
           <p className="flex items-center gap-1.5 font-medium">
             <span>Developed by</span>
-            <span className="text-teal-300 font-semibold">Jhudel</span>
+            <span className="text-emerald-400 font-semibold">Jhudel</span>
           </p>
         </footer>
       </div>
@@ -165,15 +165,15 @@ export default function SetupPage() {
   }
 
   return (
-    <div className="relative min-h-screen bg-[#1f3151] text-white flex flex-col justify-between overflow-x-hidden font-sans selection:bg-teal-500 selection:text-white">
+    <div className="relative min-h-screen bg-[#1f3151] text-white flex flex-col justify-between overflow-x-hidden font-sans selection:bg-emerald-500 selection:text-white">
       {/* Top Header */}
       <header className="relative w-full max-w-7xl mx-auto px-6 sm:px-12 pt-8 flex items-center justify-between z-20">
         <div className="flex items-center gap-3">
-          <div className="h-9 w-9 rounded-xl bg-teal-500/20 border border-teal-400/30 flex items-center justify-center text-teal-300 shadow-md shadow-teal-900/30">
+          <div className="h-9 w-9 rounded-xl bg-emerald-500/20 border border-emerald-400/30 flex items-center justify-center text-emerald-400 shadow-md shadow-emerald-950/40">
             <Home className="h-5 w-5" />
           </div>
           <div>
-            <span className="text-xs font-bold tracking-wider uppercase text-teal-300 block">
+            <span className="text-xs font-bold tracking-wider uppercase text-emerald-400 block">
               St. Joseph Village 6 Phase 4
             </span>
             <span className="text-[10px] text-slate-400 font-medium tracking-wide">
@@ -183,7 +183,7 @@ export default function SetupPage() {
         </div>
 
         <div className="hidden sm:flex items-center gap-2 px-3 py-1.5 rounded-full bg-[#0a1b38]/80 border border-slate-700/60 text-xs text-slate-300">
-          <Sparkles className="h-3 w-3 text-teal-400" />
+          <Sparkles className="h-3 w-3 text-emerald-400" />
           <span>Initial Setup</span>
         </div>
       </header>
@@ -197,8 +197,8 @@ export default function SetupPage() {
               <Shield className="h-8 w-8 text-teal-200" />
             </div>
             <div>
-              <span className="inline-flex items-center gap-1 text-[11px] font-semibold tracking-wider uppercase text-teal-400 bg-teal-950/60 px-2.5 py-0.5 rounded-full border border-teal-800/50">
-                <Sparkles className="h-3 w-3 text-teal-300" />
+              <span className="inline-flex items-center gap-1 text-[11px] font-semibold tracking-wider uppercase text-emerald-400 bg-emerald-950/60 px-2.5 py-0.5 rounded-full border border-emerald-800/50">
+                <Sparkles className="h-3 w-3 text-emerald-400" />
                 First-Time Setup
               </span>
             </div>
@@ -229,7 +229,7 @@ export default function SetupPage() {
                   placeholder="e.g. Juan Dela Cruz"
                   value={fullName}
                   onChange={(e) => setFullName(e.target.value)}
-                  className="w-full h-11 pl-10 pr-3.5 rounded-xl border border-slate-600 bg-[#0a1b38]/50 text-sm text-white placeholder:text-slate-500 focus:outline-none focus:border-teal-400 focus:ring-1 focus:ring-teal-400 transition-all"
+                  className="w-full h-11 pl-10 pr-3.5 rounded-xl border border-slate-600 bg-[#0a1b38]/50 text-sm text-white placeholder:text-slate-500 focus:outline-none focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 transition-all"
                 />
               </div>
             </div>
@@ -247,7 +247,7 @@ export default function SetupPage() {
                   placeholder="e.g. admin@sjv6phase4.com"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
-                  className="w-full h-11 pl-10 pr-3.5 rounded-xl border border-slate-600 bg-[#0a1b38]/50 text-sm text-white placeholder:text-slate-500 focus:outline-none focus:border-teal-400 focus:ring-1 focus:ring-teal-400 transition-all"
+                  className="w-full h-11 pl-10 pr-3.5 rounded-xl border border-slate-600 bg-[#0a1b38]/50 text-sm text-white placeholder:text-slate-500 focus:outline-none focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 transition-all"
                 />
               </div>
             </div>
@@ -262,10 +262,10 @@ export default function SetupPage() {
                 <input
                   type={showPassword ? "text" : "password"}
                   required
-                  placeholder="••••••••"
+                  placeholder="â€¢â€¢â€¢â€¢â€¢â€¢â€¢â€¢"
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
-                  className="w-full h-11 pl-10 pr-10 rounded-xl border border-slate-600 bg-[#0a1b38]/50 text-sm text-white placeholder:text-slate-500 focus:outline-none focus:border-teal-400 focus:ring-1 focus:ring-teal-400 transition-all"
+                  className="w-full h-11 pl-10 pr-10 rounded-xl border border-slate-600 bg-[#0a1b38]/50 text-sm text-white placeholder:text-slate-500 focus:outline-none focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 transition-all"
                 />
                 <button
                   type="button"
@@ -288,10 +288,10 @@ export default function SetupPage() {
                 <input
                   type={showConfirmPassword ? "text" : "password"}
                   required
-                  placeholder="••••••••"
+                  placeholder="â€¢â€¢â€¢â€¢â€¢â€¢â€¢â€¢"
                   value={confirmPassword}
                   onChange={(e) => setConfirmPassword(e.target.value)}
-                  className="w-full h-11 pl-10 pr-10 rounded-xl border border-slate-600 bg-[#0a1b38]/50 text-sm text-white placeholder:text-slate-500 focus:outline-none focus:border-teal-400 focus:ring-1 focus:ring-teal-400 transition-all"
+                  className="w-full h-11 pl-10 pr-10 rounded-xl border border-slate-600 bg-[#0a1b38]/50 text-sm text-white placeholder:text-slate-500 focus:outline-none focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 transition-all"
                 />
                 <button
                   type="button"
@@ -336,9 +336,10 @@ export default function SetupPage() {
         </p>
         <p className="flex items-center gap-1.5 font-medium">
           <span>Developed by</span>
-          <span className="text-teal-300 font-semibold">Jhudel</span>
+          <span className="text-emerald-400 font-semibold">Jhudel</span>
         </p>
       </footer>
     </div>
   );
 }
+

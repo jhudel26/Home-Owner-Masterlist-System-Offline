@@ -1,4 +1,4 @@
-import React from "react";
+﻿import React from "react";
 import { cn } from "@/lib/utils";
 
 export interface SelectProps extends React.SelectHTMLAttributes<HTMLSelectElement> {
@@ -17,14 +17,14 @@ export const Select = React.forwardRef<HTMLSelectElement, SelectProps>(
         {label && (
           <label htmlFor={selectId} className="block text-xs font-semibold uppercase tracking-wider text-slate-700 dark:text-slate-300">
             {label}
-            {props.required && <span className="text-red-500 ml-0.5">*</span>}
+            {props.required && <span className="text-emerald-500 ml-0.5">*</span>}
           </label>
         )}
         <select
           id={selectId}
           ref={ref}
           className={cn(
-            "w-full rounded-lg border border-slate-200 dark:border-[#1e2f4d] bg-white dark:bg-[#0c182c] px-3.5 py-2 text-sm text-slate-900 dark:text-slate-100 shadow-subtle transition-colors focus:border-teal-600 dark:focus:border-teal-400 focus:outline-none focus:ring-2 focus:ring-teal-600/20 disabled:cursor-not-allowed disabled:bg-slate-50 dark:disabled:bg-slate-900",
+            "w-full rounded-xl border border-slate-200/90 dark:border-slate-800 bg-white/90 dark:bg-[#091424]/90 backdrop-blur-md px-3.5 py-2.5 text-sm text-slate-900 dark:text-slate-100 shadow-subtle transition-all duration-200 focus:border-emerald-500 dark:focus:border-emerald-400 focus:outline-none focus:ring-2 focus:ring-emerald-500/20 disabled:cursor-not-allowed disabled:bg-slate-100 dark:disabled:bg-slate-900",
             error && "border-red-400 dark:border-red-500 focus:border-red-500 focus:ring-red-500/20",
             className
           )}
@@ -32,7 +32,7 @@ export const Select = React.forwardRef<HTMLSelectElement, SelectProps>(
         >
           {options
             ? options.map((opt) => (
-                <option key={opt.value} value={opt.value} className="bg-white dark:bg-[#0c182c] text-slate-900 dark:text-slate-100">
+                <option key={opt.value} value={opt.value} className="bg-white dark:bg-[#0e192d] text-slate-900 dark:text-slate-100">
                   {opt.label}
                 </option>
               ))

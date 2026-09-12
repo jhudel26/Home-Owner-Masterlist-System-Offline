@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import React from "react";
 import { cn } from "@/lib/utils";
@@ -50,13 +50,15 @@ export function Switch({
         id={switchId}
         onClick={() => !disabled && onCheckedChange(!checked)}
         className={cn(
-          "relative inline-flex h-6 w-11 flex-shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-teal-600 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50",
-          checked ? "bg-teal-600 dark:bg-teal-500" : "bg-slate-200 dark:bg-slate-700"
+          "relative inline-flex h-6 w-11 flex-shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-all duration-200 ease-in-out focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-500 focus-visible:ring-offset-2 focus-visible:ring-offset-white dark:focus-visible:ring-offset-[#0e192d] disabled:cursor-not-allowed disabled:opacity-50",
+          checked
+            ? "bg-gradient-to-r from-emerald-600 to-teal-600 shadow-sm shadow-emerald-500/30"
+            : "bg-slate-200 dark:bg-slate-700"
         )}
       >
         <span
           className={cn(
-            "pointer-events-none inline-block h-5 w-5 transform rounded-full bg-white shadow-sm ring-0 transition duration-200 ease-in-out",
+            "pointer-events-none inline-block h-5 w-5 transform rounded-full bg-white shadow ring-0 transition duration-200 ease-in-out",
             checked ? "translate-x-5" : "translate-x-0"
           )}
         />

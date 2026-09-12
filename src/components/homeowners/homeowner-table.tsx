@@ -242,7 +242,7 @@ export function HomeownerTable({ homeowners }: HomeownerTableProps) {
               setSearchTerm(e.target.value);
               setCurrentPage(1);
             }}
-            className="w-full pl-10 pr-20 py-2.5 text-sm rounded-2xl border border-slate-200 dark:border-[#1e2f4d] bg-slate-50/70 dark:bg-[#0c182c] focus:bg-white dark:focus:bg-[#0e192d] focus:border-teal-600 dark:focus:border-teal-400 focus:outline-none focus:ring-2 focus:ring-teal-600/20 transition-all placeholder:text-slate-400 dark:placeholder:text-slate-500 text-slate-900 dark:text-slate-100"
+            className="w-full pl-10 pr-20 py-2.5 text-sm rounded-2xl border border-slate-200 dark:border-[#1e2f4d] bg-slate-50/70 dark:bg-[#0c182c] focus:bg-white dark:focus:bg-[#0e192d] focus:border-emerald-500 dark:focus:border-emerald-400 focus:outline-none focus:ring-2 focus:ring-emerald-500/20 transition-all placeholder:text-slate-400 dark:placeholder:text-slate-500 text-slate-900 dark:text-slate-100"
           />
           {searchTerm ? (
             <button
@@ -268,7 +268,7 @@ export function HomeownerTable({ homeowners }: HomeownerTableProps) {
               setFilterOwnership(e.target.value);
               setCurrentPage(1);
             }}
-            className="text-xs rounded-xl border border-slate-200 dark:border-[#1e2f4d] bg-slate-50/50 dark:bg-[#0c182c] px-3 py-2 text-slate-700 dark:text-slate-200 focus:outline-none focus:border-teal-600 font-medium"
+            className="text-xs rounded-xl border border-slate-200 dark:border-[#1e2f4d] bg-slate-50/50 dark:bg-[#0c182c] px-3 py-2 text-slate-700 dark:text-slate-200 focus:outline-none focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500/20 font-medium"
           >
             <option value="All" className="bg-white dark:bg-[#0c182c]">All Ownership Types</option>
             <option value="owner" className="bg-white dark:bg-[#0c182c]">Owners Only</option>
@@ -281,7 +281,7 @@ export function HomeownerTable({ homeowners }: HomeownerTableProps) {
               setFilterGender(e.target.value);
               setCurrentPage(1);
             }}
-            className="text-xs rounded-xl border border-slate-200 dark:border-[#1e2f4d] bg-slate-50/50 dark:bg-[#0c182c] px-3 py-2 text-slate-700 dark:text-slate-200 focus:outline-none focus:border-teal-600 font-medium"
+            className="text-xs rounded-xl border border-slate-200 dark:border-[#1e2f4d] bg-slate-50/50 dark:bg-[#0c182c] px-3 py-2 text-slate-700 dark:text-slate-200 focus:outline-none focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500/20 font-medium"
           >
             <option value="All" className="bg-white dark:bg-[#0c182c]">All Genders</option>
             <option value="male" className="bg-white dark:bg-[#0c182c]">Male</option>
@@ -294,7 +294,7 @@ export function HomeownerTable({ homeowners }: HomeownerTableProps) {
               setFilterStatus(e.target.value);
               setCurrentPage(1);
             }}
-            className="text-xs rounded-xl border border-slate-200 dark:border-[#1e2f4d] bg-slate-50/50 dark:bg-[#0c182c] px-3 py-2 text-slate-700 dark:text-slate-200 focus:outline-none focus:border-teal-600 font-medium"
+            className="text-xs rounded-xl border border-slate-200 dark:border-[#1e2f4d] bg-slate-50/50 dark:bg-[#0c182c] px-3 py-2 text-slate-700 dark:text-slate-200 focus:outline-none focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500/20 font-medium"
           >
             <option value="All" className="bg-white dark:bg-[#0c182c]">All Statuses</option>
             <option value="active" className="bg-white dark:bg-[#0c182c]">Active Only</option>
@@ -343,7 +343,7 @@ export function HomeownerTable({ homeowners }: HomeownerTableProps) {
                 variant="outline"
                 size="sm"
                 onClick={() => setIsBulkImportOpen(true)}
-                className="border-teal-300 dark:border-teal-800 text-teal-800 dark:text-teal-300 hover:bg-teal-50 dark:hover:bg-teal-950/30 h-9 font-medium"
+                className="border-emerald-300 dark:border-emerald-800 text-emerald-800 dark:text-emerald-300 hover:bg-emerald-50 dark:hover:bg-emerald-950/30 h-9 font-medium"
               >
                 <Upload className="h-4 w-4 mr-1.5" />
                 <span>Bulk Import</span>
@@ -377,7 +377,7 @@ export function HomeownerTable({ homeowners }: HomeownerTableProps) {
             onClick={() => applyPreset(preset.id)}
             className={`px-3 py-1 rounded-full font-medium transition-all text-xs shrink-0 ${
               activePreset === preset.id
-                ? "bg-teal-600 text-white shadow-sm font-semibold"
+                ? "bg-emerald-600 text-white shadow-sm shadow-emerald-600/30 font-semibold"
                 : "bg-white dark:bg-[#0e192d] text-slate-600 dark:text-slate-400 border border-slate-200/80 dark:border-[#1e2f4d] hover:border-slate-300 dark:hover:border-slate-600"
             }`}
           >
@@ -462,7 +462,7 @@ export function HomeownerTable({ homeowners }: HomeownerTableProps) {
                               title={isExpanded ? "Collapse members" : "Preview members"}
                             >
                               {isExpanded ? (
-                                <ChevronUp className="h-4 w-4 text-teal-600 dark:text-teal-400" />
+                                <ChevronUp className="h-4 w-4 text-emerald-600 dark:text-emerald-400" />
                               ) : (
                                 <ChevronDown className="h-4 w-4" />
                               )}
@@ -471,12 +471,12 @@ export function HomeownerTable({ homeowners }: HomeownerTableProps) {
 
                           {/* Name */}
                           <td className="py-3.5 px-4">
-                            <div className="font-bold text-slate-900 dark:text-slate-100 group-hover:text-teal-700 dark:group-hover:text-teal-400 transition-colors">
+                            <div className="font-bold text-slate-900 dark:text-slate-100 group-hover:text-emerald-600 dark:group-hover:text-emerald-400 transition-colors">
                               {ho.full_name || `${ho.first_name || ""} ${ho.last_name || ""}`.trim() || "Unnamed"}
                             </div>
                             {(ho.ga_proxy_name || ho.ga_proxy_designated) ? (
                               <div className="text-[11px] text-slate-500 dark:text-slate-400 flex items-center gap-1 mt-0.5">
-                                <Shield className="h-3 w-3 text-teal-600 dark:text-teal-400" />
+                                <Shield className="h-3 w-3 text-emerald-600 dark:text-emerald-400" />
                                 <span>Proxy: {ho.ga_proxy_name || ho.ga_proxy_designated}</span>
                               </div>
                             ) : null}
@@ -513,7 +513,7 @@ export function HomeownerTable({ homeowners }: HomeownerTableProps) {
                               {ho.household_count ?? (memberCount + 1)}
                             </span>
                             {memberCount > 0 && (
-                              <span className="text-[10px] text-teal-700 dark:text-teal-400 font-semibold block">
+                              <span className="text-[10px] text-emerald-600 dark:text-emerald-400 font-semibold block">
                                 +{memberCount} listed
                               </span>
                             )}
@@ -617,7 +617,7 @@ export function HomeownerTable({ homeowners }: HomeownerTableProps) {
                                           key={idx}
                                           className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-white dark:bg-[#0e192d] border border-slate-200 dark:border-[#1e2f4d] text-xs font-medium text-slate-800 dark:text-slate-200 shadow-xs"
                                         >
-                                          <Users className="h-3 w-3 text-teal-600 dark:text-teal-400" />
+                                          <Users className="h-3 w-3 text-emerald-600 dark:text-emerald-400" />
                                           <span className="font-bold">{m.member_name}</span>
                                           <span className="text-slate-400 dark:text-slate-500">({m.relationship})</span>
                                         </span>
@@ -709,11 +709,11 @@ export function HomeownerTable({ homeowners }: HomeownerTableProps) {
                     {/* Card Top Row */}
                     <div className="flex items-start justify-between gap-3 mb-3">
                       <div className="flex items-center gap-3">
-                        <div className="h-11 w-11 rounded-2xl bg-gradient-to-br from-[#07162c] to-[#0c2340] text-teal-300 border border-teal-500/20 flex items-center justify-center font-bold text-base shadow-sm shrink-0">
+                        <div className="h-11 w-11 rounded-2xl bg-gradient-to-br from-[#07162c] to-[#0c2340] text-emerald-400 border border-emerald-500/30 flex items-center justify-center font-bold text-base shadow-sm shrink-0">
                           {(ho.full_name || ho.first_name || "?").charAt(0)}
                         </div>
                         <div>
-                          <h4 className="font-bold text-sm text-slate-900 dark:text-slate-100 group-hover:text-teal-700 dark:group-hover:text-teal-400 transition-colors leading-snug">
+                          <h4 className="font-bold text-sm text-slate-900 dark:text-slate-100 group-hover:text-emerald-600 dark:group-hover:text-emerald-400 transition-colors leading-snug">
                             {ho.full_name || `${ho.first_name || ""} ${ho.last_name || ""}`.trim() || "Unnamed"}
                           </h4>
                           <span className="text-xs text-slate-500 dark:text-slate-400 font-mono font-medium">
@@ -726,7 +726,7 @@ export function HomeownerTable({ homeowners }: HomeownerTableProps) {
 
                     {/* Address Banner */}
                     <div className="p-2.5 rounded-xl bg-slate-50 dark:bg-[#0a1526] border border-slate-100 dark:border-[#1e2f4d] flex items-center gap-2 text-xs text-slate-700 dark:text-slate-300 font-semibold mb-3">
-                      <Home className="h-3.5 w-3.5 text-teal-600 dark:text-teal-400 shrink-0" />
+                      <Home className="h-3.5 w-3.5 text-emerald-600 dark:text-emerald-400 shrink-0" />
                       <span className="truncate">{ho.street_name || ho.address}</span>
                     </div>
 
@@ -857,4 +857,5 @@ export function HomeownerTable({ homeowners }: HomeownerTableProps) {
     </div>
   );
 }
+
 

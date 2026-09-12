@@ -38,7 +38,7 @@ export function ThemeToggle({ className, showLabel = false }: ThemeToggleProps) 
         "bg-white dark:bg-[#0c182c]",
         "text-slate-600 dark:text-slate-300",
         "hover:bg-slate-100 dark:hover:bg-[#13233f] hover:text-slate-900 dark:hover:text-white",
-        "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-teal-500 shadow-xs",
+        "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-500 shadow-xs",
         showLabel && "px-3 gap-2",
         className
       )}
@@ -56,3 +56,4 @@ export function ThemeToggle({ className, showLabel = false }: ThemeToggleProps) 
     </button>
   );
 }
+

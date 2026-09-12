@@ -46,7 +46,7 @@ export function BulkImportModal({ isOpen, onClose }: BulkImportModalProps) {
       titleCell.fill = {
         type: "pattern",
         pattern: "solid",
-        fgColor: { argb: "FF0D9488" }, // HOA Teal
+        fgColor: { argb: "FF059669" }, // HOA Emerald
       };
       titleCell.alignment = { horizontal: "center", vertical: "middle" };
       worksheet.getRow(1).height = 30;
@@ -424,13 +424,13 @@ export function BulkImportModal({ isOpen, onClose }: BulkImportModalProps) {
     >
       <div className="space-y-6">
         {/* Step 1: Download Template */}
-        <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 p-4 rounded-2xl bg-teal-50/60 dark:bg-teal-950/20 border border-teal-200/80 dark:border-teal-900/50 text-xs">
+        <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 p-4 rounded-2xl bg-emerald-50/60 dark:bg-emerald-950/20 border border-emerald-200/80 dark:border-emerald-900/50 text-xs">
           <div className="space-y-1">
-            <h4 className="font-bold text-teal-950 dark:text-teal-200 flex items-center gap-1.5">
-              <FileSpreadsheet className="h-4 w-4 text-teal-600" />
+            <h4 className="font-bold text-emerald-950 dark:text-emerald-200 flex items-center gap-1.5">
+              <FileSpreadsheet className="h-4 w-4 text-emerald-600" />
               <span>Download Official Excel Template (.xlsx)</span>
             </h4>
-            <p className="text-teal-700 dark:text-teal-400">
+            <p className="text-emerald-700 dark:text-emerald-400">
               Download the official template with pre-formatted column headers and sample rows.
             </p>
           </div>
@@ -438,7 +438,7 @@ export function BulkImportModal({ isOpen, onClose }: BulkImportModalProps) {
             variant="outline"
             size="sm"
             onClick={handleDownloadTemplate}
-            className="shrink-0 gap-1.5 border-teal-300 dark:border-teal-700 text-teal-800 dark:text-teal-200 bg-white dark:bg-[#0c182c]"
+            className="shrink-0 gap-1.5 border-emerald-300 dark:border-emerald-700 text-emerald-800 dark:text-emerald-200 bg-white dark:bg-[#0c182c]"
           >
             <Download className="h-4 w-4" />
             <span>Download Excel Template</span>
@@ -448,7 +448,7 @@ export function BulkImportModal({ isOpen, onClose }: BulkImportModalProps) {
         {/* Step 2: Upload Area */}
         <div
           onClick={() => fileInputRef.current?.click()}
-          className="border-2 border-dashed border-slate-300 dark:border-slate-700 hover:border-teal-500 dark:hover:border-teal-500 rounded-3xl p-8 text-center cursor-pointer transition-colors bg-slate-50/50 dark:bg-[#091424]/40"
+          className="border-2 border-dashed border-slate-300 dark:border-slate-700 hover:border-emerald-500 dark:hover:border-emerald-500 rounded-3xl p-8 text-center cursor-pointer transition-colors bg-slate-50/50 dark:bg-[#091424]/40"
         >
           <input
             ref={fileInputRef}
@@ -457,7 +457,7 @@ export function BulkImportModal({ isOpen, onClose }: BulkImportModalProps) {
             onChange={handleFileUpload}
             className="hidden"
           />
-          <div className="w-12 h-12 rounded-2xl bg-teal-100 dark:bg-teal-950/60 text-teal-600 dark:text-teal-400 flex items-center justify-center mx-auto mb-3">
+          <div className="w-12 h-12 rounded-2xl bg-emerald-100 dark:bg-emerald-950/60 text-emerald-600 dark:text-teal-400 flex items-center justify-center mx-auto mb-3">
             <FileSpreadsheet className="h-6 w-6" />
           </div>
           <h4 className="text-sm font-semibold text-slate-800 dark:text-slate-200">
@@ -531,7 +531,7 @@ export function BulkImportModal({ isOpen, onClose }: BulkImportModalProps) {
             onClick={handleImport}
             disabled={parsedRows.length === 0 || validCount === 0 || isProcessing}
             isLoading={isProcessing}
-            className="gap-1.5 bg-teal-600 hover:bg-teal-700"
+            className="gap-1.5 bg-emerald-600 hover:bg-emerald-700 shadow-sm shadow-emerald-600/30"
           >
             <FileSpreadsheet className="h-4 w-4" />
             <span>Import {validCount > 0 ? `${validCount} Records` : ""}</span>
@@ -541,3 +541,5 @@ export function BulkImportModal({ isOpen, onClose }: BulkImportModalProps) {
     </Modal>
   );
 }
+
+

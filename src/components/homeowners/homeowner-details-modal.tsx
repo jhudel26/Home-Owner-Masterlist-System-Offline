@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import React, { useState } from "react";
 import { Homeowner } from "@/types/database";
@@ -54,14 +54,14 @@ export function HomeownerDetailsModal({
   };
 
   const modalTabs = [
-    { id: "overview", label: "Overview & Property", icon: <Home className="h-3.5 w-3.5 text-teal-600 dark:text-teal-400" /> },
+    { id: "overview", label: "Overview & Property", icon: <Home className="h-3.5 w-3.5 text-emerald-600 dark:text-emerald-400" /> },
     {
       id: "household",
       label: "Household Members",
-      icon: <Users className="h-3.5 w-3.5 text-teal-600 dark:text-teal-400" />,
+      icon: <Users className="h-3.5 w-3.5 text-emerald-600 dark:text-emerald-400" />,
       badge: homeowner.household_members?.length || 0,
     },
-    { id: "proxy", label: "GA Proxy & Contact", icon: <Shield className="h-3.5 w-3.5 text-teal-600 dark:text-teal-400" /> },
+    { id: "proxy", label: "GA Proxy & Contact", icon: <Shield className="h-3.5 w-3.5 text-emerald-600 dark:text-emerald-400" /> },
   ];
 
   return (
@@ -80,14 +80,14 @@ export function HomeownerDetailsModal({
               <img
                 src={homeowner.photo_path}
                 alt={homeowner.full_name}
-                className="h-20 w-20 rounded-2xl object-cover border-2 border-teal-500/30 shadow-md shrink-0"
+                className="h-20 w-20 rounded-2xl object-cover border-2 border-emerald-500/30 shadow-md shrink-0"
                 onError={(e) => {
                   e.currentTarget.style.display = 'none';
                   // Fallback to initial when image fails to load
                 }}
               />
             ) : (
-              <div className="h-20 w-20 rounded-2xl bg-[#0c2340] border border-teal-500/30 text-teal-300 flex items-center justify-center font-bold text-2xl shadow-md shrink-0">
+              <div className="h-20 w-20 rounded-2xl bg-[#0c2340] border border-emerald-500/30 text-emerald-400 flex items-center justify-center font-bold text-2xl shadow-md shrink-0">
                 {homeowner.full_name?.charAt(0) || "?"}
               </div>
             )}
@@ -95,7 +95,7 @@ export function HomeownerDetailsModal({
               <div className="flex items-center gap-2">
                 <h4 className="text-lg font-bold text-white tracking-tight">{homeowner.full_name || "Unknown"}</h4>
                 {homeowner.age && homeowner.age >= 60 && (
-                  <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-teal-500/20 text-teal-300 border border-teal-400/40">
+                  <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-emerald-500/20 text-emerald-400 border border-emerald-400/40">
                     Senior (60+)
                   </span>
                 )}
@@ -125,12 +125,12 @@ export function HomeownerDetailsModal({
             <div className="grid grid-cols-2 sm:grid-cols-3 gap-3.5">
               <div className="p-3.5 rounded-xl border border-slate-200/80 dark:border-[#1e2f4d] bg-slate-50/50 dark:bg-[#0a1526]">
                 <div className="flex items-center gap-1.5 text-xs text-slate-500 dark:text-slate-400 mb-1">
-                  <Calendar className="h-3.5 w-3.5 text-teal-700 dark:text-teal-400" />
+                  <Calendar className="h-3.5 w-3.5 text-emerald-600 dark:text-emerald-400" />
                   <span>Date of Birth</span>
                 </div>
                 <p className="text-sm font-bold text-slate-900 dark:text-slate-100">{formatDate(homeowner.birthdate)}</p>
-                <p className="text-xs text-teal-700 dark:text-teal-400 font-semibold mt-0.5">
-                  {homeowner.age ? `${homeowner.age} years old` : "—"}
+                <p className="text-xs text-emerald-600 dark:text-emerald-400 font-semibold mt-0.5">
+                  {homeowner.age ? `${homeowner.age} years old` : "â€”"}
                 </p>
               </div>
 
@@ -139,13 +139,13 @@ export function HomeownerDetailsModal({
                   <User className="h-3.5 w-3.5 text-slate-700 dark:text-slate-300" />
                   <span>Gender</span>
                 </div>
-                <p className="text-sm font-bold text-slate-900 dark:text-slate-100">{homeowner.gender || "—"}</p>
+                <p className="text-sm font-bold text-slate-900 dark:text-slate-100">{homeowner.gender || "â€”"}</p>
                 <p className="text-xs text-slate-400 dark:text-slate-500 mt-0.5">Registered Identity</p>
               </div>
 
               <div className="p-3.5 rounded-xl border border-slate-200/80 dark:border-[#1e2f4d] bg-slate-50/50 dark:bg-[#0a1526]">
                 <div className="flex items-center gap-1.5 text-xs text-slate-500 dark:text-slate-400 mb-1">
-                  <Users className="h-3.5 w-3.5 text-teal-700 dark:text-teal-400" />
+                  <Users className="h-3.5 w-3.5 text-emerald-600 dark:text-emerald-400" />
                   <span>Total Occupants</span>
                 </div>
                 <p className="text-sm font-bold text-slate-900 dark:text-slate-100 font-mono">
@@ -156,7 +156,7 @@ export function HomeownerDetailsModal({
 
               <div className="p-3.5 rounded-xl border border-slate-200/80 dark:border-[#1e2f4d] bg-slate-50/50 dark:bg-[#0a1526]">
                 <div className="flex items-center gap-1.5 text-xs text-slate-500 dark:text-slate-400 mb-1">
-                  <PawPrint className="h-3.5 w-3.5 text-teal-700 dark:text-teal-400" />
+                  <PawPrint className="h-3.5 w-3.5 text-emerald-600 dark:text-emerald-400" />
                   <span>Domestic Pets</span>
                 </div>
                 <p className="text-sm font-bold text-slate-900 dark:text-slate-100 font-mono">
@@ -167,7 +167,7 @@ export function HomeownerDetailsModal({
 
               <div className="p-3.5 rounded-xl border border-slate-200/80 dark:border-[#1e2f4d] bg-slate-50/50 dark:bg-[#0a1526] col-span-2">
                 <div className="flex items-center gap-1.5 text-xs text-slate-500 dark:text-slate-400 mb-1">
-                  <Home className="h-3.5 w-3.5 text-teal-700 dark:text-teal-400" />
+                  <Home className="h-3.5 w-3.5 text-emerald-600 dark:text-emerald-400" />
                   <span>Subdivision Lot</span>
                 </div>
                 <p className="text-xs font-bold text-slate-800 dark:text-slate-200 leading-snug">{homeowner.street_name || "No address on file"}</p>
@@ -211,7 +211,7 @@ export function HomeownerDetailsModal({
                     className="p-3.5 rounded-xl border border-slate-200 dark:border-[#1e2f4d] bg-white dark:bg-[#0e192d] shadow-xs flex items-center justify-between"
                   >
                     <div className="flex items-center gap-2.5">
-                      <div className="h-8 w-8 rounded-lg bg-teal-50 dark:bg-teal-950/60 text-teal-800 dark:text-teal-300 flex items-center justify-center text-xs font-bold shrink-0">
+                      <div className="h-8 w-8 rounded-lg bg-emerald-50 dark:bg-emerald-950/60 text-emerald-800 dark:text-emerald-400 flex items-center justify-center text-xs font-bold shrink-0">
                         {member.member_name.charAt(0)}
                       </div>
                       <div>
@@ -233,9 +233,9 @@ export function HomeownerDetailsModal({
         {activeTab === "proxy" && (
           <div className="space-y-4 animate-fade-in">
             {/* General Assembly Proxy Card */}
-            <div className="p-4 rounded-2xl border border-teal-200 dark:border-teal-800/60 bg-teal-50/40 dark:bg-teal-950/30">
-              <div className="flex items-center gap-2 text-teal-900 dark:text-teal-300 font-bold text-xs uppercase tracking-wider mb-3">
-                <Shield className="h-4 w-4 text-teal-700 dark:text-teal-400" />
+            <div className="p-4 rounded-2xl border border-emerald-200 dark:border-emerald-800/60 bg-emerald-50/40 dark:bg-emerald-950/30">
+              <div className="flex items-center gap-2 text-emerald-900 dark:text-emerald-400 font-bold text-xs uppercase tracking-wider mb-3">
+                <Shield className="h-4 w-4 text-emerald-600 dark:text-emerald-400" />
                 <span>General Assembly (GA) Designated Proxy</span>
               </div>
               
@@ -246,19 +246,19 @@ export function HomeownerDetailsModal({
                       <img
                         src={homeowner.ga_proxy_photo_path}
                         alt={homeowner.ga_proxy_designated}
-                        className="h-20 w-20 rounded-2xl object-cover border-2 border-teal-500/30 shadow-md shrink-0"
+                        className="h-20 w-20 rounded-2xl object-cover border-2 border-emerald-500/30 shadow-md shrink-0"
                         onError={(e) => {
                           e.currentTarget.style.display = 'none';
                         }}
                       />
                     ) : (
-                      <div className="h-20 w-20 rounded-2xl bg-[#0c2340] border border-teal-500/30 text-teal-300 flex items-center justify-center font-bold text-2xl shadow-md shrink-0">
+                      <div className="h-20 w-20 rounded-2xl bg-[#0c2340] border border-emerald-500/30 text-emerald-400 flex items-center justify-center font-bold text-2xl shadow-md shrink-0">
                         {homeowner.ga_proxy_designated?.charAt(0) || "?"}
                       </div>
                     )}
                     <div className="flex-1">
                       <p className="text-sm font-bold text-slate-900 dark:text-slate-100">{homeowner.ga_proxy_designated}</p>
-                      <span className="text-xs text-teal-800 dark:text-teal-300 font-medium px-2.5 py-0.5 rounded-lg bg-white dark:bg-[#0e192d] border border-teal-200 dark:border-teal-800/60 inline-block mt-1">
+                      <span className="text-xs text-emerald-800 dark:text-emerald-400 font-medium px-2.5 py-0.5 rounded-lg bg-white dark:bg-[#0e192d] border border-emerald-200 dark:border-emerald-800/60 inline-block mt-1">
                         Designated Proxy
                       </span>
                     </div>
@@ -332,3 +332,5 @@ export function HomeownerDetailsModal({
     </Modal>
   );
 }
+
+

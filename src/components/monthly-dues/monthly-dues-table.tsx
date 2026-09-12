@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import React, { useState, useMemo } from "react";
 import Link from "next/link";
@@ -318,7 +318,7 @@ export function MonthlyDuesTable({
         });
         const data = await res.json();
         if (data.success) {
-          success("Amount Updated", `Dues amount set to ₱${numAmount.toFixed(2)}.`);
+          success("Amount Updated", `Dues amount set to â‚±${numAmount.toFixed(2)}.`);
           setIsAmountModalOpen(false);
           onDataChange();
         } else {
@@ -339,7 +339,7 @@ export function MonthlyDuesTable({
         });
         const data = await res.json();
         if (data.success) {
-          success("Amount Set", `Dues amount set to ₱${numAmount.toFixed(2)}.`);
+          success("Amount Set", `Dues amount set to â‚±${numAmount.toFixed(2)}.`);
           setIsAmountModalOpen(false);
           onDataChange();
         } else {
@@ -388,9 +388,9 @@ export function MonthlyDuesTable({
           />
         ) : null}
         <div
-          className={`avatar-fallback ${sizeClasses[size]} bg-gradient-to-br from-[#07162c] to-[#0c2340] text-teal-300 font-bold flex items-center justify-center shadow-sm ${
+          className={`avatar-fallback ${sizeClasses[size]} bg-gradient-to-br from-[#07162c] to-[#0c2340] text-emerald-400 font-bold flex items-center justify-center shadow-sm ${
             ho.photo_path && isValidImageUrl(ho.photo_path) ? "hidden" : "flex"
-          } ${ringColor ? `ring-2 ${ringColor}` : "border border-teal-500/20"}`}
+          } ${ringColor ? `ring-2 ${ringColor}` : "border border-emerald-500/30"}`}
         >
           {initial}
         </div>
@@ -412,7 +412,7 @@ export function MonthlyDuesTable({
               setSearchTerm(e.target.value);
               setCurrentPage(1);
             }}
-            className="w-full pl-10 pr-4 py-2.5 text-sm rounded-2xl border border-slate-200 dark:border-[#1e2f4d] bg-slate-50/70 dark:bg-[#0c182c] focus:bg-white dark:focus:bg-[#0e192d] focus:border-teal-600 dark:focus:border-teal-400 focus:outline-none focus:ring-2 focus:ring-teal-600/20 transition-all placeholder:text-slate-400 dark:placeholder:text-slate-500 text-slate-900 dark:text-slate-100"
+            className="w-full pl-10 pr-4 py-2.5 text-sm rounded-2xl border border-slate-200 dark:border-[#1e2f4d] bg-slate-50/70 dark:bg-[#0c182c] focus:bg-white dark:focus:bg-[#0e192d] focus:border-emerald-500 dark:focus:border-emerald-400 focus:outline-none focus:ring-2 focus:ring-emerald-500/20 transition-all placeholder:text-slate-400 dark:placeholder:text-slate-500 text-slate-900 dark:text-slate-100"
           />
         </div>
 
@@ -426,7 +426,7 @@ export function MonthlyDuesTable({
               }}
               className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-colors ${
                 paymentStatusFilter === "all"
-                  ? "bg-teal-600 text-white"
+                  ? "bg-emerald-600 text-white shadow-sm shadow-emerald-600/30"
                   : "bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-700"
               }`}
             >
@@ -470,7 +470,7 @@ export function MonthlyDuesTable({
               setPaymentStatusFilter(e.target.value);
               setCurrentPage(1);
             }}
-            className="text-xs rounded-xl border border-slate-200 dark:border-[#1e2f4d] bg-slate-50/50 dark:bg-[#0c182c] px-3 py-2 text-slate-700 dark:text-slate-200 focus:outline-none focus:border-teal-600 font-medium"
+            className="text-xs rounded-xl border border-slate-200 dark:border-[#1e2f4d] bg-slate-50/50 dark:bg-[#0c182c] px-3 py-2 text-slate-700 dark:text-slate-200 focus:outline-none focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500/20 font-medium"
           >
             <option value="all" className="bg-white dark:bg-[#0c182c]">All Statuses</option>
             <option value="paid" className="bg-white dark:bg-[#0c182c]">Paid Only</option>
@@ -484,7 +484,7 @@ export function MonthlyDuesTable({
               setBlockFilter(e.target.value);
               setCurrentPage(1);
             }}
-            className="text-xs rounded-xl border border-slate-200 dark:border-[#1e2f4d] bg-slate-50/50 dark:bg-[#0c182c] px-3 py-2 text-slate-700 dark:text-slate-200 focus:outline-none focus:border-teal-600 font-medium"
+            className="text-xs rounded-xl border border-slate-200 dark:border-[#1e2f4d] bg-slate-50/50 dark:bg-[#0c182c] px-3 py-2 text-slate-700 dark:text-slate-200 focus:outline-none focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500/20 font-medium"
           >
             <option value="all" className="bg-white dark:bg-[#0c182c]">All Blocks</option>
             {uniqueBlocks.map((block) => (
@@ -501,7 +501,7 @@ export function MonthlyDuesTable({
               setLotFilter(e.target.value);
               setCurrentPage(1);
             }}
-            className="w-20 text-xs rounded-xl border border-slate-200 dark:border-[#1e2f4d] bg-slate-50/50 dark:bg-[#0c182c] px-3 py-2 text-slate-700 dark:text-slate-200 focus:outline-none focus:border-teal-600 font-medium placeholder:text-slate-400"
+            className="w-20 text-xs rounded-xl border border-slate-200 dark:border-[#1e2f4d] bg-slate-50/50 dark:bg-[#0c182c] px-3 py-2 text-slate-700 dark:text-slate-200 focus:outline-none focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500/20 font-medium placeholder:text-slate-400"
           />
 
           {isFiltered && (
@@ -610,12 +610,12 @@ export function MonthlyDuesTable({
                             isPaid ? "ring-emerald-500 ring-offset-2 dark:ring-offset-[#0e192d]" : "ring-amber-500 ring-offset-2 dark:ring-offset-[#0e192d]"
                           )}
                           <div>
-                            <h4 className="font-bold text-sm text-slate-900 dark:text-slate-100 group-hover:text-teal-600 dark:group-hover:text-teal-400 transition-colors leading-snug">
+                            <h4 className="font-bold text-sm text-slate-900 dark:text-slate-100 group-hover:text-emerald-600 dark:group-hover:text-emerald-400 transition-colors leading-snug">
                               {ho.full_name || "Unnamed"}
                             </h4>
                             <div className="flex items-center gap-2 mt-0.5">
                               {ho.hoa_number && (
-                                <span className="text-[10px] font-mono font-semibold px-1.5 py-0.5 rounded-md bg-teal-50 dark:bg-teal-950/60 text-teal-700 dark:text-teal-300 border border-teal-200 dark:border-teal-800/60">
+                                <span className="text-[10px] font-mono font-semibold px-1.5 py-0.5 rounded-md bg-emerald-50 dark:bg-emerald-950/60 text-emerald-700 dark:text-emerald-300 border border-emerald-200 dark:border-emerald-800/60">
                                   {ho.hoa_number}
                                 </span>
                               )}
@@ -630,7 +630,7 @@ export function MonthlyDuesTable({
 
                       {/* Address Line */}
                       <div className="p-2.5 rounded-xl bg-slate-50 dark:bg-[#0a1526] border border-slate-100 dark:border-[#1e2f4d] flex items-center gap-2 text-xs text-slate-700 dark:text-slate-300 font-medium mb-3.5">
-                        <Home className="h-3.5 w-3.5 text-teal-600 dark:text-teal-400 shrink-0" />
+                        <Home className="h-3.5 w-3.5 text-emerald-600 dark:text-emerald-400 shrink-0" />
                         <span className="truncate">{ho.street_name || ho.address}</span>
                       </div>
 
@@ -641,14 +641,14 @@ export function MonthlyDuesTable({
                           <div>
                             <span className="text-[10px] uppercase font-bold text-slate-400 block">Assessment</span>
                             <span className="text-sm font-extrabold text-slate-900 dark:text-slate-100 font-mono">
-                              ₱{amount.toFixed(2)}
+                              â‚±{amount.toFixed(2)}
                             </span>
                           </div>
                           {canManageDues && (
                             <button
                               onClick={() => openEditAmountModal(ho)}
                               title="Edit dues amount"
-                              className="p-1 rounded-md text-slate-400 hover:text-teal-600 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors"
+                              className="p-1 rounded-md text-slate-400 hover:text-emerald-600 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors"
                             >
                               <Edit2 className="h-3 w-3" />
                             </button>
@@ -838,7 +838,7 @@ export function MonthlyDuesTable({
 
                         <td className="py-3.5 px-4 text-xs text-slate-700 dark:text-slate-300">
                           <div className="flex items-center gap-2">
-                            <Home className="h-3.5 w-3.5 text-teal-600 dark:text-teal-400 shrink-0" />
+                            <Home className="h-3.5 w-3.5 text-emerald-600 dark:text-emerald-400 shrink-0" />
                             <span>{ho.street_name || ho.address}</span>
                           </div>
                         </td>
@@ -868,14 +868,14 @@ export function MonthlyDuesTable({
 
                         <td className="py-3.5 px-4 text-center">
                           <div className="flex items-center justify-center gap-1">
-                            <span className="font-bold text-xs text-slate-500 dark:text-slate-400">₱</span>
+                            <span className="font-bold text-xs text-slate-500 dark:text-slate-400">â‚±</span>
                             <span className="font-mono font-bold text-slate-900 dark:text-slate-100">
                               {amount.toFixed(2)}
                             </span>
                             {canManageDues && (
                               <button
                                 onClick={() => openEditAmountModal(ho)}
-                                className="p-1 rounded text-slate-400 hover:text-teal-600"
+                                className="p-1 rounded text-slate-400 hover:text-emerald-600"
                                 title="Change Amount"
                               >
                                 <Edit2 className="h-3 w-3" />
@@ -989,7 +989,7 @@ export function MonthlyDuesTable({
           </div>
 
           <div className="flex items-center gap-2 text-xs text-slate-500 dark:text-slate-400">
-            <Receipt className="h-4 w-4 text-teal-600" />
+            <Receipt className="h-4 w-4 text-emerald-600" />
             <span>
               Billing Period: <strong>{monthNames[selectedMonth - 1]} {selectedYear}</strong>
             </span>
@@ -1034,10 +1034,10 @@ export function MonthlyDuesTable({
         <form onSubmit={handleSaveCustomAmount} className="space-y-4">
           <div>
             <label className="block text-xs font-bold uppercase text-slate-700 dark:text-slate-300 mb-1.5">
-              Dues Amount (PHP ₱)
+              Dues Amount (PHP â‚±)
             </label>
             <div className="relative">
-              <span className="absolute left-3.5 top-1/2 -translate-y-1/2 font-bold text-teal-600">₱</span>
+              <span className="absolute left-3.5 top-1/2 -translate-y-1/2 font-bold text-emerald-600">â‚±</span>
               <Input
                 type="number"
                 step="0.01"
@@ -1050,7 +1050,7 @@ export function MonthlyDuesTable({
               />
             </div>
             <p className="text-[11px] text-slate-500 mt-1">
-              Standard rate is ₱{standardRate.toFixed(2)}. Adjust if special discount, penalty, or custom fee applies.
+              Standard rate is â‚±{standardRate.toFixed(2)}. Adjust if special discount, penalty, or custom fee applies.
             </p>
           </div>
 
@@ -1089,3 +1089,4 @@ export function MonthlyDuesTable({
     </div>
   );
 }
+

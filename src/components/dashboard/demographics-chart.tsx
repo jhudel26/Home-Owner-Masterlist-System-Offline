@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import React, { useState } from "react";
 import {
@@ -30,8 +30,8 @@ export function DemographicsCharts({ homeowners }: DemographicsChartProps) {
   const totalOccupied = ownersCount + rentersCount;
 
   const ownershipData = [
-    { name: "Owner-Occupied", value: ownersCount, color: "#0d9488" }, // Teal 600
-    { name: "Renter-Occupied", value: rentersCount, color: "#07162c" }, // Deep Navy
+    { name: "Owner-Occupied", value: ownersCount, color: "#059669" }, // Emerald 600
+    { name: "Renter-Occupied", value: rentersCount, color: "#0f172a" }, // Slate 900
   ];
 
   // Compute tenure breakdown (years of residency)
@@ -62,10 +62,10 @@ export function DemographicsCharts({ homeowners }: DemographicsChartProps) {
   }).length;
 
   const tenureData = [
-    { name: "< 1 Year", value: tenureLessThan1, color: "#14b8a6" },
-    { name: "1-5 Years", value: tenure1to5, color: "#0d9488" },
-    { name: "5-10 Years", value: tenure5to10, color: "#1e3a8a" },
-    { name: "10+ Years", value: tenure10Plus, color: "#07162c" },
+    { name: "< 1 Year", value: tenureLessThan1, color: "#10b981" }, // Emerald 500
+    { name: "1-5 Years", value: tenure1to5, color: "#059669" }, // Emerald 600
+    { name: "5-10 Years", value: tenure5to10, color: "#0d9488" }, // Teal 600
+    { name: "10+ Years", value: tenure10Plus, color: "#0f172a" }, // Deep Slate
   ];
 
   // Compute gender distribution
@@ -74,8 +74,8 @@ export function DemographicsCharts({ homeowners }: DemographicsChartProps) {
   const otherCount = homeowners.filter((h) => h.gender === "other").length;
 
   const genderData = [
-    { name: "Male", count: maleCount, fill: "#07162c" },
-    { name: "Female", count: femaleCount, fill: "#0d9488" },
+    { name: "Male", count: maleCount, fill: "#0f172a" },
+    { name: "Female", count: femaleCount, fill: "#059669" },
     ...(otherCount > 0 ? [{ name: "Other", count: otherCount, fill: "#64748b" }] : []),
   ];
 
@@ -86,10 +86,10 @@ export function DemographicsCharts({ homeowners }: DemographicsChartProps) {
   const seniors = homeowners.filter((h) => (h.age ?? 0) >= 60).length;
 
   const ageData = [
-    { name: "18-35 yrs (Young)", count: youngAdults, fill: "#14b8a6" },
-    { name: "36-50 yrs (Adult)", count: adults, fill: "#0d9488" },
-    { name: "51-59 yrs (Middle)", count: mature, fill: "#1e3a8a" },
-    { name: "60+ yrs (Senior)", count: seniors, fill: "#07162c" },
+    { name: "18-35 yrs (Young)", count: youngAdults, fill: "#10b981" },
+    { name: "36-50 yrs (Adult)", count: adults, fill: "#059669" },
+    { name: "51-59 yrs (Middle)", count: mature, fill: "#0d9488" },
+    { name: "60+ yrs (Senior)", count: seniors, fill: "#0f172a" },
   ];
 
   // Compute generation breakdown
@@ -100,10 +100,10 @@ export function DemographicsCharts({ homeowners }: DemographicsChartProps) {
   const silentGen = homeowners.filter((h) => (h.age ?? 0) >= 81).length;
 
   const generationData = [
-    { name: "Gen Z (14-29)", count: genZ, fill: "#14b8a6" },
-    { name: "Millennials (30-45)", count: millennials, fill: "#0d9488" },
-    { name: "Gen X (46-61)", count: genX, fill: "#1e3a8a" },
-    { name: "Boomers (62-80)", count: boomers, fill: "#07162c" },
+    { name: "Gen Z (14-29)", count: genZ, fill: "#10b981" },
+    { name: "Millennials (30-45)", count: millennials, fill: "#059669" },
+    { name: "Gen X (46-61)", count: genX, fill: "#0d9488" },
+    { name: "Boomers (62-80)", count: boomers, fill: "#0f172a" },
     ...(silentGen > 0 ? [{ name: "Silent Gen+ (81+)", count: silentGen, fill: "#64748b" }] : []),
   ];
 
@@ -173,7 +173,7 @@ export function DemographicsCharts({ homeowners }: DemographicsChartProps) {
                 verticalAlign="bottom"
                 height={36}
                 iconType="circle"
-                formatter={(val) => <span className="text-xs font-semibold text-slate-700">{val}</span>}
+                formatter={(val) => <span className="text-xs font-semibold text-slate-700 dark:text-slate-300">{val}</span>}
               />
             </PieChart>
           </ResponsiveContainer>
@@ -208,7 +208,7 @@ export function DemographicsCharts({ homeowners }: DemographicsChartProps) {
                 verticalAlign="bottom"
                 height={36}
                 iconType="circle"
-                formatter={(val) => <span className="text-xs font-semibold text-slate-700">{val}</span>}
+                formatter={(val) => <span className="text-xs font-semibold text-slate-700 dark:text-slate-300">{val}</span>}
               />
             </PieChart>
           </ResponsiveContainer>
@@ -218,7 +218,7 @@ export function DemographicsCharts({ homeowners }: DemographicsChartProps) {
               <XAxis dataKey="name" stroke="#64748b" fontSize={12} tickLine={false} />
               <YAxis stroke="#64748b" fontSize={12} allowDecimals={false} tickLine={false} />
               <Tooltip
-                cursor={{ fill: "#f8fafc" }}
+                cursor={{ fill: "rgba(241, 245, 249, 0.4)" }}
                 contentStyle={{
                   backgroundColor: "#0a1120",
                   borderColor: "#1e293b",
@@ -242,7 +242,7 @@ export function DemographicsCharts({ homeowners }: DemographicsChartProps) {
               <XAxis dataKey="name" stroke="#64748b" fontSize={12} tickLine={false} />
               <YAxis stroke="#64748b" fontSize={12} allowDecimals={false} tickLine={false} />
               <Tooltip
-                cursor={{ fill: "#f8fafc" }}
+                cursor={{ fill: "rgba(241, 245, 249, 0.4)" }}
                 contentStyle={{
                   backgroundColor: "#0a1120",
                   borderColor: "#1e293b",
@@ -266,7 +266,7 @@ export function DemographicsCharts({ homeowners }: DemographicsChartProps) {
               <XAxis dataKey="name" stroke="#64748b" fontSize={12} tickLine={false} />
               <YAxis stroke="#64748b" fontSize={12} allowDecimals={false} tickLine={false} />
               <Tooltip
-                cursor={{ fill: "#f8fafc" }}
+                cursor={{ fill: "rgba(241, 245, 249, 0.4)" }}
                 contentStyle={{
                   backgroundColor: "#0a1120",
                   borderColor: "#1e293b",
@@ -289,21 +289,21 @@ export function DemographicsCharts({ homeowners }: DemographicsChartProps) {
 
       {/* Mini Legend Callout Bar */}
       <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 pt-3 border-t border-slate-100 dark:border-slate-800 text-center">
-        <div className="p-2 rounded-xl bg-slate-50 dark:bg-[#091424] border border-slate-100 dark:border-slate-800">
+        <div className="p-2.5 rounded-2xl bg-slate-50 dark:bg-[#091424] border border-slate-100 dark:border-slate-800/80 shadow-sm">
           <span className="text-[11px] text-slate-500 dark:text-slate-400 font-medium">Owners</span>
-          <p className="text-sm font-bold text-teal-700 dark:text-teal-400">{ownersCount} properties</p>
+          <p className="text-sm font-bold text-emerald-600 dark:text-emerald-400">{ownersCount} properties</p>
         </div>
-        <div className="p-2 rounded-xl bg-slate-50 dark:bg-[#091424] border border-slate-100 dark:border-slate-800">
+        <div className="p-2.5 rounded-2xl bg-slate-50 dark:bg-[#091424] border border-slate-100 dark:border-slate-800/80 shadow-sm">
           <span className="text-[11px] text-slate-500 dark:text-slate-400 font-medium">Renters</span>
-          <p className="text-sm font-bold text-[#07162c] dark:text-sky-300">{rentersCount} properties</p>
+          <p className="text-sm font-bold text-slate-800 dark:text-slate-300">{rentersCount} properties</p>
         </div>
-        <div className="p-2 rounded-xl bg-slate-50 dark:bg-[#091424] border border-slate-100 dark:border-slate-800">
+        <div className="p-2.5 rounded-2xl bg-slate-50 dark:bg-[#091424] border border-slate-100 dark:border-slate-800/80 shadow-sm">
           <span className="text-[11px] text-slate-500 dark:text-slate-400 font-medium">Senior Citizens</span>
           <p className="text-sm font-bold text-slate-900 dark:text-slate-100">{seniors} registered</p>
         </div>
-        <div className="p-2 rounded-xl bg-slate-50 dark:bg-[#091424] border border-slate-100 dark:border-slate-800">
+        <div className="p-2.5 rounded-2xl bg-slate-50 dark:bg-[#091424] border border-slate-100 dark:border-slate-800/80 shadow-sm">
           <span className="text-[11px] text-slate-500 dark:text-slate-400 font-medium">Occupancy</span>
-          <p className="text-sm font-bold text-teal-700 dark:text-teal-400">{totalOccupied} units active</p>
+          <p className="text-sm font-bold text-emerald-600 dark:text-emerald-400">{totalOccupied} units active</p>
         </div>
       </div>
     </div>

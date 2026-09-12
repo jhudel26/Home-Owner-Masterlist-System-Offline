@@ -14,10 +14,10 @@ export function RecentActivity({ logs }: RecentActivityProps) {
     switch (action) {
       case "CREATED_HOMEOWNER":
         return {
-          icon: <UserPlus className="h-4 w-4 text-teal-600" />,
-          bgColor: "bg-teal-50 border-teal-200",
+          icon: <UserPlus className="h-4 w-4 text-emerald-600" />,
+          bgColor: "bg-emerald-50 border-emerald-200",
           tag: "Added",
-          tagColor: "bg-teal-100/80 text-teal-800",
+          tagColor: "bg-emerald-100/80 text-emerald-800",
         };
       case "UPDATED_HOMEOWNER":
       case "UPDATED_STATUS":
@@ -36,10 +36,10 @@ export function RecentActivity({ logs }: RecentActivityProps) {
         };
       case "EXPORTED_EXCEL":
         return {
-          icon: <FileSpreadsheet className="h-4 w-4 text-teal-600" />,
-          bgColor: "bg-teal-50 border-teal-200",
+          icon: <FileSpreadsheet className="h-4 w-4 text-emerald-600" />,
+          bgColor: "bg-emerald-50 border-emerald-200",
           tag: "Export",
-          tagColor: "bg-teal-100/80 text-teal-800",
+          tagColor: "bg-emerald-100/80 text-emerald-800",
         };
       case "UPDATED_MONTHLY_DUES":
         return {
@@ -64,10 +64,10 @@ export function RecentActivity({ logs }: RecentActivityProps) {
         };
       case "SYSTEM_INITIALIZED":
         return {
-          icon: <Sparkles className="h-4 w-4 text-teal-600" />,
-          bgColor: "bg-teal-50 border-teal-200",
+          icon: <Sparkles className="h-4 w-4 text-emerald-600" />,
+          bgColor: "bg-emerald-50 border-emerald-200",
           tag: "System",
-          tagColor: "bg-teal-100 text-teal-800",
+          tagColor: "bg-emerald-100 text-emerald-800",
         };
       default:
         return {
@@ -135,12 +135,12 @@ export function RecentActivity({ logs }: RecentActivityProps) {
             return (
               <div key={log.id} className="relative flex items-start gap-3.5 group">
                 {/* Timeline Dot */}
-                <div className="absolute -left-6 top-1.5 flex h-5 w-5 items-center justify-center rounded-full bg-white dark:bg-[#0e192d] border-2 border-slate-300 dark:border-slate-700 group-hover:border-teal-600 transition-colors">
-                  <div className="h-1.5 w-1.5 rounded-full bg-slate-400 dark:bg-slate-500 group-hover:bg-teal-600 transition-colors" />
+                <div className="absolute -left-6 top-1.5 flex h-5 w-5 items-center justify-center rounded-full bg-white dark:bg-[#0e192d] border-2 border-slate-300 dark:border-slate-700 group-hover:border-emerald-600 transition-colors">
+                  <div className="h-1.5 w-1.5 rounded-full bg-slate-400 dark:bg-slate-500 group-hover:bg-emerald-600 transition-colors" />
                 </div>
 
                 {/* Content Card */}
-                <div className="flex-1 min-w-0 p-3 rounded-2xl border border-slate-100 dark:border-slate-800/80 bg-slate-50/50 dark:bg-[#091424]/70 hover:bg-white dark:hover:bg-[#13233f] hover:border-slate-200 dark:hover:border-teal-500/30 hover:shadow-subtle transition-all duration-200 flex flex-col gap-1.5">
+                <div className="flex-1 min-w-0 p-3 rounded-2xl border border-slate-100 dark:border-slate-800/80 bg-slate-50/50 dark:bg-[#091424]/70 hover:bg-white dark:hover:bg-[#13233f] hover:border-slate-200 dark:hover:border-emerald-500/30 hover:shadow-subtle transition-all duration-200 flex flex-col gap-1.5">
                   <div className="flex items-start gap-2.5 min-w-0">
                     <div className={`p-1.5 rounded-lg border shrink-0 mt-0.5 ${meta.bgColor}`}>
                       {meta.icon}
@@ -169,3 +169,4 @@ export function RecentActivity({ logs }: RecentActivityProps) {
     </div>
   );
 }
+
