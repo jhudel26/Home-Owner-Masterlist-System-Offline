@@ -91,8 +91,8 @@ export default function MonthlyDuesPage() {
         success(
           "Dues Rate Updated",
           updateUnpaidCheck
-            ? `Monthly dues rate updated to â‚±${num.toFixed(2)} and existing unpaid dues updated.`
-            : `Monthly dues rate updated to â‚±${num.toFixed(2)}.`
+            ? `Monthly dues rate updated to ₱${num.toFixed(2)} and existing unpaid dues updated.`
+            : `Monthly dues rate updated to ₱${num.toFixed(2)}.`
         );
         setIsRateModalOpen(false);
         fetchMonthlyDues();
@@ -170,7 +170,7 @@ export default function MonthlyDuesPage() {
               </span>
               <div className="flex items-center justify-center gap-1.5 mt-0.5">
                 <span className="text-base sm:text-lg font-extrabold text-white font-mono">
-                  â‚±{standardDuesRate.toFixed(2)}
+                  ₱{standardDuesRate.toFixed(2)}
                 </span>
                 {canManageDues && (
                   <button
@@ -192,7 +192,7 @@ export default function MonthlyDuesPage() {
                 Collected
               </span>
               <span className="text-base sm:text-lg font-extrabold text-emerald-300 font-mono block mt-0.5">
-                â‚±{totalCollected.toFixed(2)}
+                ₱{totalCollected.toFixed(2)}
               </span>
             </div>
 
@@ -255,11 +255,11 @@ export default function MonthlyDuesPage() {
         <form onSubmit={handleSaveRate} className="space-y-4">
           <div>
             <label className="block text-xs font-bold uppercase text-slate-700 dark:text-slate-300 mb-1.5">
-              New Dues Amount (PHP â‚±)
+              New Dues Amount (PHP ₱)
             </label>
             <div className="relative">
               <span className="absolute left-3.5 top-1/2 -translate-y-1/2 text-base font-bold text-emerald-600">
-                â‚±
+                ₱
               </span>
               <Input
                 type="number"
@@ -283,7 +283,7 @@ export default function MonthlyDuesPage() {
                 className="mt-0.5 h-4 w-4 rounded border-slate-300 text-emerald-600 focus:ring-emerald-500"
               />
               <span className="text-slate-700 dark:text-slate-300">
-                <strong>Update all unpaid dues</strong> for homeowners to â‚±{parseFloat(newRateInput || "0").toFixed(2)}. Existing paid receipts will not be altered.
+                <strong>Update all unpaid dues</strong> for homeowners to ₱{parseFloat(newRateInput || "0").toFixed(2)}. Existing paid receipts will not be altered.
               </span>
             </label>
           </div>

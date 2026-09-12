@@ -1,4 +1,4 @@
-﻿"use client";
+"use client";
 
 import { useEffect, useState } from "react";
 
@@ -726,14 +726,7 @@ export default function AnalyticsPage() {
       {analyticsData.since &&
         analyticsData.until && (
           <p className="text-xs text-slate-500 dark:text-slate-400">
-            Local Analytics Â·{" "}
-            {formatDate(
-              analyticsData.since
-            )}{" "}
-            â€“{" "}
-            {formatDate(
-              analyticsData.until
-            )}
+            Local Analytics ({formatDate(analyticsData.since)} to {formatDate(analyticsData.until)})
           </p>
         )}
 
@@ -766,7 +759,7 @@ export default function AnalyticsPage() {
 
                 <p className="mt-2 text-3xl font-bold text-slate-900 dark:text-white">
                   {analyticsData.loading
-                    ? "â€”"
+                    ? "—"
                     : formatNumber(
                         analyticsData.pageViews
                       )}
@@ -794,7 +787,7 @@ export default function AnalyticsPage() {
 
                 <p className="mt-2 text-3xl font-bold text-slate-900 dark:text-white">
                   {analyticsData.loading
-                    ? "â€”"
+                    ? "—"
                     : formatNumber(
                         analyticsData.visitors
                       )}
@@ -973,7 +966,7 @@ export default function AnalyticsPage() {
                 />
 
                 {/* =================================================
-                    PAGE VIEWS â€” KEEP THIS
+                    PAGE VIEWS — KEEP THIS
                 ================================================= */}
 
                 <Line
@@ -992,7 +985,7 @@ export default function AnalyticsPage() {
                 />
 
                 {/* =================================================
-                    VISITORS â€” KEEP THIS TOO
+                    VISITORS — KEEP THIS TOO
                 ================================================= */}
 
                 <Line

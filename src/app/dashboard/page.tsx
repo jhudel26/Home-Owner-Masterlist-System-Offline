@@ -1,4 +1,4 @@
-﻿"use client";
+"use client";
 
 import React, { useState } from "react";
 import Link from "next/link";
@@ -156,7 +156,7 @@ export default function DashboardPage() {
           <StatCard
             title="Total Homeowners"
             value={totalHomeowners}
-            subtitle={`${activeHomeowners} Active â€¢ ${inactiveHomeowners} Archived`}
+            subtitle={`${activeHomeowners} Active / ${inactiveHomeowners} Archived`}
             icon={Building}
             variant="emerald"
             badgeText={`${totalHomeowners} Units`}
@@ -175,7 +175,7 @@ export default function DashboardPage() {
           <StatCard
             title="Occupancy Profile"
             value={`${ownerPercent}%`}
-            subtitle={`${ownersCount} Owners â€¢ ${rentersCount} Renters`}
+            subtitle={`${ownersCount} Owners / ${rentersCount} Renters`}
             icon={Home}
             variant="navy"
             progressPercent={ownerPercent}
@@ -204,7 +204,7 @@ export default function DashboardPage() {
         <DemographicsCharts homeowners={homeowners} />
       </div>
 
-      {/* Right: Activity Sidebar â€” visible only on xl+ screens */}
+      {/* Right: Activity Sidebar — visible only on xl+ screens */}
       <aside className="hidden xl:flex flex-col w-72 2xl:w-80 shrink-0 border-l border-slate-200/80 dark:border-[#1e2f4d]/80 bg-white dark:bg-[#0e192d] self-stretch">
         <div className="sticky top-0 h-screen overflow-y-auto p-4">
           <RecentActivity logs={activityLogs} />

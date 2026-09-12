@@ -1,4 +1,4 @@
-﻿import React from "react";
+import React from "react";
 import { cn } from "@/lib/utils";
 import { UserRole, RecordStatus, OwnershipType } from "@/types/database";
 
@@ -64,7 +64,7 @@ export function StatusBadge({ status }: { status: RecordStatus }) {
   if (status === "Active") {
     return (
       <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-xs font-semibold bg-emerald-50 dark:bg-emerald-950/50 text-emerald-700 dark:text-emerald-300 border border-emerald-200/90 dark:border-emerald-800/60 shadow-sm">
-        <span className="h-1.5 w-1.5 rounded-full bg-emerald-500 animate-pulse" />
+        <span className="h-1.5 w-1.5 rounded-full bg-emerald-500" />
         Active
       </span>
     );
