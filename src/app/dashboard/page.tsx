@@ -39,6 +39,7 @@ export default function DashboardPage() {
   const canCreateHomeowner = hasPermission(currentUser, "can_create_homeowner");
   const canExport = hasPermission(currentUser, "can_export_excel");
   const canBackupRestore = hasPermission(currentUser, "can_backup_restore");
+  const canViewAuditTrail = hasPermission(currentUser, "can_view_audit_trail");
 
   // Metrics calculations
   const totalHomeowners = homeowners.length;
@@ -204,12 +205,14 @@ export default function DashboardPage() {
         <DemographicsCharts homeowners={homeowners} />
       </div>
 
-      {/* Right: Activity Sidebar — visible only on xl+ screens */}
-      <aside className="hidden xl:flex flex-col w-72 2xl:w-80 shrink-0 border-l border-slate-200/80 dark:border-[#1e2f4d]/80 bg-white dark:bg-[#0e192d] self-stretch">
-        <div className="sticky top-0 h-screen overflow-y-auto p-4">
-          <RecentActivity logs={activityLogs} />
-        </div>
-      </aside>
+      {/* Right: Activity Sidebar — visible only on xl+ screens when user has audit trail access */}
+      {canViewAuditTrail && (
+        <aside className="hidden xl:flex flex-col w-72 2xl:w-80 shrink-0 border-l border-slate-200/80 dark:border-[#1e2f4d]/80 bg-white dark:bg-[#0e192d] self-stretch">
+          <div className="sticky top-0 h-screen overflow-y-auto p-4">
+            <RecentActivity logs={activityLogs} />
+          </div>
+        </aside>
+      )}
 
       {/* Backup & Disaster Recovery Modal */}
       <BackupRestoreModal isOpen={isBackupOpen} onClose={() => setIsBackupOpen(false)} />
