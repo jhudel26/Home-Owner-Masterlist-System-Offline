@@ -1,4 +1,4 @@
-﻿"use client";
+"use client";
 
 import React, { useState, useMemo } from "react";
 import { Profile, UserPermissions, UserRole } from "@/types/database";
@@ -7,6 +7,7 @@ import { hasPermission, PERMISSION_DEFINITIONS } from "@/lib/permissions";
 import { RoleBadge, StatusBadge } from "@/components/ui/badge";
 import { ManagePermissionsModal } from "./manage-permissions-modal";
 import { CreateUserModal } from "./create-user-modal";
+import { EditUserModal } from "./edit-user-modal";
 import { Button } from "@/components/ui/button";
 import { useToast } from "@/components/ui/toast";
 import {
@@ -18,6 +19,7 @@ import {
   Shield,
   UserCheck,
   UserX,
+  Pencil,
 } from "lucide-react";
 
 interface UserTableProps {
@@ -25,13 +27,15 @@ interface UserTableProps {
 }
 
 export function UserTable({ profiles }: UserTableProps) {
-  const { currentUser, updateUserPermissions, updateUserStatus, createUser } = useApp();
+  const { currentUser, updateUserPermissions, updateUserStatus, createUser, editUser } = useApp();
   const { success, error: toastError } = useToast();
 
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedUser, setSelectedUser] = useState<Profile | null>(null);
   const [isPermsOpen, setIsPermsOpen] = useState(false);
   const [isCreateOpen, setIsCreateOpen] = useState(false);
+  const [isEditOpen, setIsEditOpen] = useState(false);
+  const [editingUser, setEditingUser] = useState<Profile | null>(null);
 
   const canManageAccounts = hasPermission(currentUser, "can_manage_users");
   const canGrantPerms = hasPermission(currentUser, "can_grant_permissions");
@@ -89,6 +93,16 @@ export function UserTable({ profiles }: UserTableProps) {
     role: UserRole;
   }) => {
     return await createUser(data);
+  };
+
+  const handleSaveEditUser = async (userId: string, data: { full_name?: string; email?: string; password?: string }) => {
+    const res = await editUser(userId, data);
+    if (res.success) {
+      success("Account Updated", "User account and credentials have been updated.");
+    } else {
+      toastError("Update Failed", res.error);
+    }
+    return res;
   };
 
   const countActivePermissions = (perms: UserPermissions) => {
@@ -227,6 +241,22 @@ export function UserTable({ profiles }: UserTableProps) {
                       {/* Actions */}
                       <td className="py-4 px-5 text-right">
                         <div className="flex items-center justify-end gap-2">
+                          {currentUser?.role === "super_admin" && (
+                            <Button
+                              variant="outline"
+                              size="sm"
+                              onClick={() => {
+                                setEditingUser(user);
+                                setIsEditOpen(true);
+                              }}
+                              className="h-8 text-xs gap-1.5 font-semibold text-sky-700 dark:text-sky-300 border-sky-300 dark:border-sky-800/60 hover:bg-sky-50 dark:hover:bg-sky-950/30"
+                              title="Edit user account & change password"
+                            >
+                              <Pencil className="h-3.5 w-3.5 text-sky-600 dark:text-sky-400" />
+                              <span>Edit Account</span>
+                            </Button>
+                          )}
+
                           {canGrantPerms && (
                             <Button
                               variant="outline"
@@ -281,6 +311,13 @@ export function UserTable({ profiles }: UserTableProps) {
         isOpen={isCreateOpen}
         onClose={() => setIsCreateOpen(false)}
         onCreate={handleCreateUser}
+      />
+
+      <EditUserModal
+        isOpen={isEditOpen}
+        onClose={() => setIsEditOpen(false)}
+        targetUser={editingUser}
+        onSave={handleSaveEditUser}
       />
     </div>
   );

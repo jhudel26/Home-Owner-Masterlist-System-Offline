@@ -104,8 +104,13 @@ export function HomeownerDetailsModal({
               </div>
             )}
             <div>
-              <div className="flex items-center gap-2">
+              <div className="flex items-center gap-2 flex-wrap">
                 <h4 className="text-lg font-bold text-white tracking-tight">{homeowner.full_name || "Unknown"}</h4>
+                {homeowner.hoa_number && (
+                  <span className="text-xs font-mono font-bold px-2.5 py-0.5 rounded-lg bg-emerald-500/20 text-emerald-300 border border-emerald-400/40">
+                    HOA# {homeowner.hoa_number}
+                  </span>
+                )}
                 {homeowner.age && homeowner.age >= 60 && (
                   <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-emerald-500/20 text-emerald-400 border border-emerald-400/40">
                     Senior (60+)
@@ -135,6 +140,17 @@ export function HomeownerDetailsModal({
         {activeTab === "overview" && (
           <div className="space-y-4 animate-fade-in">
             <div className="grid grid-cols-2 sm:grid-cols-3 gap-3.5">
+              <div className="p-3.5 rounded-xl border border-slate-200/80 dark:border-[#1e2f4d] bg-slate-50/50 dark:bg-[#0a1526]">
+                <div className="flex items-center gap-1.5 text-xs text-slate-500 dark:text-slate-400 mb-1">
+                  <Shield className="h-3.5 w-3.5 text-emerald-600 dark:text-emerald-400" />
+                  <span>HOA Number</span>
+                </div>
+                <p className="text-sm font-bold text-slate-900 dark:text-slate-100 font-mono">
+                  {homeowner.hoa_number || "Pending Assignment"}
+                </p>
+                <p className="text-xs text-slate-400 dark:text-slate-500 mt-0.5">Phase 4 Official ID</p>
+              </div>
+
               <div className="p-3.5 rounded-xl border border-slate-200/80 dark:border-[#1e2f4d] bg-slate-50/50 dark:bg-[#0a1526]">
                 <div className="flex items-center gap-1.5 text-xs text-slate-500 dark:text-slate-400 mb-1">
                   <Calendar className="h-3.5 w-3.5 text-emerald-600 dark:text-emerald-400" />
