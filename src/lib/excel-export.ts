@@ -1,6 +1,6 @@
-﻿import ExcelJS from "exceljs";
-import { Homeowner, MonthlyDue } from "@/types/database";
-import { formatDate } from "./utils";
+import ExcelJS from "exceljs";
+import { Homeowner, MonthlyDue, ActivityLog } from "@/types/database";
+import { formatDate, formatDateTime } from "./utils";
 
 export async function exportHomeownersToExcel(
   homeowners: Homeowner[],
@@ -644,6 +644,183 @@ export async function exportMonthlyDuesReportToExcel(
   const timestamp = new Date().toISOString().slice(0, 10);
   const yearsLabel = sortedYears.length === 1 ? `${sortedYears[0]}` : `${sortedYears[sortedYears.length - 1]}-${sortedYears[0]}`;
   const fullFilename = `${filenamePrefix}_${yearsLabel}_${timestamp}.xlsx`;
+
+  const url = window.URL.createObjectURL(blob);
+  const anchor = document.createElement("a");
+  anchor.href = url;
+  anchor.download = fullFilename;
+  anchor.click();
+  window.URL.revokeObjectURL(url);
+}
+
+function formatLogActionText(log: ActivityLog): string {
+  const hoName = log.details?.name || log.details?.full_name || "a homeowner";
+  const hoAddress = log.details?.address || log.details?.street_name || "Phase 4";
+
+  switch (log.action) {
+    case "CREATED_HOMEOWNER":
+      return `registered new homeowner "${hoName !== "a homeowner" ? hoName : "Unknown"}" at ${hoAddress}`;
+    case "UPDATED_HOMEOWNER":
+      return `updated records for "${hoName}"`;
+    case "DELETED_HOMEOWNER":
+      return `archived homeowner "${hoName}"`;
+    case "UPDATED_STATUS":
+      return `${log.details?.is_active ? "activated" : "archived"} status for "${hoName}"`;
+    case "UPDATED_MONTHLY_DUES":
+      return "updated monthly dues payment records";
+    case "EXPORTED_EXCEL":
+      return "exported the official homeowner masterlist (.xlsx)";
+    case "RESTORED_BACKUP":
+      return `restored database backup (${log.details?.count ?? 0} homeowners)`;
+    case "UPDATED_SETTINGS":
+      return "updated system configuration and dues settings";
+    case "UPDATED_USER_PERMISSIONS":
+      return `modified access privileges for ${log.details?.target_user || "user"}`;
+    case "SYSTEM_INITIALIZED":
+      return "initialized system registry and baseline records";
+    case "CREATED_USER":
+      return `created new user account for ${log.details?.email || "unknown"} (${log.details?.role || "user"})`;
+    case "EDITED_USER":
+      return `edited account details for ${log.details?.target_user || log.details?.email || "user"}`;
+    default:
+      return log.action.replace(/_/g, " ").toLowerCase();
+  }
+}
+
+export async function exportAuditTrailToExcel(
+  logs: ActivityLog[],
+  filterInfo?: { search?: string; type?: string; dateFrom?: string; dateTo?: string },
+  filenamePrefix = "St_Joseph_Village_6_Phase_4_Audit_Trail"
+) {
+  const workbook = new ExcelJS.Workbook();
+  workbook.creator = "St. Joseph Village 6 Phase 4 HOA";
+  workbook.lastModifiedBy = "HOA Masterlist System";
+  workbook.created = new Date();
+  workbook.modified = new Date();
+
+  const sheet = workbook.addWorksheet("Audit Trail", {
+    views: [{ showGridLines: true }],
+  });
+
+  // Title Row
+  sheet.mergeCells("A1:F1");
+  const titleCell = sheet.getCell("A1");
+  titleCell.value = "ST. JOSEPH VILLAGE 6 PHASE 4 — OFFICIAL AUDIT TRAIL / ACTIVITY LOG";
+  titleCell.font = { name: "Arial", size: 14, bold: true, color: { argb: "FFFFFFFF" } };
+  titleCell.fill = {
+    type: "pattern",
+    pattern: "solid",
+    fgColor: { argb: "FF0F382A" }, // HOA Emerald Green
+  };
+  titleCell.alignment = { horizontal: "center", vertical: "middle" };
+  sheet.getRow(1).height = 32;
+
+  // Subtitle Row
+  sheet.mergeCells("A2:F2");
+  const subCell = sheet.getCell("A2");
+  const filterParts = [
+    filterInfo?.type && filterInfo.type !== "all" ? `Type: ${filterInfo.type}` : null,
+    filterInfo?.dateFrom || filterInfo?.dateTo
+      ? `Date: ${filterInfo.dateFrom || "Start"} to ${filterInfo.dateTo || "Present"}`
+      : null,
+    filterInfo?.search ? `Search: "${filterInfo.search}"` : null,
+  ].filter(Boolean);
+
+  subCell.value = `Exported: ${new Date().toLocaleDateString("en-US", {
+    dateStyle: "long",
+  })} | Total Entries: ${logs.length}${filterParts.length > 0 ? ` | Filter: [ ${filterParts.join(" | ")} ]` : ""}`;
+  subCell.font = { name: "Arial", size: 10, italic: true, color: { argb: "FF2D705D" } };
+  subCell.alignment = { horizontal: "center", vertical: "middle" };
+  sheet.getRow(2).height = 20;
+
+  // Spacer row
+  sheet.getRow(3).height = 10;
+
+  // Headers
+  const headers = [
+    "#",
+    "Timestamp",
+    "Staff / Officer",
+    "Action Type",
+    "Activity Description",
+    "Reference / Context",
+  ];
+  const headerRow = sheet.getRow(4);
+  headerRow.values = headers;
+  headerRow.height = 26;
+
+  for (let col = 1; col <= headers.length; col++) {
+    const cell = headerRow.getCell(col);
+    cell.font = { name: "Arial", size: 10, bold: true, color: { argb: "FFFFFFFF" } };
+    cell.fill = { type: "pattern", pattern: "solid", fgColor: { argb: "FF1E3A8A" } };
+    cell.alignment = { horizontal: col === 1 ? "center" : "left", vertical: "middle" };
+    cell.border = {
+      top: { style: "thin", color: { argb: "FFD1D5DB" } },
+      bottom: { style: "medium", color: { argb: "FF1E3A8A" } },
+      left: { style: "thin", color: { argb: "FFD1D5DB" } },
+      right: { style: "thin", color: { argb: "FFD1D5DB" } },
+    };
+  }
+
+  // Data rows
+  logs.forEach((log, index) => {
+    const rowNum = index + 5;
+    const row = sheet.getRow(rowNum);
+    const isEven = index % 2 === 0;
+    const bgArgb = isEven ? "FFFFFFFF" : "FFF8FAFC";
+
+    const detailsStr = log.details
+      ? Object.entries(log.details)
+          .map(([k, v]) => `${k}: ${typeof v === "object" ? JSON.stringify(v) : v}`)
+          .join("; ")
+      : "—";
+
+    row.values = [
+      index + 1,
+      formatDateTime(log.created_at),
+      log.user_name || "System",
+      log.action,
+      formatLogActionText(log),
+      detailsStr,
+    ];
+    row.height = 24;
+
+    for (let col = 1; col <= headers.length; col++) {
+      const cell = row.getCell(col);
+      cell.font = { name: "Arial", size: 9 };
+      cell.fill = { type: "pattern", pattern: "solid", fgColor: { argb: bgArgb } };
+      cell.alignment = {
+        horizontal: col === 1 ? "center" : "left",
+        vertical: "middle",
+        wrapText: col === 5 || col === 6,
+      };
+      cell.border = {
+        top: { style: "thin", color: { argb: "FFE2E8F0" } },
+        bottom: { style: "thin", color: { argb: "FFE2E8F0" } },
+        left: { style: "thin", color: { argb: "FFE2E8F0" } },
+        right: { style: "thin", color: { argb: "FFE2E8F0" } },
+      };
+    }
+  });
+
+  // Column widths
+  sheet.columns = [
+    { width: 8 },  // #
+    { width: 22 }, // Timestamp
+    { width: 26 }, // Staff / Officer
+    { width: 24 }, // Action Type
+    { width: 55 }, // Activity Description
+    { width: 40 }, // Reference / Context
+  ];
+
+  // Write and trigger download
+  const buffer = await workbook.xlsx.writeBuffer();
+  const blob = new Blob([buffer], {
+    type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+  });
+
+  const timestamp = new Date().toISOString().slice(0, 10);
+  const fullFilename = `${filenamePrefix}_${timestamp}.xlsx`;
 
   const url = window.URL.createObjectURL(blob);
   const anchor = document.createElement("a");
