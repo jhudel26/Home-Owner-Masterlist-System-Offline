@@ -16,6 +16,7 @@ export interface UserPermissions {
   can_backup_restore: boolean;
   can_view_analytics: boolean;
   can_manage_monthly_dues: boolean;
+  can_view_audit_trail?: boolean;
 }
 
 export interface Profile {

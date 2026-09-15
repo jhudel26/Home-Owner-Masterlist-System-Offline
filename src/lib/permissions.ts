@@ -59,6 +59,11 @@ export const PERMISSION_DEFINITIONS: Record<
     description: "Access application analytics, performance metrics, and usage data",
     category: "System",
   },
+  can_view_audit_trail: {
+    label: "View Audit Trail",
+    description: "Access official activity log trail and historical system operations",
+    category: "System",
+  },
 };
 
 export const DEFAULT_PERMISSIONS_BY_ROLE: Record<UserRole, UserPermissions> = {
@@ -74,6 +79,7 @@ export const DEFAULT_PERMISSIONS_BY_ROLE: Record<UserRole, UserPermissions> = {
     can_view_dashboard_stats: true,
     can_backup_restore: true,
     can_view_analytics: true,
+    can_view_audit_trail: true,
   },
   admin: {
     can_create_homeowner: true,
@@ -87,6 +93,7 @@ export const DEFAULT_PERMISSIONS_BY_ROLE: Record<UserRole, UserPermissions> = {
     can_view_dashboard_stats: true,
     can_backup_restore: false,
     can_view_analytics: false,
+    can_view_audit_trail: false,
   },
   user: {
     can_create_homeowner: false,
@@ -100,6 +107,7 @@ export const DEFAULT_PERMISSIONS_BY_ROLE: Record<UserRole, UserPermissions> = {
     can_view_dashboard_stats: true,
     can_backup_restore: false,
     can_view_analytics: false,
+    can_view_audit_trail: false,
   },
 };
 

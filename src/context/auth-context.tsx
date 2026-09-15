@@ -22,6 +22,7 @@ interface AuthContextType {
   updateUserPermissions: (userId: string, permissions: UserPermissions) => Promise<{ success: boolean; error?: string }>;
   updateUserStatus: (userId: string, status: "Active" | "Inactive") => Promise<{ success: boolean; error?: string }>;
   createUser: (userData: { full_name: string; email: string; password?: string; role: UserRole; permissions?: UserPermissions }) => Promise<{ success: boolean; error?: string; user?: Profile }>;
+  editUser: (userId: string, data: { full_name?: string; email?: string; password?: string }) => Promise<{ success: boolean; error?: string }>;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -109,7 +110,18 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     } catch (error) { return { success: false, error: getErrorMessage(error) }; }
   }, []);
 
-  return <AuthContext.Provider value={{ currentUser, setCurrentUser, allProfiles, setAllProfiles, fetchProfiles, isLoading, setIsLoading, loadingStage, setLoadingStage, isLocalDatabaseActive, setIsLocalDatabaseActive, logout, updateUserPermissions, updateUserStatus, createUser }}>{children}</AuthContext.Provider>;
+  const editUser = useCallback(async (userId: string, data: { full_name?: string; email?: string; password?: string }) => {
+    try {
+      const response = await fetch("/api/users", { method: "PUT", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ id: userId, ...data }) });
+      const result = await response.json();
+      if (!response.ok) return { success: false, error: result.error || "Failed to update user." };
+      setAllProfiles((prev) => prev.map((p) => p.id === userId ? result.profile : p));
+      if (currentUser?.id === userId) setCurrentUser(result.profile);
+      return { success: true };
+    } catch (error) { return { success: false, error: getErrorMessage(error) }; }
+  }, [currentUser]);
+
+  return <AuthContext.Provider value={{ currentUser, setCurrentUser, allProfiles, setAllProfiles, fetchProfiles, isLoading, setIsLoading, loadingStage, setLoadingStage, isLocalDatabaseActive, setIsLocalDatabaseActive, logout, updateUserPermissions, updateUserStatus, createUser, editUser }}>{children}</AuthContext.Provider>;
 }
 
 export function useAuth() {
