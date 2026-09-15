@@ -6,7 +6,7 @@ import { formatDateTime } from "@/lib/utils";
 import { useApp } from "@/context/app-context";
 import { hasPermission } from "@/lib/permissions";
 import { exportAuditTrailToExcel } from "@/lib/excel-export";
-import { Clock, UserPlus, Edit3, Trash2, FileSpreadsheet, ShieldAlert, Sparkles, Settings, RefreshCw, Search, X, ChevronLeft, ChevronRight, Filter } from "lucide-react";
+import { Clock, UserPlus, Edit3, Trash2, FileSpreadsheet, ShieldAlert, Sparkles, Settings, RefreshCw, Search, X, ChevronLeft, ChevronRight, Filter, Receipt } from "lucide-react";
 
 interface RecentActivityProps {
   logs: ActivityLog[];
@@ -76,7 +76,7 @@ export function RecentActivity({ logs, fullPage = false }: RecentActivityProps) 
         };
       case "UPDATED_MONTHLY_DUES":
         return {
-          icon: <FileSpreadsheet className="h-4 w-4 text-emerald-600" />,
+          icon: <Receipt className="h-4 w-4 text-emerald-600" />,
           bgColor: "bg-emerald-50 border-emerald-200",
           tag: "Dues",
           tagColor: "bg-emerald-100/80 text-emerald-800",
@@ -128,8 +128,15 @@ export function RecentActivity({ logs, fullPage = false }: RecentActivityProps) 
   };
 
   const formatActionText = (log: ActivityLog) => {
-    const hoName = log.details?.name || log.details?.full_name || "a homeowner";
-    const hoAddress = log.details?.address || log.details?.street_name || "Phase 4";
+    let details = log.details as any;
+    if (typeof details === "string") {
+      try {
+        details = JSON.parse(details);
+      } catch {}
+    }
+
+    const hoName = details?.name || details?.full_name || "a homeowner";
+    const hoAddress = details?.address || details?.street_name || "Phase 4";
 
     switch (log.action) {
       case "CREATED_HOMEOWNER":
@@ -139,23 +146,39 @@ export function RecentActivity({ logs, fullPage = false }: RecentActivityProps) 
       case "DELETED_HOMEOWNER":
         return `archived homeowner "${hoName}"`;
       case "UPDATED_STATUS":
-        return `${log.details?.is_active ? "activated" : "archived"} status for "${hoName}"`;
-      case "UPDATED_MONTHLY_DUES":
-        return "updated monthly dues payment records";
+        return `${details?.is_active ? "activated" : "archived"} status for "${hoName}"`;
+      case "UPDATED_MONTHLY_DUES": {
+        const monthNames = [
+          "January", "February", "March", "April", "May", "June",
+          "July", "August", "September", "October", "November", "December"
+        ];
+        const monthStr = details?.month && monthNames[details.month - 1] ? monthNames[details.month - 1] : "";
+        const periodStr = monthStr ? `${monthStr} ${details?.year || ""}`.trim() : (details?.year ? `${details.year}` : "");
+        const statusStr = (details?.status || "").toString().toLowerCase();
+        const amountStr = details?.amount !== undefined && details?.amount !== null ? ` (₱${Number(details.amount).toFixed(2)})` : "";
+        const orStr = details?.official_receipt_number ? ` [OR# ${details.official_receipt_number}]` : "";
+
+        if (statusStr === "paid") {
+          return `recorded payment${amountStr} for "${hoName}"${periodStr ? ` for ${periodStr}` : ""}${orStr}`;
+        } else if (statusStr === "unpaid") {
+          return `marked dues as unpaid for "${hoName}"${periodStr ? ` for ${periodStr}` : ""}`;
+        }
+        return `updated monthly dues records for "${hoName}"${periodStr ? ` (${periodStr})` : ""}`;
+      }
       case "EXPORTED_EXCEL":
         return "exported the official homeowner masterlist (.xlsx)";
       case "RESTORED_BACKUP":
-        return `restored database backup (${log.details?.count ?? 0} homeowners)`;
+        return `restored database backup (${details?.count ?? 0} homeowners)`;
       case "UPDATED_SETTINGS":
         return "updated system configuration and dues settings";
       case "UPDATED_USER_PERMISSIONS":
-        return `modified access privileges for ${log.details?.target_user || "user"}`;
+        return `modified access privileges for ${details?.target_user || "user"}`;
       case "SYSTEM_INITIALIZED":
         return "initialized system registry and baseline records";
       case "CREATED_USER":
-        return `created new user account for ${log.details?.email || "unknown"} (${log.details?.role || "user"})`;
+        return `created new user account for ${details?.email || "unknown"} (${details?.role || "user"})`;
       case "EDITED_USER":
-        return `edited account details for ${log.details?.target_user || log.details?.email || "user"}`;
+        return `edited account details for ${details?.target_user || details?.email || "user"}`;
       default:
         return log.action.replace(/_/g, " ").toLowerCase();
     }

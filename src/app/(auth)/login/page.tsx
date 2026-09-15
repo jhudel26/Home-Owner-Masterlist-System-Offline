@@ -1,6 +1,7 @@
-﻿"use client";
+"use client";
 
 import React, { useState, useEffect } from "react";
+import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { useApp } from "@/context/app-context";
 import { Button } from "@/components/ui/button";
@@ -106,8 +107,15 @@ export default function LoginPage() {
       {/* Top Header / Brand Identity */}
       <header className="relative w-full max-w-7xl mx-auto px-6 sm:px-12 pt-8 flex items-center justify-between z-20">
         <div className="flex items-center gap-3">
-          <div className="h-9 w-9 rounded-xl bg-emerald-500/20 border border-emerald-400/30 flex items-center justify-center text-emerald-400 shadow-md shadow-emerald-950/40">
-            <Home className="h-5 w-5" />
+          <div className="relative h-10 w-10 rounded-xl bg-white/10 border border-white/20 p-1 flex items-center justify-center shadow-md overflow-hidden shrink-0">
+            <Image
+              src="/icon.png"
+              alt="Logo"
+              width={40}
+              height={40}
+              className="h-full w-full object-contain"
+              priority
+            />
           </div>
           <div>
             <span className="text-xs font-bold tracking-wider uppercase text-emerald-400 block">

@@ -8,8 +8,14 @@ import { RecentActivity } from "@/components/dashboard/recent-activity";
 import { ShieldAlert } from "lucide-react";
 
 export default function ActivityLogPage() {
-  const { currentUser, activityLogs } = useApp();
+  const { currentUser, activityLogs, refreshData } = useApp();
   const canView = hasPermission(currentUser, "can_view_audit_trail");
+
+  React.useEffect(() => {
+    if (canView && refreshData) {
+      void refreshData();
+    }
+  }, [canView, refreshData]);
 
   if (!canView) {
     return (

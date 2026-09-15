@@ -36,7 +36,7 @@ DefaultDirName={autopf}\{#AppName}
 DefaultGroupName={#AppName}
 AllowNoIcons=no
 ; Installer output
-OutputDir="C:\Users\Jhodel Orola\Downloads\Home-Owner-Masterlist-System-Offline-main\Home-Owner-Masterlist-System-Offline-main\dist"
+OutputDir={#DistDir}
 OutputBaseFilename=ResidentialMasterlistSetup
 ; Compression
 Compression=lzma2/ultra64

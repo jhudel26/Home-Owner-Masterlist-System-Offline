@@ -17,6 +17,7 @@ interface DataContextType {
   bulkImportHomeowners: (records: Array<{ homeowner: Omit<Homeowner, "id" | "created_at" | "updated_at" | "is_active"> & { is_active?: number }; members?: Omit<HouseholdMember, "id" | "homeowner_id">[] }>) => Promise<{ success: boolean; count: number; error?: string }>;
   exportBackupData: () => string;
   restoreBackupData: (jsonData: string) => Promise<{ success: boolean; error?: string; count?: number }>;
+  refreshData: () => Promise<void>;
 }
 
 const DataContext = createContext<DataContextType | undefined>(undefined);
@@ -47,6 +48,16 @@ export function DataProvider({ children }: { children: React.ReactNode }) {
       setLoadingStage("Start XAMPP MySQL and refresh the page.");
     } finally { setIsLoading(false); }
   }, [setIsLoading, setLoadingStage]);
+
+  const refreshData = useCallback(async () => {
+    try {
+      const result = await api("/api/homeowners");
+      if (Array.isArray(result.homeowners)) setHomeowners(result.homeowners);
+      if (Array.isArray(result.activityLogs)) setActivityLogs(result.activityLogs);
+    } catch (error) {
+      console.error("Failed to refresh local data:", error);
+    }
+  }, []);
 
   useEffect(() => {
     if (currentUser) {
@@ -137,7 +148,7 @@ export function DataProvider({ children }: { children: React.ReactNode }) {
     } catch (error) { return { success: false, error: getErrorMessage(error) }; }
   }, []);
 
-  return <DataContext.Provider value={{ homeowners, setHomeowners, activityLogs, setActivityLogs, addHomeowner, updateHomeowner, deleteHomeowner, bulkImportHomeowners, exportBackupData, restoreBackupData }}>{children}</DataContext.Provider>;
+  return <DataContext.Provider value={{ homeowners, setHomeowners, activityLogs, setActivityLogs, addHomeowner, updateHomeowner, deleteHomeowner, bulkImportHomeowners, exportBackupData, restoreBackupData, refreshData }}>{children}</DataContext.Provider>;
 }
 
 export function useData() { const context = useContext(DataContext); if (!context) throw new Error("useData must be used within a DataProvider"); return context; }

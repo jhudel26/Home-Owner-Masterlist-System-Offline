@@ -35,7 +35,7 @@ const MONTHS = [
 export default function HomeownerDuesDetailPage() {
   const params = useParams();
   const router = useRouter();
-  const { currentUser, homeowners } = useApp();
+  const { currentUser, homeowners, setActivityLogs } = useApp();
   const { success, error: toastError } = useToast();
   const canManageDues = hasPermission(currentUser, "can_manage_monthly_dues");
   const homeownerId = params?.homeownerId as string;
@@ -168,6 +168,9 @@ export default function HomeownerDuesDetailPage() {
 
         const data = await response.json();
         if (data.success) {
+          if (data.activity && setActivityLogs) {
+            setActivityLogs((prev) => [data.activity, ...prev]);
+          }
           success(
             newStatus === "paid" ? "Payment Recorded" : "Payment Unmarked",
             `Monthly dues for ${MONTHS[month - 1]} has been updated.`
@@ -194,6 +197,9 @@ export default function HomeownerDuesDetailPage() {
 
         const data = await response.json();
         if (data.success) {
+          if (data.activity && setActivityLogs) {
+            setActivityLogs((prev) => [data.activity, ...prev]);
+          }
           success(
             newStatus === "paid" ? "Payment Recorded" : "Payment Unmarked",
             `Monthly dues for ${MONTHS[month - 1]} has been updated.`
@@ -259,6 +265,9 @@ export default function HomeownerDuesDetailPage() {
         });
         const data = await res.json();
         if (data.success) {
+          if (data.activity && setActivityLogs) {
+            setActivityLogs((prev) => [data.activity, ...prev]);
+          }
           success("Amount Updated", `${MONTHS[targetMonth - 1]} dues set to ₱${numAmount.toFixed(2)}.`);
           setIsAmountModalOpen(false);
           fetchMonthlyDues();
@@ -280,6 +289,9 @@ export default function HomeownerDuesDetailPage() {
         });
         const data = await res.json();
         if (data.success) {
+          if (data.activity && setActivityLogs) {
+            setActivityLogs((prev) => [data.activity, ...prev]);
+          }
           success("Amount Set", `${MONTHS[targetMonth - 1]} dues set to ₱${numAmount.toFixed(2)}.`);
           setIsAmountModalOpen(false);
           fetchMonthlyDues();

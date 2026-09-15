@@ -1,4 +1,4 @@
-﻿"use client";
+"use client";
 
 import React, { useState, useEffect } from "react";
 import { useApp } from "@/context/app-context";
@@ -45,7 +45,7 @@ export default function MonthlyDuesPage() {
   const fetchMonthlyDues = async () => {
     try {
       setIsLoading(true);
-      const response = await fetch(`/api/monthly-dues?year=${selectedYear}&month=${selectedMonth}`);
+      const response = await fetch(`/api/monthly-dues`);
       const data = await response.json();
       if (data.success) {
         setMonthlyDues(data.data);
@@ -120,7 +120,10 @@ export default function MonthlyDuesPage() {
 
   // Calculate quick metrics for the month
   const totalHomeowners = homeowners.length;
-  const paidDues = monthlyDues.filter((d) => d.status === "paid");
+  const currentMonthDues = monthlyDues.filter(
+    (d) => Number(d.year) === Number(selectedYear) && Number(d.month) === Number(selectedMonth)
+  );
+  const paidDues = currentMonthDues.filter((d) => d.status === "paid");
   const paidCount = paidDues.length;
   const unpaidCount = Math.max(0, totalHomeowners - paidCount);
   const totalCollected = paidDues.reduce((sum, d) => sum + Number(d.amount || standardDuesRate), 0);

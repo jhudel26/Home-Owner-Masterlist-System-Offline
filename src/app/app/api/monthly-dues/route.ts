@@ -1,8 +1,9 @@
-﻿import { NextRequest, NextResponse } from 'next/server';
+import { NextRequest, NextResponse } from 'next/server';
 import { randomUUID } from 'crypto';
 import { dbQuery, dbExecute } from '@/lib/db/mysql';
 import { getCurrentUser } from '@/lib/auth/local-auth';
 import { hasPermission } from '@/lib/permissions';
+import type { ActivityLog } from '@/types/database';
 
 export const dynamic = "force-dynamic";
 
@@ -118,7 +119,38 @@ export async function POST(request: NextRequest) {
 
     await dbExecute(query, [id, homeowner_id, year, month, amount, status, official_receipt_number || null, payment_date || null, created_by || actor.id]);
 
-    return NextResponse.json({ success: true, id });
+    // Retrieve homeowner name for activity logging
+    const homeownerRows = await dbQuery<{ full_name: string }>(
+      "SELECT full_name FROM homeowners WHERE id = ?",
+      [homeowner_id]
+    );
+    const hoName = homeownerRows[0]?.full_name || "Homeowner";
+
+    // Log the activity
+    const activityId = randomUUID();
+    await dbExecute(
+      "INSERT INTO activity_logs (id, user_id, user_name, action, details) VALUES (?, ?, ?, ?, ?)",
+      [
+        activityId,
+        actor.id,
+        actor.full_name,
+        "UPDATED_MONTHLY_DUES",
+        JSON.stringify({
+          homeowner_id,
+          name: hoName,
+          full_name: hoName,
+          year,
+          month,
+          amount,
+          status,
+          official_receipt_number: official_receipt_number || null,
+        }),
+      ]
+    );
+
+    const activity = await dbQuery<ActivityLog>("SELECT * FROM activity_logs WHERE id = ?", [activityId]);
+
+    return NextResponse.json({ success: true, id, activity: activity[0] || null });
   } catch (error: any) {
     console.error('Error creating monthly due:', error);
     if (error.code === 'ER_DUP_ENTRY') {
@@ -153,6 +185,20 @@ export async function PATCH(request: NextRequest) {
       );
     }
 
+    // Retrieve existing due and homeowner name for activity logging
+    const existingDueRows = await dbQuery<any>(
+      `SELECT md.*, h.full_name 
+       FROM monthly_dues md 
+       LEFT JOIN homeowners h ON md.homeowner_id = h.id 
+       WHERE md.id = ?`,
+      [id]
+    );
+    const existingDue = existingDueRows[0];
+    const hoName = existingDue?.full_name || "Homeowner";
+    const hoId = existingDue?.homeowner_id;
+    const dueYear = existingDue?.year;
+    const dueMonth = existingDue?.month;
+
     const updates: string[] = ["updated_at = CURRENT_TIMESTAMP"];
     const params: any[] = [];
 
@@ -186,7 +232,35 @@ export async function PATCH(request: NextRequest) {
 
     await dbExecute(query, params);
 
-    return NextResponse.json({ success: true });
+    // Log the activity
+    const activityId = randomUUID();
+    const finalStatus = status !== undefined ? status : existingDue?.status;
+    const finalAmount = amount !== undefined && !isNaN(Number(amount)) ? Number(amount) : existingDue?.amount;
+    const finalOr = official_receipt_number !== undefined ? (official_receipt_number || null) : existingDue?.official_receipt_number;
+
+    await dbExecute(
+      "INSERT INTO activity_logs (id, user_id, user_name, action, details) VALUES (?, ?, ?, ?, ?)",
+      [
+        activityId,
+        actor.id,
+        actor.full_name,
+        "UPDATED_MONTHLY_DUES",
+        JSON.stringify({
+          homeowner_id: hoId,
+          name: hoName,
+          full_name: hoName,
+          year: dueYear,
+          month: dueMonth,
+          amount: finalAmount,
+          status: finalStatus,
+          official_receipt_number: finalOr,
+        }),
+      ]
+    );
+
+    const activity = await dbQuery<ActivityLog>("SELECT * FROM activity_logs WHERE id = ?", [activityId]);
+
+    return NextResponse.json({ success: true, activity: activity[0] || null });
   } catch (error: any) {
     console.error('Error updating monthly due:', error);
     return NextResponse.json(

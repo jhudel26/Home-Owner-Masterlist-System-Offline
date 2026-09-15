@@ -52,7 +52,7 @@ export function MonthlyDuesTable({
   onMonthChange,
   onDataChange,
 }: MonthlyDuesTableProps) {
-  const { currentUser } = useApp();
+  const { currentUser, setActivityLogs } = useApp();
   const { success, error: toastError } = useToast();
   const canManageDues = hasPermission(currentUser, "can_manage_monthly_dues");
   const canExport = hasPermission(currentUser, "can_export_excel");
@@ -126,6 +126,75 @@ export function MonthlyDuesTable({
     return url.startsWith("/uploads/") || url.startsWith("data:image/");
   };
 
+  // Compute active month list when date range is selected
+  const activeMonthList = useMemo(() => {
+    if (!dateFrom && !dateTo) return [];
+    const now = new Date();
+    const currentYm = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, "0")}`;
+    const effectiveFrom = dateFrom || `${now.getFullYear()}-01`;
+    const effectiveTo = dateTo || currentYm;
+
+    const [fromY, fromM] = effectiveFrom.split("-").map(Number);
+    const [toY, toM] = effectiveTo.split("-").map(Number);
+
+    if (isNaN(fromY) || isNaN(fromM) || isNaN(toY) || isNaN(toM)) return [];
+
+    const startNum = fromY * 100 + fromM;
+    const endNum = toY * 100 + toM;
+
+    if (startNum > endNum) return [];
+
+    const list: { year: number; month: number }[] = [];
+    let curY = fromY;
+    let curM = fromM;
+
+    while (curY * 100 + curM <= endNum) {
+      list.push({ year: curY, month: curM });
+      curM++;
+      if (curM > 12) {
+        curM = 1;
+        curY++;
+      }
+    }
+    return list;
+  }, [dateFrom, dateTo]);
+
+  const isRangeActive = activeMonthList.length > 0;
+
+  const getRangeStats = (homeownerId: string) => {
+    let paidCount = 0;
+    let totalAmount = 0;
+    let paidAmount = 0;
+
+    activeMonthList.forEach(({ year, month }) => {
+      const key = `${homeownerId}-${year}-${month}`;
+      const due = duesMap.get(key);
+      const dueAmt = due && due.amount !== undefined && due.amount !== null ? Number(due.amount) : standardRate;
+      totalAmount += dueAmt;
+
+      if (due && due.status === "paid") {
+        paidCount++;
+        paidAmount += dueAmt;
+      }
+    });
+
+    const totalMonths = activeMonthList.length;
+    const unpaidCount = totalMonths - paidCount;
+    const unpaidAmount = Math.max(0, totalAmount - paidAmount);
+
+    return {
+      totalMonths,
+      paidCount,
+      unpaidCount,
+      isFullyPaid: paidCount === totalMonths && totalMonths > 0,
+      isFullyUnpaid: paidCount === 0,
+      isPartiallyPaid: paidCount > 0 && paidCount < totalMonths,
+      totalAmount,
+      paidAmount,
+      unpaidAmount,
+    };
+  };
+
   // Filter homeowners
   const filteredHomeowners = useMemo(() => {
     return homeowners.filter((ho) => {
@@ -139,70 +208,47 @@ export function MonthlyDuesTable({
         (ho.contact_number && ho.contact_number.toLowerCase().includes(query)) ||
         (ho.hoa_number && ho.hoa_number.toLowerCase().includes(query));
 
-      const paymentStatus = getPaymentStatus(ho.id);
-      const isPaid = paymentStatus?.status === "paid";
-
-      const matchPaymentStatus =
-        paymentStatusFilter === "all" ||
-        (paymentStatusFilter === "paid" && isPaid) ||
-        (paymentStatusFilter === "unpaid" && !isPaid);
-
       const matchBlock = blockFilter === "all" || ho.block_number === blockFilter;
       const matchLot =
         !lotFilter ||
         (ho.lot_number && ho.lot_number.toLowerCase().includes(lotFilter.toLowerCase()));
 
-      const matchDateRange = (() => {
-        if (!dateFrom && !dateTo) return true;
+      let matchPaymentStatus = true;
 
-        if (isPaid) {
-          // For paid dues: check payment_date (fallback to created_at or billing period)
-          const pDate = paymentStatus?.payment_date
-            ? String(paymentStatus.payment_date).slice(0, 10)
-            : paymentStatus?.created_at
-            ? String(paymentStatus.created_at).slice(0, 10)
-            : null;
-
-          if (pDate) {
-            if (dateFrom && pDate < dateFrom) return false;
-            if (dateTo && pDate > dateTo) return false;
-            return true;
-          }
-          // If paid without explicit payment_date, check if billing period overlaps
-          const periodStart = `${selectedYear}-${String(selectedMonth).padStart(2, "0")}-01`;
-          const lastDay = new Date(selectedYear, selectedMonth, 0).getDate();
-          const periodEnd = `${selectedYear}-${String(selectedMonth).padStart(2, "0")}-${String(lastDay).padStart(2, "0")}`;
-          if (dateFrom && periodEnd < dateFrom) return false;
-          if (dateTo && periodStart > dateTo) return false;
-          return true;
-        } else {
-          // For unpaid dues: check if the billing assessment period or created_at falls within the date range
-          const recordDate = paymentStatus?.created_at ? String(paymentStatus.created_at).slice(0, 10) : null;
-          if (recordDate) {
-            const inRecordDate = (!dateFrom || recordDate >= dateFrom) && (!dateTo || recordDate <= dateTo);
-            if (inRecordDate) return true;
-          }
-          // Check if the assessment billing month falls within the date range
-          const periodStart = `${selectedYear}-${String(selectedMonth).padStart(2, "0")}-01`;
-          const lastDay = new Date(selectedYear, selectedMonth, 0).getDate();
-          const periodEnd = `${selectedYear}-${String(selectedMonth).padStart(2, "0")}-${String(lastDay).padStart(2, "0")}`;
-          if (dateFrom && periodEnd < dateFrom) return false;
-          if (dateTo && periodStart > dateTo) return false;
-          return true;
+      if (isRangeActive) {
+        const stats = getRangeStats(ho.id);
+        if (paymentStatusFilter === "paid") {
+          matchPaymentStatus = stats.paidCount > 0;
+        } else if (paymentStatusFilter === "unpaid") {
+          matchPaymentStatus = stats.unpaidCount > 0;
         }
-      })();
+      } else {
+        const paymentStatus = getPaymentStatus(ho.id);
+        const isPaid = paymentStatus?.status === "paid";
+        if (paymentStatusFilter === "paid") {
+          matchPaymentStatus = isPaid;
+        } else if (paymentStatusFilter === "unpaid") {
+          matchPaymentStatus = !isPaid;
+        }
+      }
 
-      return matchSearch && matchPaymentStatus && matchBlock && matchLot && matchDateRange;
+      return matchSearch && matchBlock && matchLot && matchPaymentStatus;
     });
-  }, [homeowners, searchTerm, paymentStatusFilter, blockFilter, lotFilter, dateFrom, dateTo, selectedYear, selectedMonth, duesMap]);
+  }, [homeowners, searchTerm, paymentStatusFilter, blockFilter, lotFilter, isRangeActive, activeMonthList, selectedYear, selectedMonth, duesMap, standardRate]);
 
   // Unpaid count
   const unpaidCount = useMemo(() => {
+    if (isRangeActive) {
+      return homeowners.filter((ho) => {
+        const stats = getRangeStats(ho.id);
+        return stats.unpaidCount > 0;
+      }).length;
+    }
     return homeowners.filter((ho) => {
       const paymentStatus = getPaymentStatus(ho.id);
       return !paymentStatus || paymentStatus.status !== "paid";
     }).length;
-  }, [homeowners, selectedYear, selectedMonth, duesMap]);
+  }, [homeowners, isRangeActive, activeMonthList, selectedYear, selectedMonth, duesMap, standardRate]);
 
   const isFiltered =
     searchTerm !== "" ||
@@ -250,11 +296,71 @@ export function MonthlyDuesTable({
     orNum: string | null,
     amount?: number
   ) => {
-    const key = `${homeownerId}-${selectedYear}-${selectedMonth}`;
-    const existingDue = duesMap.get(key);
-    const finalAmount = amount ?? getDueAmount(homeownerId);
-
     try {
+      if (isRangeActive && activeMonthList.length > 0) {
+        let updatedCount = 0;
+        const newActivities: any[] = [];
+        for (const { year, month } of activeMonthList) {
+          const mKey = `${homeownerId}-${year}-${month}`;
+          const existing = duesMap.get(mKey);
+          if (newStatus === "paid" && existing?.status === "paid") continue;
+          if (newStatus === "unpaid" && (!existing || existing.status !== "paid")) continue;
+
+          const mAmount =
+            existing && existing.amount !== undefined && existing.amount !== null
+              ? Number(existing.amount)
+              : standardRate;
+
+          if (existing) {
+            const response = await fetch("/api/monthly-dues", {
+              method: "PATCH",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify({
+                id: existing.id,
+                status: newStatus,
+                amount: mAmount,
+                official_receipt_number: newStatus === "paid" ? orNum : null,
+                payment_date: newStatus === "paid" ? new Date().toISOString().split("T")[0] : null,
+              }),
+            });
+            const data = await response.json().catch(() => ({}));
+            if (data?.activity) newActivities.unshift(data.activity);
+          } else {
+            const response = await fetch("/api/monthly-dues", {
+              method: "POST",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify({
+                homeowner_id: homeownerId,
+                year: year,
+                month: month,
+                amount: mAmount,
+                status: newStatus,
+                official_receipt_number: newStatus === "paid" ? orNum : null,
+                payment_date: newStatus === "paid" ? new Date().toISOString().split("T")[0] : null,
+                created_by: currentUser?.id,
+              }),
+            });
+            const data = await response.json().catch(() => ({}));
+            if (data?.activity) newActivities.unshift(data.activity);
+          }
+          updatedCount++;
+        }
+
+        if (newActivities.length > 0 && setActivityLogs) {
+          setActivityLogs((prev) => [...newActivities, ...prev]);
+        }
+
+        success(
+          newStatus === "paid" ? "Payments Recorded" : "Payments Marked Unpaid",
+          `${updatedCount} month(s) updated for the selected date range.`
+        );
+        onDataChange();
+        return;
+      }
+
+      const key = `${homeownerId}-${selectedYear}-${selectedMonth}`;
+      const existingDue = duesMap.get(key);
+      const finalAmount = amount ?? getDueAmount(homeownerId);
       if (existingDue) {
         const response = await fetch("/api/monthly-dues", {
           method: "PATCH",
@@ -270,6 +376,9 @@ export function MonthlyDuesTable({
 
         const data = await response.json();
         if (data.success) {
+          if (data.activity && setActivityLogs) {
+            setActivityLogs((prev) => [data.activity, ...prev]);
+          }
           success(
             newStatus === "paid" ? "Payment Recorded" : "Payment Marked Unpaid",
             `Monthly dues status has been updated.`
@@ -296,6 +405,9 @@ export function MonthlyDuesTable({
 
         const data = await response.json();
         if (data.success) {
+          if (data.activity && setActivityLogs) {
+            setActivityLogs((prev) => [data.activity, ...prev]);
+          }
           success(
             newStatus === "paid" ? "Payment Recorded" : "Payment Marked Unpaid",
             `Monthly dues status has been updated.`
@@ -367,6 +479,9 @@ export function MonthlyDuesTable({
         });
         const data = await res.json();
         if (data.success) {
+          if (data.activity && setActivityLogs) {
+            setActivityLogs((prev) => [data.activity, ...prev]);
+          }
           success("Amount Updated", `Dues amount set to ₱${numAmount.toFixed(2)}.`);
           setIsAmountModalOpen(false);
           onDataChange();
@@ -388,6 +503,9 @@ export function MonthlyDuesTable({
         });
         const data = await res.json();
         if (data.success) {
+          if (data.activity && setActivityLogs) {
+            setActivityLogs((prev) => [data.activity, ...prev]);
+          }
           success("Amount Set", `Dues amount set to ₱${numAmount.toFixed(2)}.`);
           setIsAmountModalOpen(false);
           onDataChange();
@@ -555,29 +673,35 @@ export function MonthlyDuesTable({
 
           {/* Date Range Filter */}
           <div className="flex items-center gap-1.5 border-l border-slate-200 dark:border-slate-700 pl-2.5">
-            <span className="text-[11px] font-semibold text-slate-500 dark:text-slate-400 shrink-0">Date Range:</span>
+            <span className="text-[11px] font-semibold text-slate-500 dark:text-slate-400 shrink-0">Month Range:</span>
             <input
-              type="date"
+              type="month"
               value={dateFrom}
               onChange={(e) => {
                 setDateFrom(e.target.value);
                 setCurrentPage(1);
               }}
-              title="From Date"
+              title="From Month"
               className="text-xs rounded-xl border border-slate-200 dark:border-[#1e2f4d] bg-slate-50/50 dark:bg-[#0c182c] px-2 py-1.5 text-slate-700 dark:text-slate-200 focus:outline-none focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500/20 font-medium"
             />
             <span className="text-xs text-slate-400">–</span>
             <input
-              type="date"
+              type="month"
               value={dateTo}
               onChange={(e) => {
                 setDateTo(e.target.value);
                 setCurrentPage(1);
               }}
-              title="To Date"
+              title="To Month"
               className="text-xs rounded-xl border border-slate-200 dark:border-[#1e2f4d] bg-slate-50/50 dark:bg-[#0c182c] px-2 py-1.5 text-slate-700 dark:text-slate-200 focus:outline-none focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500/20 font-medium"
             />
           </div>
+
+          {isRangeActive && (
+            <span className="text-[11px] font-semibold px-2.5 py-1 rounded-lg bg-emerald-50 dark:bg-emerald-950/40 text-emerald-700 dark:text-emerald-300 border border-emerald-200 dark:border-emerald-800/60 shrink-0">
+              {activeMonthList.length} months
+            </span>
+          )}
 
           {isFiltered && (
             <Button
@@ -663,8 +787,12 @@ export function MonthlyDuesTable({
             ) : (
               paginatedHomeowners.map((ho) => {
                 const paymentStatus = getPaymentStatus(ho.id);
-                const isPaid = paymentStatus?.status === "paid";
-                const amount = getDueAmount(ho.id);
+                const stats = isRangeActive ? getRangeStats(ho.id) : null;
+                const isPaid = isRangeActive && stats ? stats.isFullyPaid : paymentStatus?.status === "paid";
+                const isPartial = isRangeActive && stats ? stats.isPartiallyPaid : false;
+                const amount = isRangeActive && stats ? stats.totalAmount : getDueAmount(ho.id);
+                const unpaidAmount = isRangeActive && stats ? stats.unpaidAmount : isPaid ? 0 : amount;
+                const paidAmount = isRangeActive && stats ? stats.paidAmount : isPaid ? amount : 0;
 
                 return (
                   <div
@@ -672,6 +800,8 @@ export function MonthlyDuesTable({
                     className={`rounded-3xl border p-5 shadow-subtle hover:shadow-card hover:-translate-y-0.5 transition-all duration-200 flex flex-col justify-between group ${
                       isPaid
                         ? "bg-white dark:bg-[#0e192d] border-emerald-500/30 hover:border-emerald-500/50"
+                        : isPartial
+                        ? "bg-white dark:bg-[#0e192d] border-sky-500/30 hover:border-sky-500/50"
                         : "bg-white dark:bg-[#0e192d] border-slate-200/80 dark:border-[#1e2f4d] hover:border-amber-500/40"
                     }`}
                   >
@@ -682,7 +812,11 @@ export function MonthlyDuesTable({
                           {renderAvatar(
                             ho,
                             "md",
-                            isPaid ? "ring-emerald-500 ring-offset-2 dark:ring-offset-[#0e192d]" : "ring-amber-500 ring-offset-2 dark:ring-offset-[#0e192d]"
+                            isPaid
+                              ? "ring-emerald-500 ring-offset-2 dark:ring-offset-[#0e192d]"
+                              : isPartial
+                              ? "ring-sky-500 ring-offset-2 dark:ring-offset-[#0e192d]"
+                              : "ring-amber-500 ring-offset-2 dark:ring-offset-[#0e192d]"
                           )}
                           <div>
                             <h4 className="font-bold text-sm text-slate-900 dark:text-slate-100 group-hover:text-emerald-600 dark:group-hover:text-emerald-400 transition-colors leading-snug">
@@ -710,57 +844,152 @@ export function MonthlyDuesTable({
                       </div>
 
                       {/* Dues Status & Amount Banner */}
-                      <div className="grid grid-cols-2 gap-2 mb-3.5">
-                        {/* Amount */}
-                        <div className="p-2.5 rounded-xl bg-slate-50/80 dark:bg-[#0a1526] border border-slate-100 dark:border-[#1e2f4d] flex items-center justify-between">
-                          <div>
-                            <span className="text-[10px] uppercase font-bold text-slate-400 block">Assessment</span>
-                            <span className="text-sm font-extrabold text-slate-900 dark:text-slate-100 font-mono">
-                              ₱{amount.toFixed(2)}
-                            </span>
+                      {isRangeActive && stats ? (
+                        <div className="space-y-2 mb-3.5">
+                          {/* Total Dues Full-Width Header */}
+                          <div className="p-2.5 rounded-xl bg-slate-50/80 dark:bg-[#0a1526] border border-slate-100 dark:border-[#1e2f4d] flex items-center justify-between">
+                            <div>
+                              <span className="text-[10px] uppercase font-bold text-slate-400 block">
+                                Total Dues ({stats.totalMonths} {stats.totalMonths === 1 ? "Month" : "Months"})
+                              </span>
+                              <span className="text-sm font-extrabold text-slate-900 dark:text-slate-100 font-mono">
+                                ₱{stats.totalAmount.toFixed(2)}
+                              </span>
+                            </div>
+                            {canManageDues && (
+                              <button
+                                onClick={() => openEditAmountModal(ho)}
+                                title="Edit dues amount"
+                                className="p-1 rounded-md text-slate-400 hover:text-emerald-600 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors"
+                              >
+                                <Edit2 className="h-3 w-3" />
+                              </button>
+                            )}
                           </div>
-                          {canManageDues && (
-                            <button
-                              onClick={() => openEditAmountModal(ho)}
-                              title="Edit dues amount"
-                              className="p-1 rounded-md text-slate-400 hover:text-emerald-600 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors"
-                            >
-                              <Edit2 className="h-3 w-3" />
-                            </button>
-                          )}
-                        </div>
 
-                        {/* Status Pill */}
-                        <div
-                          className={`p-2.5 rounded-xl border flex items-center gap-2 ${
-                            isPaid
-                              ? "bg-emerald-50 dark:bg-emerald-950/40 border-emerald-200 dark:border-emerald-800/60"
-                              : "bg-amber-50 dark:bg-amber-950/40 border-amber-200 dark:border-amber-800/60"
-                          }`}
-                        >
-                          {isPaid ? (
-                            <CheckCircle className="h-4 w-4 text-emerald-600 dark:text-emerald-400 shrink-0" />
-                          ) : (
-                            <XCircle className="h-4 w-4 text-amber-600 dark:text-amber-400 shrink-0" />
-                          )}
-                          <div className="min-w-0">
-                            <span
-                              className={`text-[10px] uppercase font-bold block ${
-                                isPaid ? "text-emerald-700 dark:text-emerald-300" : "text-amber-700 dark:text-amber-300"
+                          {/* Paid & Unpaid Split Badges */}
+                          <div className="grid grid-cols-2 gap-2">
+                            {/* Paid Box */}
+                            <div
+                              className={`p-2.5 rounded-xl border flex items-center gap-2 ${
+                                stats.paidAmount > 0
+                                  ? "bg-emerald-50 dark:bg-emerald-950/40 border-emerald-200 dark:border-emerald-800/60"
+                                  : "bg-slate-50/80 dark:bg-[#0a1526] border-slate-100 dark:border-[#1e2f4d] opacity-75"
                               }`}
                             >
-                              {isPaid ? "Paid" : "Unpaid"}
-                            </span>
-                            <span className="text-[11px] font-mono font-semibold text-slate-600 dark:text-slate-300 truncate block">
-                              {isPaid && paymentStatus?.official_receipt_number
-                                ? `OR: ${paymentStatus.official_receipt_number}`
-                                : isPaid
-                                ? "Recorded"
-                                : "Pending"}
-                            </span>
+                              <CheckCircle
+                                className={`h-4 w-4 shrink-0 ${
+                                  stats.paidAmount > 0 ? "text-emerald-600 dark:text-emerald-400" : "text-slate-400"
+                                }`}
+                              />
+                              <div className="min-w-0">
+                                <span
+                                  className={`text-[10px] uppercase font-bold block ${
+                                    stats.paidAmount > 0 ? "text-emerald-700 dark:text-emerald-300" : "text-slate-400 dark:text-slate-500"
+                                  }`}
+                                >
+                                  Paid ({stats.paidCount}/{stats.totalMonths})
+                                </span>
+                                <span
+                                  className={`text-xs font-mono font-bold truncate block ${
+                                    stats.paidAmount > 0 ? "text-emerald-700 dark:text-emerald-300" : "text-slate-500 dark:text-slate-400"
+                                  }`}
+                                >
+                                  ₱{stats.paidAmount.toFixed(2)}
+                                </span>
+                              </div>
+                            </div>
+
+                            {/* Unpaid Box */}
+                            <div
+                              className={`p-2.5 rounded-xl border flex items-center gap-2 ${
+                                unpaidAmount > 0
+                                  ? "bg-amber-50 dark:bg-amber-950/40 border-amber-200 dark:border-amber-800/60"
+                                  : "bg-slate-50/80 dark:bg-[#0a1526] border-slate-100 dark:border-[#1e2f4d] opacity-75"
+                              }`}
+                            >
+                              <XCircle
+                                className={`h-4 w-4 shrink-0 ${
+                                  unpaidAmount > 0 ? "text-amber-600 dark:text-amber-400" : "text-slate-400"
+                                }`}
+                              />
+                              <div className="min-w-0">
+                                <span
+                                  className={`text-[10px] uppercase font-bold block ${
+                                    unpaidAmount > 0 ? "text-amber-700 dark:text-amber-300" : "text-slate-400 dark:text-slate-500"
+                                  }`}
+                                >
+                                  Unpaid ({stats.unpaidCount}/{stats.totalMonths})
+                                </span>
+                                <span
+                                  className={`text-xs font-mono font-bold truncate block ${
+                                    unpaidAmount > 0 ? "text-amber-700 dark:text-amber-300" : "text-slate-500 dark:text-slate-400"
+                                  }`}
+                                >
+                                  ₱{unpaidAmount.toFixed(2)}
+                                </span>
+                              </div>
+                            </div>
                           </div>
                         </div>
-                      </div>
+                      ) : (
+                        /* Single Month View */
+                        <div className="grid grid-cols-2 gap-2 mb-3.5">
+                          {/* Amount */}
+                          <div className="p-2.5 rounded-xl bg-slate-50/80 dark:bg-[#0a1526] border border-slate-100 dark:border-[#1e2f4d] flex items-center justify-between">
+                            <div>
+                              <span className="text-[10px] uppercase font-bold text-slate-400 block">
+                                Assessment
+                              </span>
+                              <span className="text-sm font-extrabold text-slate-900 dark:text-slate-100 font-mono">
+                                ₱{amount.toFixed(2)}
+                              </span>
+                            </div>
+                            {canManageDues && (
+                              <button
+                                onClick={() => openEditAmountModal(ho)}
+                                title="Edit dues amount"
+                                className="p-1 rounded-md text-slate-400 hover:text-emerald-600 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors"
+                              >
+                                <Edit2 className="h-3 w-3" />
+                              </button>
+                            )}
+                          </div>
+
+                          {/* Status Pill */}
+                          <div
+                            className={`p-2.5 rounded-xl border flex items-center gap-2 ${
+                              isPaid
+                                ? "bg-emerald-50 dark:bg-emerald-950/40 border-emerald-200 dark:border-emerald-800/60"
+                                : "bg-amber-50 dark:bg-amber-950/40 border-amber-200 dark:border-amber-800/60"
+                            }`}
+                          >
+                            {isPaid ? (
+                              <CheckCircle className="h-4 w-4 text-emerald-600 dark:text-emerald-400 shrink-0" />
+                            ) : (
+                              <XCircle className="h-4 w-4 text-amber-600 dark:text-amber-400 shrink-0" />
+                            )}
+                            <div className="min-w-0">
+                              <span
+                                className={`text-[10px] uppercase font-bold block ${
+                                  isPaid
+                                    ? "text-emerald-700 dark:text-emerald-300"
+                                    : "text-amber-700 dark:text-amber-300"
+                                }`}
+                              >
+                                {isPaid ? "Paid" : "Unpaid"}
+                              </span>
+                              <span className="text-[11px] font-mono font-semibold text-slate-600 dark:text-slate-300 truncate block">
+                                {isPaid && paymentStatus?.official_receipt_number
+                                  ? `OR: ${paymentStatus.official_receipt_number}`
+                                  : isPaid
+                                  ? `₱${amount.toFixed(2)} paid`
+                                  : `₱${amount.toFixed(2)} unpaid`}
+                              </span>
+                            </div>
+                          </div>
+                        </div>
+                      )}
 
                       {/* Payment Date (if paid) */}
                       {isPaid && paymentStatus?.payment_date && (
@@ -880,8 +1109,10 @@ export function MonthlyDuesTable({
                 ) : (
                   paginatedHomeowners.map((ho) => {
                     const paymentStatus = getPaymentStatus(ho.id);
-                    const isPaid = paymentStatus?.status === "paid";
-                    const amount = getDueAmount(ho.id);
+                    const stats = isRangeActive ? getRangeStats(ho.id) : null;
+                    const isPaid = isRangeActive && stats ? stats.isFullyPaid : paymentStatus?.status === "paid";
+                    const isPartial = isRangeActive && stats ? stats.isPartiallyPaid : false;
+                    const amount = isRangeActive && stats ? stats.totalAmount : getDueAmount(ho.id);
 
                     return (
                       <tr key={ho.id} className="hover:bg-slate-50/80 dark:hover:bg-[#13233d]/60 transition-colors">
@@ -891,7 +1122,11 @@ export function MonthlyDuesTable({
                             {renderAvatar(
                               ho,
                               "sm",
-                              isPaid ? "ring-emerald-500" : "ring-amber-500"
+                              isPaid
+                                ? "ring-emerald-500"
+                                : isPartial
+                                ? "ring-sky-500"
+                                : "ring-amber-500"
                             )}
                             <div>
                               <div className="font-bold text-slate-900 dark:text-slate-100 flex items-center gap-1.5">
@@ -923,7 +1158,30 @@ export function MonthlyDuesTable({
                         </td>
 
                         <td className="py-3.5 px-4 text-center">
-                          {isPaid ? (
+                          {isRangeActive && stats ? (
+                            stats.isFullyPaid ? (
+                              <div className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-emerald-50 dark:bg-emerald-950/30 border border-emerald-200 dark:border-emerald-800/60">
+                                <CheckCircle className="h-3.5 w-3.5 text-emerald-600 dark:text-emerald-400" />
+                                <span className="text-xs font-bold text-emerald-700 dark:text-emerald-300">
+                                  Paid ({stats.paidCount}/{stats.totalMonths} mos)
+                                </span>
+                              </div>
+                            ) : stats.isPartiallyPaid ? (
+                              <div className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-sky-50 dark:bg-sky-950/30 border border-sky-200 dark:border-sky-800/60">
+                                <CheckCircle className="h-3.5 w-3.5 text-sky-600 dark:text-sky-400" />
+                                <span className="text-xs font-bold text-sky-700 dark:text-sky-300">
+                                  Partial ({stats.paidCount}/{stats.totalMonths} mos)
+                                </span>
+                              </div>
+                            ) : (
+                              <div className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-amber-50 dark:bg-amber-950/30 border border-amber-200 dark:border-amber-800/60">
+                                <XCircle className="h-3.5 w-3.5 text-amber-600 dark:text-amber-400" />
+                                <span className="text-xs font-bold text-amber-700 dark:text-amber-300">
+                                  Unpaid (0/{stats.totalMonths} mos)
+                                </span>
+                              </div>
+                            )
+                          ) : isPaid ? (
                             <div className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-emerald-50 dark:bg-emerald-950/30 border border-emerald-200 dark:border-emerald-800/60">
                               <CheckCircle className="h-3.5 w-3.5 text-emerald-600 dark:text-emerald-400" />
                               <span className="text-xs font-bold text-emerald-700 dark:text-emerald-300">Paid</span>
@@ -934,10 +1192,22 @@ export function MonthlyDuesTable({
                               <span className="text-xs font-bold text-amber-700 dark:text-amber-300">Unpaid</span>
                             </div>
                           )}
-                          {isPaid && paymentStatus?.official_receipt_number && (
-                            <div className="text-[10px] text-slate-500 dark:text-slate-400 font-mono mt-0.5">
-                              OR: {paymentStatus.official_receipt_number}
+                          {isRangeActive && stats ? (
+                            <div className="text-[10px] font-mono mt-0.5 flex items-center justify-center gap-1.5">
+                              <span className="text-emerald-600 dark:text-emerald-400 font-semibold">
+                                ₱{stats.paidAmount.toFixed(2)} paid
+                              </span>
+                              <span className="text-slate-400">•</span>
+                              <span className="text-amber-600 dark:text-amber-400 font-semibold">
+                                ₱{stats.unpaidAmount.toFixed(2)} unpaid
+                              </span>
                             </div>
+                          ) : (
+                            isPaid && paymentStatus?.official_receipt_number && (
+                              <div className="text-[10px] text-slate-500 dark:text-slate-400 font-mono mt-0.5">
+                                OR: {paymentStatus.official_receipt_number}
+                              </div>
+                            )
                           )}
                         </td>
 

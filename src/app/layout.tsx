@@ -9,6 +9,14 @@ import { LocalAnalytics } from "@/components/analytics/local-analytics";
 export const metadata: Metadata = {
   title: "St. Joseph Village 6 Phase 4 — Homeowners Masterlist",
   description: "Official Homeowners Association Registry and Resident Information System",
+  icons: {
+    icon: [
+      { url: "/icon.png" },
+      { url: "/favicon.ico" },
+    ],
+    shortcut: "/icon.png",
+    apple: "/icon.png",
+  },
 };
 
 export default function RootLayout({
