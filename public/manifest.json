@@ -1,0 +1,21 @@
+﻿{
+  "name": "St. Joseph Village 6 Phase 4 HOA Masterlist",
+  "short_name": "SJV6P4 HOA",
+  "description": "Homeowners Association Registry and Resident Management System",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#060c18",
+  "theme_color": "#0d9488",
+  "icons": [
+    {
+      "src": "/login-avatar.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "/login-avatar-circle.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}
