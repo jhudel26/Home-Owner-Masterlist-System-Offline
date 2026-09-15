@@ -136,7 +136,53 @@ export async function PUT(request: NextRequest) {
       await dbExecute("UPDATE profiles SET status=?, updated_at=UTC_TIMESTAMP() WHERE id=?", [body.status, userId]);
     }
 
+    // Super admin only: update identity fields (full_name, email, password)
+    if (body.full_name !== undefined || body.email !== undefined || body.password !== undefined) {
+      if (actor.role !== "super_admin") {
+        return NextResponse.json({ error: "Only the Super Admin can edit account identity fields." }, { status: 403 });
+      }
+      if (target.role === "super_admin" && target.id !== actor.id) {
+        return NextResponse.json({ error: "Cannot edit another Super Admin account." }, { status: 403 });
+      }
+
+      // Check email uniqueness if being changed
+      if (body.email !== undefined && body.email.trim().toLowerCase() !== (target.email || "").toLowerCase()) {
+        const existing = await dbQuery<Profile[]>("SELECT id FROM profiles WHERE LOWER(email)=LOWER(?) AND id != ? LIMIT 1", [body.email.trim(), userId]);
+        if (existing.length) return NextResponse.json({ error: "An account with this email already exists." }, { status: 409 });
+      }
+
+      if (body.full_name !== undefined && body.email !== undefined && body.password !== undefined) {
+        // Update all three
+        const passwordHash = await hashPassword(body.password);
+        await dbExecute(
+          "UPDATE profiles SET full_name=?, email=?, password_hash=?, updated_at=UTC_TIMESTAMP() WHERE id=?",
+          [body.full_name.trim(), body.email.trim().toLowerCase(), passwordHash, userId]
+        );
+      } else if (body.full_name !== undefined && body.email !== undefined) {
+        // Update name + email only
+        await dbExecute(
+          "UPDATE profiles SET full_name=?, email=?, updated_at=UTC_TIMESTAMP() WHERE id=?",
+          [body.full_name.trim(), body.email.trim().toLowerCase(), userId]
+        );
+      } else if (body.full_name !== undefined) {
+        await dbExecute("UPDATE profiles SET full_name=?, updated_at=UTC_TIMESTAMP() WHERE id=?", [body.full_name.trim(), userId]);
+      } else if (body.email !== undefined) {
+        await dbExecute("UPDATE profiles SET email=?, updated_at=UTC_TIMESTAMP() WHERE id=?", [body.email.trim().toLowerCase(), userId]);
+      }
+      if (body.password !== undefined && !(body.full_name !== undefined && body.email !== undefined)) {
+        const passwordHash = await hashPassword(body.password);
+        await dbExecute("UPDATE profiles SET password_hash=?, updated_at=UTC_TIMESTAMP() WHERE id=?", [passwordHash, userId]);
+      }
+
+      // Log the edit action
+      await dbExecute(
+        "INSERT INTO activity_logs (id, user_id, user_name, action, details) VALUES (?, ?, ?, ?, ?)",
+        [randomUUID(), actor.id, actor.full_name, "EDITED_USER", JSON.stringify({ target_user: body.full_name || target.full_name, email: body.email || target.email })]
+      );
+    }
+
     const updated = await dbQuery<ProfileRow[]>("SELECT id, full_name, email, role, permissions, status, created_at, updated_at FROM profiles WHERE id=?", [userId]);
     return NextResponse.json({ success: true, profile: publicProfile(updated[0]) });
   } catch (error) { return NextResponse.json({ error: getErrorMessage(error) }, { status: 500 }); }
 }
+
