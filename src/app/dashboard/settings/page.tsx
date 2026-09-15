@@ -1,4 +1,4 @@
-﻿"use client";
+"use client";
 
 import React, { useState, useEffect, useRef } from "react";
 import { PageHeader } from "@/components/layout/page-header";
@@ -478,7 +478,7 @@ export default function SettingsPage() {
             <div className="border-t border-slate-100 dark:border-[#1e2f4d] pt-4 grid grid-cols-1 sm:grid-cols-2 gap-4 text-xs">
               <div className="p-3 rounded-xl bg-slate-50 dark:bg-[#0c182c] border border-slate-200/70 dark:border-slate-800">
                 <span className="text-[10px] font-bold uppercase text-slate-400 block">System Version</span>
-                <span className="font-semibold text-slate-800 dark:text-slate-200">v1.0.0 (Windows Native)</span>
+                <span className="font-semibold text-slate-800 dark:text-slate-200">v1.1.0 (Windows Native)</span>
               </div>
 
               <div className="p-3 rounded-xl bg-slate-50 dark:bg-[#0c182c] border border-slate-200/70 dark:border-slate-800">

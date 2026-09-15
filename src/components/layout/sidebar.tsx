@@ -180,11 +180,17 @@ export function Sidebar({ onNavigate }: { onNavigate?: () => void }) {
 
         <button
           onClick={() => logout()}
-          className="flex w-full items-center justify-center gap-2 rounded-xl px-3.5 py-2.5 text-sm font-semibold text-slate-500 dark:text-slate-400 hover:bg-red-50 dark:hover:bg-red-950/30 hover:text-red-600 dark:hover:text-red-300 border border-transparent hover:border-red-200 dark:hover:border-red-900/40 transition-all duration-150"
+          className="flex w-full items-center justify-center gap-2 rounded-xl px-3.5 py-2.5 text-sm font-semibold text-slate-500 dark:text-slate-400 hover:bg-red-50 dark:hover:bg-red-950/30 hover:text-red-600 dark:hover:text-red-300 border border-transparent hover:border-red-200 dark:hover:border-red-950/40 transition-all duration-150"
         >
           <LogOut className="h-4 w-4" />
           <span>Sign Out</span>
         </button>
+
+        <div className="text-center pt-1">
+          <span className="text-[10px] font-semibold tracking-wider text-slate-400 dark:text-slate-500 uppercase">
+            v1.1.0 • Offline Edition
+          </span>
+        </div>
       </div>
     </div>
   );

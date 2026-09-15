@@ -16,8 +16,8 @@ using System.Reflection;
 [assembly: AssemblyProduct("Residential Masterlist")]
 [assembly: AssemblyCopyright("Copyright © Eru Studio. All rights reserved.")]
 [assembly: AssemblyTrademark("Eru Studio")]
-[assembly: AssemblyVersion("1.0.0.0")]
-[assembly: AssemblyFileVersion("1.0.0.0")]
+[assembly: AssemblyVersion("1.1.0.0")]
+[assembly: AssemblyFileVersion("1.1.0.0")]
 
 namespace ResidentialMasterlist.Launcher
 {
@@ -692,6 +692,16 @@ namespace ResidentialMasterlist.Launcher
             mainTitle.Location = new Point(18, 30);
             mainTitle.AutoSize = true;
             this.Controls.Add(mainTitle);
+
+            Label verBadge = new Label();
+            verBadge.Text = "v1.1.0";
+            verBadge.Font = new Font("Segoe UI", 8F, FontStyle.Bold);
+            verBadge.ForeColor = Color.FromArgb(45, 212, 191);
+            verBadge.BackColor = Color.FromArgb(15, 30, 45);
+            verBadge.Location = new Point(340, 36);
+            verBadge.Padding = new Padding(4, 1, 4, 1);
+            verBadge.AutoSize = true;
+            this.Controls.Add(verBadge);
 
             // ── ROW 1: BENTO TRIO (Hero 376px | Services 188px | Uptime 172px) ─
             int row1Y = 70;
