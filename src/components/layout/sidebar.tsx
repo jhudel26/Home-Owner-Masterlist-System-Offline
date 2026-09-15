@@ -1,4 +1,4 @@
-﻿"use client";
+"use client";
 
 import React, { useState } from "react";
 import Link from "next/link";
@@ -16,6 +16,7 @@ import {
   BarChart3,
   DollarSign,
   Settings,
+  Clock,
 } from "lucide-react";
 import { useApp } from "@/context/app-context";
 import { hasPermission } from "@/lib/permissions";
@@ -32,6 +33,7 @@ export function Sidebar({ onNavigate }: { onNavigate?: () => void }) {
   const canManageMonthlyDues = hasPermission(currentUser, "can_manage_monthly_dues");
   const canManageUsers = hasPermission(currentUser, "can_manage_users");
   const canViewAnalytics = hasPermission(currentUser, "can_view_analytics");
+  const canViewAuditTrail = hasPermission(currentUser, "can_view_audit_trail");
   const canManageSettings =
     currentUser?.role === "super_admin" ||
     currentUser?.role === "admin" ||
@@ -74,6 +76,12 @@ export function Sidebar({ onNavigate }: { onNavigate?: () => void }) {
       href: "/dashboard/users",
       icon: ShieldCheck,
       show: canManageUsers,
+    },
+    {
+      name: "Audit Trail",
+      href: "/dashboard/activity",
+      icon: Clock,
+      show: canViewAuditTrail,
     },
     {
       name: "System Settings",

@@ -1,4 +1,4 @@
-﻿"use client";
+"use client";
 
 import React, { useState, useMemo } from "react";
 import Link from "next/link";
@@ -64,6 +64,8 @@ export function MonthlyDuesTable({
   const [paymentStatusFilter, setPaymentStatusFilter] = useState<string>("all");
   const [blockFilter, setBlockFilter] = useState<string>("all");
   const [lotFilter, setLotFilter] = useState<string>("");
+  const [dateFrom, setDateFrom] = useState<string>("");
+  const [dateTo, setDateTo] = useState<string>("");
   const [currentPage, setCurrentPage] = useState(1);
   const [isExportModalOpen, setIsExportModalOpen] = useState(false);
 
@@ -150,9 +152,49 @@ export function MonthlyDuesTable({
         !lotFilter ||
         (ho.lot_number && ho.lot_number.toLowerCase().includes(lotFilter.toLowerCase()));
 
-      return matchSearch && matchPaymentStatus && matchBlock && matchLot;
+      const matchDateRange = (() => {
+        if (!dateFrom && !dateTo) return true;
+
+        if (isPaid) {
+          // For paid dues: check payment_date (fallback to created_at or billing period)
+          const pDate = paymentStatus?.payment_date
+            ? String(paymentStatus.payment_date).slice(0, 10)
+            : paymentStatus?.created_at
+            ? String(paymentStatus.created_at).slice(0, 10)
+            : null;
+
+          if (pDate) {
+            if (dateFrom && pDate < dateFrom) return false;
+            if (dateTo && pDate > dateTo) return false;
+            return true;
+          }
+          // If paid without explicit payment_date, check if billing period overlaps
+          const periodStart = `${selectedYear}-${String(selectedMonth).padStart(2, "0")}-01`;
+          const lastDay = new Date(selectedYear, selectedMonth, 0).getDate();
+          const periodEnd = `${selectedYear}-${String(selectedMonth).padStart(2, "0")}-${String(lastDay).padStart(2, "0")}`;
+          if (dateFrom && periodEnd < dateFrom) return false;
+          if (dateTo && periodStart > dateTo) return false;
+          return true;
+        } else {
+          // For unpaid dues: check if the billing assessment period or created_at falls within the date range
+          const recordDate = paymentStatus?.created_at ? String(paymentStatus.created_at).slice(0, 10) : null;
+          if (recordDate) {
+            const inRecordDate = (!dateFrom || recordDate >= dateFrom) && (!dateTo || recordDate <= dateTo);
+            if (inRecordDate) return true;
+          }
+          // Check if the assessment billing month falls within the date range
+          const periodStart = `${selectedYear}-${String(selectedMonth).padStart(2, "0")}-01`;
+          const lastDay = new Date(selectedYear, selectedMonth, 0).getDate();
+          const periodEnd = `${selectedYear}-${String(selectedMonth).padStart(2, "0")}-${String(lastDay).padStart(2, "0")}`;
+          if (dateFrom && periodEnd < dateFrom) return false;
+          if (dateTo && periodStart > dateTo) return false;
+          return true;
+        }
+      })();
+
+      return matchSearch && matchPaymentStatus && matchBlock && matchLot && matchDateRange;
     });
-  }, [homeowners, searchTerm, paymentStatusFilter, blockFilter, lotFilter, selectedYear, selectedMonth, duesMap]);
+  }, [homeowners, searchTerm, paymentStatusFilter, blockFilter, lotFilter, dateFrom, dateTo, selectedYear, selectedMonth, duesMap]);
 
   // Unpaid count
   const unpaidCount = useMemo(() => {
@@ -163,13 +205,20 @@ export function MonthlyDuesTable({
   }, [homeowners, selectedYear, selectedMonth, duesMap]);
 
   const isFiltered =
-    searchTerm !== "" || paymentStatusFilter !== "all" || blockFilter !== "all" || lotFilter !== "";
+    searchTerm !== "" ||
+    paymentStatusFilter !== "all" ||
+    blockFilter !== "all" ||
+    lotFilter !== "" ||
+    dateFrom !== "" ||
+    dateTo !== "";
 
   const clearFilters = () => {
     setSearchTerm("");
     setPaymentStatusFilter("all");
     setBlockFilter("all");
     setLotFilter("");
+    setDateFrom("");
+    setDateTo("");
     setCurrentPage(1);
   };
 
@@ -503,6 +552,32 @@ export function MonthlyDuesTable({
             }}
             className="w-20 text-xs rounded-xl border border-slate-200 dark:border-[#1e2f4d] bg-slate-50/50 dark:bg-[#0c182c] px-3 py-2 text-slate-700 dark:text-slate-200 focus:outline-none focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500/20 font-medium placeholder:text-slate-400"
           />
+
+          {/* Date Range Filter */}
+          <div className="flex items-center gap-1.5 border-l border-slate-200 dark:border-slate-700 pl-2.5">
+            <span className="text-[11px] font-semibold text-slate-500 dark:text-slate-400 shrink-0">Date Range:</span>
+            <input
+              type="date"
+              value={dateFrom}
+              onChange={(e) => {
+                setDateFrom(e.target.value);
+                setCurrentPage(1);
+              }}
+              title="From Date"
+              className="text-xs rounded-xl border border-slate-200 dark:border-[#1e2f4d] bg-slate-50/50 dark:bg-[#0c182c] px-2 py-1.5 text-slate-700 dark:text-slate-200 focus:outline-none focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500/20 font-medium"
+            />
+            <span className="text-xs text-slate-400">–</span>
+            <input
+              type="date"
+              value={dateTo}
+              onChange={(e) => {
+                setDateTo(e.target.value);
+                setCurrentPage(1);
+              }}
+              title="To Date"
+              className="text-xs rounded-xl border border-slate-200 dark:border-[#1e2f4d] bg-slate-50/50 dark:bg-[#0c182c] px-2 py-1.5 text-slate-700 dark:text-slate-200 focus:outline-none focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500/20 font-medium"
+            />
+          </div>
 
           {isFiltered && (
             <Button

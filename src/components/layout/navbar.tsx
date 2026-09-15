@@ -1,4 +1,4 @@
-﻿"use client";
+"use client";
 
 import React, { useState, useEffect } from "react";
 import { useApp } from "@/context/app-context";
@@ -22,7 +22,7 @@ export function Navbar() {
   }, []);
 
   return (
-    <header className="hidden lg:flex items-center justify-between h-18 px-8 border-b border-slate-200/90 dark:border-white/10 bg-white/80 dark:bg-[#070d18]/80 backdrop-blur-xl sticky top-0 z-20 shadow-xs transition-colors duration-200">
+    <header className="hidden lg:flex items-center justify-between h-20 min-h-[5rem] px-8 border-b border-slate-200/90 dark:border-white/10 bg-white/80 dark:bg-[#070d18]/80 backdrop-blur-xl sticky top-0 z-20 shadow-xs transition-colors duration-200">
       {/* Left: Date & Community Identifier */}
       <div className="flex items-center gap-4">
         <div className="flex items-center gap-2 text-sm font-semibold text-slate-600 dark:text-slate-300">

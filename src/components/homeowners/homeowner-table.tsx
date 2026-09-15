@@ -1,4 +1,4 @@
-﻿"use client";
+"use client";
 
 import React, { useState, useMemo, useEffect, useRef } from "react";
 import Link from "next/link";
@@ -93,6 +93,11 @@ export function HomeownerTable({ homeowners }: HomeownerTableProps) {
     window.addEventListener("keydown", handleKeyDown);
     return () => window.removeEventListener("keydown", handleKeyDown);
   }, []);
+
+  const isValidImageUrl = (url: string | null | undefined): boolean => {
+    if (!url || typeof url !== "string") return false;
+    return url.startsWith("/uploads/") || url.startsWith("data:image/") || url.startsWith("http://") || url.startsWith("https://");
+  };
 
   const toggleRowExpansion = (id: string, e: React.MouseEvent) => {
     e.stopPropagation();
@@ -469,17 +474,52 @@ export function HomeownerTable({ homeowners }: HomeownerTableProps) {
                             </button>
                           </td>
 
-                          {/* Name */}
+                          {/* Name, Photo & HOA# */}
                           <td className="py-3.5 px-4">
-                            <div className="font-bold text-slate-900 dark:text-slate-100 group-hover:text-emerald-600 dark:group-hover:text-emerald-400 transition-colors">
-                              {ho.full_name || `${ho.first_name || ""} ${ho.last_name || ""}`.trim() || "Unnamed"}
-                            </div>
-                            {(ho.ga_proxy_name || ho.ga_proxy_designated) ? (
-                              <div className="text-[11px] text-slate-500 dark:text-slate-400 flex items-center gap-1 mt-0.5">
-                                <Shield className="h-3 w-3 text-emerald-600 dark:text-emerald-400" />
-                                <span>Proxy: {ho.ga_proxy_name || ho.ga_proxy_designated}</span>
+                            <div className="flex items-center gap-3">
+                              <div className="relative shrink-0">
+                                {ho.photo_path && isValidImageUrl(ho.photo_path) ? (
+                                  <img
+                                    src={ho.photo_path}
+                                    alt={ho.full_name || "Homeowner"}
+                                    className="h-10 w-10 rounded-xl object-cover border border-slate-200 dark:border-slate-700 shadow-xs"
+                                    onError={(e) => {
+                                      e.currentTarget.style.display = "none";
+                                      const parent = e.currentTarget.parentElement;
+                                      if (parent) {
+                                        const fb = parent.querySelector(".table-avatar-fallback") as HTMLElement;
+                                        if (fb) fb.style.display = "flex";
+                                      }
+                                    }}
+                                  />
+                                ) : null}
+                                <div
+                                  className={`table-avatar-fallback h-10 w-10 rounded-xl bg-gradient-to-br from-[#07162c] to-[#0c2340] text-emerald-400 font-bold flex items-center justify-center text-xs shadow-xs border border-emerald-500/30 ${
+                                    ho.photo_path && isValidImageUrl(ho.photo_path) ? "hidden" : "flex"
+                                  }`}
+                                >
+                                  {(ho.full_name || ho.first_name || "?").charAt(0).toUpperCase()}
+                                </div>
                               </div>
-                            ) : null}
+                              <div className="min-w-0">
+                                <div className="flex items-center gap-2 flex-wrap">
+                                  <span className="font-bold text-slate-900 dark:text-slate-100 group-hover:text-emerald-600 dark:group-hover:text-emerald-400 transition-colors">
+                                    {ho.full_name || `${ho.first_name || ""} ${ho.last_name || ""}`.trim() || "Unnamed"}
+                                  </span>
+                                  {ho.hoa_number && (
+                                    <span className="text-[10px] font-mono font-bold px-1.5 py-0.5 rounded-md bg-emerald-50 dark:bg-emerald-950/50 text-emerald-700 dark:text-emerald-300 border border-emerald-200 dark:border-emerald-800/60 shrink-0">
+                                      {ho.hoa_number}
+                                    </span>
+                                  )}
+                                </div>
+                                {(ho.ga_proxy_name || ho.ga_proxy_designated) ? (
+                                  <div className="text-[11px] text-slate-500 dark:text-slate-400 flex items-center gap-1 mt-0.5">
+                                    <Shield className="h-3 w-3 text-emerald-600 dark:text-emerald-400" />
+                                    <span>Proxy: {ho.ga_proxy_name || ho.ga_proxy_designated}</span>
+                                  </div>
+                                ) : null}
+                              </div>
+                            </div>
                           </td>
 
                           {/* Address */}
@@ -709,16 +749,46 @@ export function HomeownerTable({ homeowners }: HomeownerTableProps) {
                     {/* Card Top Row */}
                     <div className="flex items-start justify-between gap-3 mb-3">
                       <div className="flex items-center gap-3">
-                        <div className="h-11 w-11 rounded-2xl bg-gradient-to-br from-[#07162c] to-[#0c2340] text-emerald-400 border border-emerald-500/30 flex items-center justify-center font-bold text-base shadow-sm shrink-0">
-                          {(ho.full_name || ho.first_name || "?").charAt(0)}
+                        <div className="relative shrink-0">
+                          {ho.photo_path && isValidImageUrl(ho.photo_path) ? (
+                            <img
+                              src={ho.photo_path}
+                              alt={ho.full_name || "Homeowner"}
+                              className="h-11 w-11 rounded-2xl object-cover border border-slate-200 dark:border-slate-700 shadow-sm"
+                              onError={(e) => {
+                                e.currentTarget.style.display = "none";
+                                const parent = e.currentTarget.parentElement;
+                                if (parent) {
+                                  const fb = parent.querySelector(".grid-avatar-fallback") as HTMLElement;
+                                  if (fb) fb.style.display = "flex";
+                                }
+                              }}
+                            />
+                          ) : null}
+                          <div
+                            className={`grid-avatar-fallback h-11 w-11 rounded-2xl bg-gradient-to-br from-[#07162c] to-[#0c2340] text-emerald-400 border border-emerald-500/30 flex items-center justify-center font-bold text-base shadow-sm shrink-0 ${
+                              ho.photo_path && isValidImageUrl(ho.photo_path) ? "hidden" : "flex"
+                            }`}
+                          >
+                            {(ho.full_name || ho.first_name || "?").charAt(0).toUpperCase()}
+                          </div>
                         </div>
                         <div>
-                          <h4 className="font-bold text-sm text-slate-900 dark:text-slate-100 group-hover:text-emerald-600 dark:group-hover:text-emerald-400 transition-colors leading-snug">
-                            {ho.full_name || `${ho.first_name || ""} ${ho.last_name || ""}`.trim() || "Unnamed"}
-                          </h4>
-                          <span className="text-xs text-slate-500 dark:text-slate-400 font-mono font-medium">
-                            {ho.age ? `${ho.age} yrs` : "—"} &bull; {ho.gender || "—"}
-                          </span>
+                          <div className="flex items-center gap-1.5 flex-wrap">
+                            <h4 className="font-bold text-sm text-slate-900 dark:text-slate-100 group-hover:text-emerald-600 dark:group-hover:text-emerald-400 transition-colors leading-snug">
+                              {ho.full_name || `${ho.first_name || ""} ${ho.last_name || ""}`.trim() || "Unnamed"}
+                            </h4>
+                          </div>
+                          <div className="flex items-center gap-1.5 mt-0.5 flex-wrap">
+                            {ho.hoa_number && (
+                              <span className="text-[10px] font-mono font-bold px-1.5 py-0.5 rounded-md bg-emerald-50 dark:bg-emerald-950/50 text-emerald-700 dark:text-emerald-300 border border-emerald-200 dark:border-emerald-800/60 shrink-0">
+                                {ho.hoa_number}
+                              </span>
+                            )}
+                            <span className="text-xs text-slate-500 dark:text-slate-400 font-mono font-medium">
+                              {ho.age ? `${ho.age} yrs` : "—"} &bull; {ho.gender || "—"}
+                            </span>
+                          </div>
                         </div>
                       </div>
                       <OwnershipBadge type={ho.ownership_type} />
