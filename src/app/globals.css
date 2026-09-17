@@ -1,0 +1,167 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --bg-app: #f8fafc;
+    --bg-surface: #ffffff;
+    --bg-sidebar: #0b1324;
+    --border-subtle: #e2e8f0;
+    --text-primary: #0f172a;
+    --text-muted: #64748b;
+    --brand-primary: #059669;
+  }
+
+  .dark {
+    --bg-app: #060c18;
+    --bg-surface: #0e192d;
+    --bg-sidebar: #040914;
+    --border-subtle: #1a2a46;
+    --text-primary: #f8fafc;
+    --text-muted: #94a3b8;
+    --brand-primary: #10b981;
+  }
+
+  body {
+    @apply bg-slate-50 dark:bg-[#060c18] text-slate-900 dark:text-slate-100 antialiased selection:bg-emerald-600 selection:text-white transition-colors duration-200;
+    min-height: 100vh;
+    font-family: 'Montserrat', sans-serif;
+  }
+}
+
+@layer components {
+  .glass-card {
+    @apply bg-white/85 dark:bg-[#0e192d]/85 backdrop-blur-xl border border-slate-200/80 dark:border-white/10 shadow-subtle hover:border-emerald-500/30 dark:hover:border-emerald-500/30 transition-all duration-200;
+  }
+
+  .glass-card-elevated {
+    @apply bg-white/90 dark:bg-[#0e192d]/90 backdrop-blur-2xl border border-slate-200/90 dark:border-white/10 shadow-elevated transition-all duration-200;
+  }
+
+  .glass-panel {
+    @apply bg-slate-900/70 dark:bg-[#040914]/80 backdrop-blur-xl border border-white/10 text-white shadow-glass;
+  }
+
+  .executive-badge {
+    @apply inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-xs font-semibold tracking-wide border;
+  }
+
+  .emerald-glow-sm {
+    box-shadow: 0 0 15px -3px rgba(16, 185, 129, 0.3);
+  }
+
+  .emerald-glow-md {
+    box-shadow: 0 0 25px -4px rgba(16, 185, 129, 0.4);
+  }
+}
+
+/* Custom scrollbars for data tables and dialogs */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: #f1f5f9;
+}
+
+.dark ::-webkit-scrollbar-track {
+  background: #081120;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #cbd5e1;
+  border-radius: 9999px;
+}
+
+.dark ::-webkit-scrollbar-thumb {
+  background: #1e2f4d;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #94a3b8;
+}
+
+.dark ::-webkit-scrollbar-thumb:hover {
+  background: #10b981;
+}
+
+/* Page Transition & Top Progress Bar */
+@keyframes topProgress {
+  0% { transform: scaleX(0); }
+  50% { transform: scaleX(0.7); }
+  100% { transform: scaleX(1); }
+}
+
+@keyframes pulseGlow {
+  0%, 100% { opacity: 0.4; transform: scale(1); }
+  50% { opacity: 0.8; transform: scale(1.04); }
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-top-progress {
+  transform-origin: 0% 50%;
+  animation: topProgress 0.8s cubic-bezier(0.4, 0, 0.2, 1) infinite;
+}
+
+.animate-pulse-glow {
+  animation: pulseGlow 4s ease-in-out infinite;
+}
+
+.animate-fade-in {
+  animation: fadeIn 0.25s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+/* Login page custom animations */
+@keyframes float {
+  0%, 100% { transform: translateY(0px); }
+  50% { transform: translateY(-20px); }
+}
+
+@keyframes scale {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.05); }
+}
+
+@keyframes shine {
+  0% { opacity: 0; transform: translateX(-100%); }
+  50% { opacity: 1; }
+  100% { opacity: 0; transform: translateX(100%); }
+}
+
+@keyframes blob {
+  0%, 100% { transform: translate(0px, 0px) scale(1); }
+  33% { transform: translate(30px, -50px) scale(1.1); }
+  66% { transform: translate(-20px, 20px) scale(0.9); }
+}
+
+.animate-float {
+  animation: float 6s ease-in-out infinite;
+}
+
+.animate-scale {
+  animation: scale 4s ease-in-out infinite;
+}
+
+.animate-shine {
+  animation: shine 3s ease-in-out infinite;
+}
+
+.animate-blob {
+  animation: blob 7s infinite;
+}
+
+.delay-1000 {
+  animation-delay: 1s;
+}
