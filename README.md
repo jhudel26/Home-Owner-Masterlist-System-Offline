@@ -19,11 +19,78 @@ The **Residential Masterlist** is a production-grade, local-first management sys
 - **📋 Audit & Activity Logs**: Immutable log trail for sensitive administrative operations and financial transactions.
 - **💾 Automated Backups**: One-click JSON backup export and database restore capabilities.
 - **🎨 Native Windows Launcher**: A lightweight C# WinForms GUI featuring a **Dark Claymorphic Bento Grid** design, background daemon management, auto port allocation, and system tray integration (Jellyfin-style, zero Electron overhead).
+- **🌐 LAN Server Access**: Other devices on the same network can access the application via web browser (no installation required on client devices).
 - **📦 1-Click Offline Installer**: Windows installer (`ResidentialMasterlistSetup.exe`) that packages Next.js standalone, portable Node.js runtime, portable MariaDB 10.11, and automatic database migration.
 
 ---
 
-## 🏗️ Architecture
+## � LAN Access
+
+The application supports **LAN server access**, allowing other devices on the same local network to access the Residential Masterlist web interface without requiring any installation on those devices.
+
+### How It Works
+
+- The Next.js server binds to `0.0.0.0` (all network interfaces) instead of just `127.0.0.1`
+- MariaDB remains bound to `127.0.0.1` only for security (not exposed to LAN)
+- The launcher automatically detects the LAN IP address
+- Both localhost and LAN access work simultaneously
+
+### Accessing from Other Devices
+
+1. **Install and run** the Residential Masterlist launcher on your main Windows PC
+2. **Note the LAN IP address** displayed in the launcher (e.g., `192.168.1.100`)
+3. **On any other device** (laptop, tablet, phone) on the same network:
+   - Open a web browser
+   - Navigate to: `http://<LAN_IP>:3000` (e.g., `http://192.168.1.100:3000`)
+   - Login with your admin credentials
+
+### Architecture Diagram
+
+```
+                LOCAL AREA NETWORK
+
+                     Router
+                       |
+      +----------------+----------------+
+      |                                 |
+      |                                 |
+  MAIN PC                         CLIENT PC
+  SERVER                          Browser
+      |                                 |
+      |                                 |
+Launcher.exe                            |
+      |                                 |
+Next.js Server <------ HTTP ------------+
+      |
+      |
+  MariaDB
+  127.0.0.1:33060
+```
+
+### Security Notes
+
+- **MariaDB is NOT exposed to the LAN** - it remains bound to `127.0.0.1` only
+- Only the Next.js web server is accessible from the LAN
+- Designed for trusted local networks (home/office)
+- No additional authentication/encryption for LAN access
+- Windows Firewall may need to allow inbound connections on port 3000
+
+### Troubleshooting
+
+**Cannot access from other devices:**
+- Ensure all devices are on the same local network
+- Check Windows Firewall settings on the main PC
+- Temporarily disable firewall to test, then add appropriate rules
+- Verify the LAN IP address displayed in the launcher
+
+**LAN IP not detected:**
+- Check network connection on the main PC
+- Ensure the PC has a valid network adapter
+- The launcher shows "LAN: Not available" if detection fails
+
+---
+
+## �🏗️ Architecture
 
 ```text
 ┌─────────────────────────────────────────────────────────────┐

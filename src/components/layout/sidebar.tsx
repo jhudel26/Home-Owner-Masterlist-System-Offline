@@ -216,7 +216,7 @@ export function Sidebar({ onNavigate }: { onNavigate?: () => void }) {
 
         <div className="text-center pt-1">
           <span className="text-[10px] font-semibold tracking-wider text-slate-400 dark:text-slate-500 uppercase">
-            v1.1.0 • Offline Edition
+            v1.2.0 • LAN Edition
           </span>
         </div>
       </div>

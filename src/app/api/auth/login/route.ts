@@ -9,6 +9,29 @@ import { DEFAULT_PERMISSIONS_BY_ROLE } from "@/lib/permissions";
 
 export const dynamic = "force-dynamic";
 
+function isPrivateIP(hostname: string): boolean {
+  // Check for localhost
+  if (hostname === "localhost" || hostname === "127.0.0.1") return true;
+  
+  // Check for private IP ranges
+  const parts = hostname.split(".");
+  if (parts.length !== 4) return false;
+  
+  const first = parseInt(parts[0], 10);
+  const second = parseInt(parts[1], 10);
+  
+  // 10.0.0.0 - 10.255.255.255
+  if (first === 10) return true;
+  
+  // 172.16.0.0 - 172.31.255.255
+  if (first === 172 && second >= 16 && second <= 31) return true;
+  
+  // 192.168.0.0 - 192.168.255.255
+  if (first === 192 && second === 168) return true;
+  
+  return false;
+}
+
 export async function POST(request: NextRequest) {
   try {
     // Rate limiting: 10 attempts per minute per IP
@@ -59,15 +82,19 @@ export async function POST(request: NextRequest) {
     const cookieStore = await cookies();
     const isProduction = process.env.NODE_ENV === "production";
     const isLocalhost = request.nextUrl.hostname === "localhost" || request.nextUrl.hostname === "127.0.0.1";
+    const isPrivateNetwork = isPrivateIP(request.nextUrl.hostname);
 
-    cookieStore.set("session", sessionId, {
+    // For LAN access, use non-secure cookies with lax sameSite to work across devices
+    const cookieOptions = {
       httpOnly: true,
-      secure: isProduction && !isLocalhost,
-      sameSite: "lax",
+      secure: false, // Always false for LAN access compatibility
+      sameSite: "lax" as const,
       expires: expiresAt,
       path: "/",
       maxAge: 60 * 60 * 24 * 7, // 7 days
-    });
+    };
+
+    cookieStore.set("session", sessionId, cookieOptions);
 
     // Parse permissions for current user
     let userPermissions: UserPermissions = profile.permissions;

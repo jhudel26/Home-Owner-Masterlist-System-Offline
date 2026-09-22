@@ -120,8 +120,72 @@ C:\ProgramData\ResidentialMasterlist\
 
 | Service | Port | Notes |
 |---------|------|-------|
-| Next.js | 3000 (auto-fallback to 3010) | localhost only |
+| Next.js | 3000 (auto-fallback to 3010) | localhost + LAN access (binds to 0.0.0.0) |
 | MariaDB | 33060 | localhost only, avoids conflict with XAMPP (3306) |
+
+---
+
+## LAN Access
+
+The application supports LAN access, allowing other devices on the same network to access the Residential Masterlist web interface.
+
+### Architecture
+
+```
+                LOCAL AREA NETWORK
+
+                     Router
+                       |
+      +----------------+----------------+
+      |                                 |
+      |                                 |
+  MAIN PC                         CLIENT PC
+  SERVER                          Browser
+      |                                 |
+      |                                 |
+Launcher.exe                            |
+      |                                 |
+Next.js Server <------ HTTP ------------+
+      |
+      |
+  MariaDB
+  127.0.0.1:33060
+```
+
+### How It Works
+
+- The Next.js server binds to `0.0.0.0` (all interfaces) instead of just `127.0.0.1`
+- MariaDB remains bound to `127.0.0.1` only for security
+- The launcher automatically detects the LAN IP address
+- Both localhost and LAN access are supported simultaneously
+
+### Accessing from Other Devices
+
+1. Start the Residential Masterlist launcher on the main PC
+2. Note the LAN IP address displayed in the launcher (e.g., `192.168.1.100`)
+3. On any other device on the same network, open a web browser
+4. Navigate to: `http://<LAN_IP>:3000` (e.g., `http://192.168.1.100:3000`)
+
+### Security Notes
+
+- **MariaDB is NOT exposed to the LAN** - it remains bound to `127.0.0.1` only
+- Only the Next.js web server is accessible from the LAN
+- The application is designed for trusted local networks (home/office)
+- No additional authentication or encryption is provided for LAN access
+- Firewall rules may need to allow inbound connections on port 3000
+
+### Troubleshooting LAN Access
+
+**Cannot access from other devices:**
+- Ensure all devices are on the same local network
+- Check Windows Firewall settings on the main PC
+- Temporarily disable firewall to test, then add appropriate rules
+- Verify the LAN IP address displayed in the launcher
+
+**LAN IP not detected:**
+- Check network connection on the main PC
+- Ensure the PC has a valid network adapter
+- The launcher shows "LAN: Not available" if detection fails
 
 ---
 

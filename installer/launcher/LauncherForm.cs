@@ -16,8 +16,8 @@ using System.Reflection;
 [assembly: AssemblyProduct("Residential Masterlist")]
 [assembly: AssemblyCopyright("Copyright © Eru Studio. All rights reserved.")]
 [assembly: AssemblyTrademark("Eru Studio")]
-[assembly: AssemblyVersion("1.1.0.0")]
-[assembly: AssemblyFileVersion("1.1.0.0")]
+[assembly: AssemblyVersion("1.2.0.0")]
+[assembly: AssemblyFileVersion("1.2.0.0")]
 
 namespace ResidentialMasterlist.Launcher
 {
@@ -530,6 +530,7 @@ namespace ResidentialMasterlist.Launcher
         private string dbPassword;
         private int appPort;
         private string cookieSecure;
+        private string lanIpAddress;
 
         // Process Management
         private Process mysqlProcess;
@@ -647,6 +648,7 @@ namespace ResidentialMasterlist.Launcher
             }
 
             currentPort = appPort;
+            lanIpAddress = GetLanIpAddress();
         }
 
         private void EnsureDirectory(string path)
@@ -696,7 +698,7 @@ namespace ResidentialMasterlist.Launcher
             this.Controls.Add(mainTitle);
 
             Label verBadge = new Label();
-            verBadge.Text = "v1.1.0";
+            verBadge.Text = "v1.2.0 LAN";
             verBadge.Font = new Font("Segoe UI", 8F, FontStyle.Bold);
             verBadge.ForeColor = Color.FromArgb(45, 212, 191);
             verBadge.BackColor = Color.FromArgb(15, 30, 45);
@@ -729,7 +731,7 @@ namespace ResidentialMasterlist.Launcher
             // 1. Bento Card A: System Status Hero
             ClayCardControl cardHero = new ClayCardControl();
             cardHero.Location = new Point(16, row1Y);
-            cardHero.Size = new Size(376, cardH);
+            cardHero.Size = new Size(376, cardH); // Reduced back to original height
             cardHero.FillTop = Color.FromArgb(28, 42, 68);
             cardHero.FillBottom = Color.FromArgb(17, 27, 46);
             cardHero.ShadowColor = Color.FromArgb(0, 0, 0);
@@ -764,9 +766,9 @@ namespace ResidentialMasterlist.Launcher
             lblOverallStatusText.Size = new Size(335, 30);
             cardHero.Controls.Add(lblOverallStatusText);
 
-            // Custom Rounded Clay URL Pill Button
+            // Custom Rounded Clay URL Pill Button (LAN URL)
             pillWebUrl = new ClayUrlPill();
-            pillWebUrl.Text = string.Format("http://127.0.0.1:{0} ↗", appPort);
+            pillWebUrl.Text = "LAN: Detecting...";
             pillWebUrl.Location = new Point(18, 98);
             pillWebUrl.Size = new Size(185, 28);
             pillWebUrl.Click += new EventHandler(BtnOpenBrowser_Click);
@@ -1139,7 +1141,16 @@ namespace ResidentialMasterlist.Launcher
                     lblOverallStatusBadge.ForeColor = Color.FromArgb(52, 211, 153); // Emerald-400
                     lblOverallStatusText.Text = "All services operational. Registry database connected.";
 
-                    pillWebUrl.Text = string.Format("http://127.0.0.1:{0} ↗", currentPort);
+                    // Show LAN URL in button if available, otherwise show localhost
+                    if (!string.IsNullOrEmpty(lanIpAddress))
+                    {
+                        pillWebUrl.Text = string.Format("LAN: {0}:{1} ↗", lanIpAddress, currentPort);
+                        lblOverallStatusText.Text += string.Format(" | Local: 127.0.0.1:{0}", currentPort);
+                    }
+                    else
+                    {
+                        pillWebUrl.Text = string.Format("Local: 127.0.0.1:{0} ↗", currentPort);
+                    }
                     pillWebUrl.Invalidate();
 
                     lblNextStatus.Text = string.Format("● Port {0} (Active)", currentPort);
@@ -1150,15 +1161,35 @@ namespace ResidentialMasterlist.Launcher
 
                     uptimeTimer.Start();
                     trayIcon.Text = string.Format("Residential Masterlist (:{0})", currentPort);
+                    
+                    string balloonMessage;
+                    if (!string.IsNullOrEmpty(lanIpAddress))
+                    {
+                        balloonMessage = string.Format("Server is online at http://{0}:{1}", lanIpAddress, currentPort);
+                    }
+                    else
+                    {
+                        balloonMessage = string.Format("Server is online at http://127.0.0.1:{0}", currentPort);
+                    }
+                    
                     trayIcon.ShowBalloonTip(
                         3000,
                         "Residential Masterlist Ready",
-                        string.Format("Server is online at http://127.0.0.1:{0}", currentPort),
+                        balloonMessage,
                         ToolTipIcon.Info
                     );
                 }));
 
-                Log(string.Format("=== Server fully operational at http://127.0.0.1:{0} ===", currentPort));
+                string logMessage;
+                if (!string.IsNullOrEmpty(lanIpAddress))
+                {
+                    logMessage = string.Format("=== Server fully operational at http://{0}:{1} ===", lanIpAddress, currentPort);
+                }
+                else
+                {
+                    logMessage = string.Format("=== Server fully operational at http://127.0.0.1:{0} ===", currentPort);
+                }
+                Log(logMessage);
                 OpenBrowser();
             }
             catch (Exception ex)
@@ -1212,6 +1243,47 @@ namespace ResidentialMasterlist.Launcher
                 }
             }
             return -1;
+        }
+
+        private string GetLanIpAddress()
+        {
+            try
+            {
+                string hostName = Dns.GetHostName();
+                IPAddress[] addresses = Dns.GetHostEntry(hostName).AddressList;
+                
+                foreach (IPAddress address in addresses)
+                {
+                    // Look for IPv4 addresses that are not loopback
+                    if (address.AddressFamily == AddressFamily.InterNetwork && 
+                        !IPAddress.IsLoopback(address))
+                    {
+                        // Prefer addresses in common private ranges
+                        byte[] bytes = address.GetAddressBytes();
+                        if (bytes[0] == 192 && bytes[1] == 168) // 192.168.x.x
+                            return address.ToString();
+                        if (bytes[0] == 10) // 10.x.x.x
+                            return address.ToString();
+                        if (bytes[0] == 172 && bytes[1] >= 16 && bytes[1] <= 31) // 172.16-31.x.x
+                            return address.ToString();
+                    }
+                }
+                
+                // Fallback to first non-loopback IPv4
+                foreach (IPAddress address in addresses)
+                {
+                    if (address.AddressFamily == AddressFamily.InterNetwork && 
+                        !IPAddress.IsLoopback(address))
+                    {
+                        return address.ToString();
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Log("Warning: Could not detect LAN IP: " + ex.Message);
+            }
+            return null;
         }
 
         private void StartMariaDB()
@@ -1416,7 +1488,7 @@ namespace ResidentialMasterlist.Launcher
 
             psi.EnvironmentVariables["NODE_ENV"] = "production";
             psi.EnvironmentVariables["PORT"] = port.ToString();
-            psi.EnvironmentVariables["HOSTNAME"] = "127.0.0.1";
+            psi.EnvironmentVariables["HOSTNAME"] = "0.0.0.0";
             psi.EnvironmentVariables["DB_HOST"] = dbHost;
             psi.EnvironmentVariables["DB_PORT"] = dbPort.ToString();
             psi.EnvironmentVariables["DB_NAME"] = dbName;
@@ -1466,7 +1538,16 @@ namespace ResidentialMasterlist.Launcher
         {
             try
             {
-                string url = string.Format("http://127.0.0.1:{0}", currentPort);
+                string url;
+                // Open LAN URL if available, otherwise fallback to localhost
+                if (!string.IsNullOrEmpty(lanIpAddress))
+                {
+                    url = string.Format("http://{0}:{1}", lanIpAddress, currentPort);
+                }
+                else
+                {
+                    url = string.Format("http://127.0.0.1:{0}", currentPort);
+                }
                 Process.Start(new ProcessStartInfo(url) { UseShellExecute = true });
             }
             catch (Exception ex)
