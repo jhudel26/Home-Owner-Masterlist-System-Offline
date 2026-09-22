@@ -24,7 +24,8 @@ CREATE TABLE IF NOT EXISTS homeowner_deductions (
 
 -- Update system settings to include new permission indicators
 INSERT IGNORE INTO system_settings (setting_key, setting_value) VALUES 
-  ('db_migration_version', '2024-09-17');
+  ('db_migration_version', '2024-09-17'),
+  ('village_logo', '');
 
 -- ============================================================================
 -- MIGRATION COMPLETE

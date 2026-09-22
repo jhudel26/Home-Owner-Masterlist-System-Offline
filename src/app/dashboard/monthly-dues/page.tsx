@@ -320,14 +320,14 @@ export default function MonthlyDuesPage() {
             <div>
               <div className="flex flex-wrap items-center gap-2 mb-1">
                 <span className="text-[10px] sm:text-xs font-bold uppercase tracking-widest text-emerald-300 bg-emerald-950/70 border border-emerald-500/30 px-2.5 py-0.5 rounded-full">
-                  Phase 4 HOA Portal
+                  HOA Portal
                 </span>
                 <span className="text-xs text-emerald-200/80 font-medium">
                   Official Dues Registry
                 </span>
               </div>
               <h1 className="text-xl sm:text-2xl lg:text-3xl font-extrabold tracking-tight text-white leading-tight">
-                St. Joseph Village 6 Phase 4
+                Residential Masterlist
               </h1>
               <p className="text-xs sm:text-sm text-slate-300 mt-1 max-w-xl">
                 Monthly association dues collection, payment receipts, and resident accounts

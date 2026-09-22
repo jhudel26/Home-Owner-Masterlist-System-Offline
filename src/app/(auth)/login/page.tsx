@@ -17,6 +17,7 @@ import {
   EyeOff,
   ArrowRight,
 } from "lucide-react";
+import { getVillageSettingsClient } from "@/lib/village-settings-client";
 
 export default function LoginPage() {
   const router = useRouter();
@@ -28,6 +29,8 @@ export default function LoginPage() {
   const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
   const [checkingSetup, setCheckingSetup] = useState(true);
+  const [villageName, setVillageName] = useState("Residential Masterlist");
+  const [villageLogo, setVillageLogo] = useState("/icon.png");
 
   // Forgot password modal
   const [isResetOpen, setIsResetOpen] = useState(false);
@@ -36,6 +39,20 @@ export default function LoginPage() {
 
   // Check if setup is needed on mount
   useEffect(() => {
+    const loadSettings = async () => {
+      try {
+        const settings = await getVillageSettingsClient();
+        if (settings.hoa_name) {
+          setVillageName(settings.hoa_name);
+        }
+        if (settings.village_logo) {
+          setVillageLogo(settings.village_logo);
+        }
+      } catch (err) {
+        console.error("Failed to load village settings:", err);
+      }
+    };
+
     const checkSetup = async () => {
       try {
         const response = await fetch("/api/auth/setup-check");
@@ -50,6 +67,7 @@ export default function LoginPage() {
         setCheckingSetup(false);
       }
     };
+    loadSettings();
     checkSetup();
   }, [router]);
 
@@ -109,7 +127,7 @@ export default function LoginPage() {
         <div className="flex items-center gap-3">
           <div className="relative h-10 w-10 rounded-xl bg-white/10 border border-white/20 p-1 flex items-center justify-center shadow-md overflow-hidden shrink-0">
             <Image
-              src="/icon.png"
+              src={villageLogo}
               alt="Logo"
               width={40}
               height={40}
@@ -119,7 +137,7 @@ export default function LoginPage() {
           </div>
           <div>
             <span className="text-xs font-bold tracking-wider uppercase text-emerald-400 block font-semibold">
-              St. Joseph Village 6 Phase 4
+              {villageName}
             </span>
             <span className="text-[10px] text-slate-400 font-medium tracking-wide">
               HOA Homeowners Registry System
@@ -272,7 +290,7 @@ export default function LoginPage() {
                 
                 {/* Main logo */}
                 <Image
-                  src="/icon.png"
+                  src={villageLogo}
                   alt="HOA Logo"
                   width={350}
                   height={350}
@@ -288,10 +306,10 @@ export default function LoginPage() {
             {/* Text with Montserrat font */}
             <div className="mt-12 text-center animate-fade-in">
               <h2 className="text-3xl sm:text-4xl font-bold text-white tracking-tight">
-                St. Joseph Village 6
+                {villageName}
               </h2>
               <p className="text-emerald-300 font-medium mt-2 text-lg">
-                Phase 4 Homeowners Association
+                Homeowners Association
               </p>
             </div>
           </div>
@@ -302,7 +320,7 @@ export default function LoginPage() {
       {/* Footer with Developer Attribution */}
       <footer className="relative w-full max-w-7xl mx-auto px-6 sm:px-12 py-6 flex flex-col sm:flex-row items-center justify-between gap-3 text-xs text-slate-400 border-t border-slate-800/60 z-20">
         <p>
-          &copy; {new Date().getFullYear()} St. Joseph Village 6 Phase 4 HOA Board. All rights reserved.
+          &copy; {new Date().getFullYear()} {villageName}. All rights reserved.
         </p>
         <p className="flex items-center gap-1.5 font-medium">
           <span>Developed by</span>

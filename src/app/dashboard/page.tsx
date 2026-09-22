@@ -123,13 +123,13 @@ export default function DashboardPage() {
             <div className="space-y-2">
               <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/10 backdrop-blur-md border border-white/15 text-xs text-emerald-300 font-medium">
                 <Sparkles className="h-3.5 w-3.5 text-emerald-400" />
-                <span>St. Joseph Village 6 Phase 4 &bull; Executive Portal</span>
+                <span>Residential Masterlist &bull; Executive Portal</span>
               </div>
               <h1 className="text-2xl sm:text-3xl font-extrabold tracking-tight font-sans">
                 {timeGreeting}, {currentUser?.full_name?.split(" ")[0] || "Officer"}
               </h1>
               <p className="text-xs sm:text-sm text-white/75 max-w-xl leading-relaxed">
-                Phase 4 Homeowners Masterlist is currently tracking <span className="font-bold text-white">{totalHomeowners} residential properties</span> and <span className="font-bold text-white">{totalResidents} total occupants</span>.
+                Homeowners Masterlist is currently tracking <span className="font-bold text-white">{totalHomeowners} residential properties</span> and <span className="font-bold text-white">{totalResidents} total occupants</span>.
               </p>
             </div>
 
@@ -215,7 +215,7 @@ export default function DashboardPage() {
           <StatCard
             title="Registered Pets"
             value={totalPets}
-            subtitle="Phase 4 Canine & Feline Census"
+            subtitle="Canine & Feline Census"
             icon={PawPrint}
             variant="slate"
             badgeText="Verified"

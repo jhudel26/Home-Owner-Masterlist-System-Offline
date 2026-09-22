@@ -1,4 +1,4 @@
-# St. Joseph Village 6 Phase 4 — Residential Masterlist System
+# Residential Masterlist System
 
 > **Official Offline HOA Registry, Household Management & Monthly Dues Financial System**  
 > Built with Next.js 16, React 19, Tailwind CSS, MariaDB/MySQL, and a native Windows Claymorphic GUI Server Controller.
@@ -21,10 +21,11 @@ The **Residential Masterlist** is a production-grade, local-first management sys
 - **🎨 Native Windows Launcher**: A lightweight C# WinForms GUI featuring a **Dark Claymorphic Bento Grid** design, background daemon management, auto port allocation, and system tray integration (Jellyfin-style, zero Electron overhead).
 - **🌐 LAN Server Access**: Other devices on the same network can access the application via web browser (no installation required on client devices).
 - **📦 1-Click Offline Installer**: Windows installer (`ResidentialMasterlistSetup.exe`) that packages Next.js standalone, portable Node.js runtime, portable MariaDB 10.11, and automatic database migration.
+- **🏘️ Dynamic Village Configuration**: Customize village name and logo during initial setup for personalized branding throughout the application.
 
 ---
 
-## � LAN Access
+## 🌐 LAN Access
 
 The application supports **LAN server access**, allowing other devices on the same local network to access the Residential Masterlist web interface without requiring any installation on those devices.
 
@@ -90,7 +91,7 @@ Next.js Server <------ HTTP ------------+
 
 ---
 
-## �🏗️ Architecture
+## 🏗️ Architecture
 
 ```text
 ┌─────────────────────────────────────────────────────────────┐
@@ -101,12 +102,14 @@ Next.js Server <------ HTTP ------------+
 │  │  - Bento Grid & Claymorphism UI                       │  │
 │  │  - Background Process Supervisor                      │  │
 │  │  - System Tray Minimization & Port Discovery          │  │
+│  │  - LAN IP Detection                                  │  │
 │  └───────────────┬───────────────────────┬───────────────┘  │
 │                  │ (spawns daemon)       │ (spawns daemon)  │
 │                  ▼                       ▼                  │
 │       ┌──────────────────────┐┌──────────────────────┐      │
 │       │ Next.js Standalone   ││ MariaDB 10.11 Engine │      │
 │       │ Port 3000 (HTTP)     ││ Port 33060 (TCP)     │      │
+│       │ 0.0.0.0 (LAN Access) ││ 127.0.0.1 (Local)   │      │
 │       └──────────┬───────────┘└──────────┬───────────┘      │
 │                  │                       │                  │
 │                  └───────────┬───────────┘                  │
@@ -116,7 +119,8 @@ Next.js Server <------ HTTP ------------+
 │              ├── app.env (Runtime Configurations)           │
 │              ├── data\   (MariaDB InnoDB Tables)            │
 │              ├── uploads\ (Resident Photos)                 │
-│              └── logs\   (Launcher & Daemon Logs)           │
+│              ├── logs\   (Launcher & Daemon Logs)           │
+│              └── village_logo (Custom Village Logo)         │
 └─────────────────────────────────────────────────────────────┘
 ```
 
@@ -148,7 +152,7 @@ Follow these steps to run the application locally on your development machine.
 ### 1. Clone & Install Dependencies
 
 ```bash
-git clone (https://github.com/jhudel26/Home-Owner-Masterlist-System-Offline/)
+git clone https://github.com/jhudel26/Home-Owner-Masterlist-System-Offline
 cd Home-Owner-Masterlist-System-Offline
 npm install
 ```
@@ -178,7 +182,7 @@ Import the schema into your local MySQL instance:
 
 - **Option A (CLI)**:
   ```bash
-  mysql -u root -p Home-Owner-Masterlist-System-Offline < installer/database/schema.sql
+  mysql -u root -p residential_masterlist < installer/database/schema.sql
   ```
 - **Option B (phpMyAdmin / GUI)**:
   1. Open phpMyAdmin or your MySQL GUI (e.g., DBeaver / HeidiSQL).
@@ -192,6 +196,40 @@ npm run dev
 ```
 
 Open [http://localhost:3000](http://localhost:3000) in your browser.
+
+---
+
+## 🏘️ Initial Setup & Village Configuration
+
+On first launch, the application will guide you through an initial setup process:
+
+### Setup Wizard
+
+1. **Village Name**: Enter your village/subdivision name (e.g., "Pagsinag Place West")
+   - This name will be displayed throughout the application
+   - Used in headers, footers, dashboard, and all branding locations
+   - Can be changed later via Settings
+
+2. **Village Logo** (Optional): Upload your village logo or association emblem
+   - Appears in the sidebar, login page, and other UI locations
+   - Supports PNG, JPG, and other image formats (max 5MB)
+   - Stored locally and served from the uploads directory
+
+3. **Admin Account**: Create your administrator account
+   - Full name, email, and password
+   - Full administrative permissions
+   - Required to access the system
+
+### Dynamic Village Settings
+
+The village name and logo are stored in the database and fetched dynamically. All pages display the configured village name:
+- Sidebar branding
+- Login page header
+- Dashboard title
+- Monthly dues page
+- Settings page
+- Footer copyright
+- Excel export metadata
 
 ---
 
@@ -231,12 +269,12 @@ npm run installer
 ```
 
 This automated 10-step build pipeline:
-1. Cleans previous build artifacts.
-2. Compiles Next.js into a standalone production bundle (`.next/standalone`).
-3. Assembles runtime packages, MariaDB engine, and database initialization scripts.
-4. Generates multi-resolution `.ico` assets from `ICON.png`.
-5. Compiles the native Claymorphic GUI launcher.
-6. Invokes Inno Setup (`ISCC.exe`) to create `dist/ResidentialMasterlistSetup.exe` (~60 MB).
+1. Cleans previous build artifacts
+2. Compiles Next.js into a standalone production bundle (`.next/standalone`)
+3. Assembles runtime packages, MariaDB engine, and database initialization scripts
+4. Generates multi-resolution `.ico` assets from `ICON.png`
+5. Compiles the native Claymorphic GUI launcher
+6. Invokes Inno Setup (`ISCC.exe`) to create `dist/ResidentialMasterlistSetup.exe` (~60 MB)
 
 The resulting installer in `dist\ResidentialMasterlistSetup.exe` is completely self-contained and ready to install on any offline Windows 10/11 PC.
 
@@ -248,7 +286,7 @@ The resulting installer in `dist\ResidentialMasterlistSetup.exe` is completely s
 residential-masterlist/
 ├── src/
 │   ├── app/                 # Next.js App Router pages and API routes
-│   │   ├── api/             # REST endpoints (auth, homeowners, dues, backup)
+│   │   ├── api/             # REST endpoints (auth, homeowners, dues, backup, settings)
 │   │   ├── dashboard/       # Administrative dashboard and metrics
 │   │   ├── homeowners/      # Resident directory, CRUD modal, details
 │   │   ├── monthly-dues/    # Payment tracking, dues assessments
@@ -256,7 +294,7 @@ residential-masterlist/
 │   │   ├── activity-logs/   # Audit trails
 │   │   └── settings/        # System configuration & backups
 │   ├── components/          # Reusable UI components (Bento cards, forms, tables)
-│   └── lib/                 # Database pool connection, auth sessions, validators
+│   └── lib/                 # Database pool connection, auth sessions, validators, village settings
 ├── database/                # Reference SQL patches & migration scripts
 ├── installer/
 │   ├── assets/              # App icon (.ico and .png)
@@ -265,6 +303,7 @@ residential-masterlist/
 │   ├── launcher/            # LauncherForm.cs (Native C# Claymorphic WinForms GUI)
 │   └── scripts/             # build-installer.js, db-init.js, prepare-tools.js
 ├── public/                  # Static assets and icons
+├── ICON.png                 # Source image for icon generation
 ├── .env.example             # Template environment variables
 ├── next.config.mjs          # Next.js build configuration (standalone output enabled)
 ├── package.json             # NPM dependencies and build commands
@@ -276,16 +315,41 @@ residential-masterlist/
 
 ## 🛡️ Data Retention & Safe Upgrades
 
-- **Program Files**: Installed by default to `C:\Program Files\Residential Masterlist\`.
-- **Persistent Data**: All live resident records, database tables, photo uploads, and configuration files reside in:
+- **Program Files**: Installed by default to `C:\Program Files\Residential Masterlist\`
+- **Persistent Data**: All live resident records, database tables, photo uploads, village logo, and configuration files reside in:
   ```text
   C:\ProgramData\ResidentialMasterlist\
   ```
-- **Upgrades**: Installing a newer version automatically upgrades binary components while **preserving 100% of resident data and uploads**.
-- **Uninstallation**: During uninstallation, users are asked whether to keep or remove their registry database.
+- **Upgrades**: Installing a newer version automatically upgrades binary components while **preserving 100% of resident data, uploads, and village settings**
+- **Uninstallation**: During uninstallation, users are asked whether to keep or remove their registry database
+
+---
+
+## 🎨 Customization
+
+### Changing Village Name and Logo
+
+After installation, village settings can be updated:
+
+1. **Via Settings Page**: Navigate to Dashboard → Settings → General
+2. **Edit Village Name**: Update the HOA/village name
+3. **Upload New Logo**: Replace the village logo image
+4. **Save Changes**: Apply to update all UI elements instantly
+
+### Default Village Name
+
+If no village name is configured, the application uses "Residential Masterlist" as the default.
 
 ---
 
 ## 📄 License
 
-Private property of **St. Joseph Village 6 Phase 4 HOA**. All rights reserved.
+Private property of the HOA organization. All rights reserved.
+
+---
+
+## 📞 Support
+
+For issues, questions, or feature requests, please contact the system administrator or refer to the technical documentation in `PACKAGING.md`.
+
+**Version**: 1.2.0 (LAN Edition)

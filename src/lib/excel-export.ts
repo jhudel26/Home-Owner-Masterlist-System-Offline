@@ -7,7 +7,7 @@ export async function exportHomeownersToExcel(
   filenamePrefix = "St_Joseph_Village_6_Phase_4_Homeowners"
 ) {
   const workbook = new ExcelJS.Workbook();
-  workbook.creator = "St. Joseph Village 6 Phase 4 HOA";
+  workbook.creator = "Residential Masterlist";
   workbook.lastModifiedBy = "HOA Masterlist System";
   workbook.created = new Date();
   workbook.modified = new Date();
@@ -328,7 +328,7 @@ export async function exportMonthlyDuesReportToExcel(
   filenamePrefix = "SJV6PH4_Monthly_Dues_Report"
 ) {
   const workbook = new ExcelJS.Workbook();
-  workbook.creator = "St. Joseph Village 6 Phase 4 HOA";
+  workbook.creator = "Residential Masterlist";
   workbook.lastModifiedBy = "HOA Masterlist System";
   workbook.created = new Date();
   workbook.modified = new Date();
@@ -654,7 +654,7 @@ export async function exportMonthlyDuesReportToExcel(
 
 function formatLogActionText(log: ActivityLog): string {
   const hoName = log.details?.name || log.details?.full_name || "a homeowner";
-  const hoAddress = log.details?.address || log.details?.street_name || "Phase 4";
+  const hoAddress = log.details?.address || log.details?.street_name || "Residential Masterlist";
 
   switch (log.action) {
     case "CREATED_HOMEOWNER":
@@ -692,7 +692,7 @@ export async function exportAuditTrailToExcel(
   filenamePrefix = "St_Joseph_Village_6_Phase_4_Audit_Trail"
 ) {
   const workbook = new ExcelJS.Workbook();
-  workbook.creator = "St. Joseph Village 6 Phase 4 HOA";
+  workbook.creator = "Residential Masterlist";
   workbook.lastModifiedBy = "HOA Masterlist System";
   workbook.created = new Date();
   workbook.modified = new Date();

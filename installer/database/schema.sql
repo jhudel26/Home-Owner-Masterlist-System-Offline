@@ -208,8 +208,9 @@ CREATE TABLE IF NOT EXISTS system_settings (
 
 INSERT IGNORE INTO system_settings (setting_key, setting_value) VALUES 
   ('monthly_dues_amount', '100.00'),
-  ('hoa_name', 'St. Joseph Village 6 Phase 4 HOA'),
-  ('hoa_currency', '₱');
+  ('hoa_name', 'Residential Masterlist'),
+  ('hoa_currency', '₱'),
+  ('village_logo', '');
 
 -- ============================================================================
 -- HOA# AUTO-GENERATION

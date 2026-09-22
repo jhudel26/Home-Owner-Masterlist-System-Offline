@@ -47,7 +47,7 @@ export default function SettingsPage() {
 
   // Dues configuration state
   const [duesAmount, setDuesAmount] = useState<string>("100.00");
-  const [hoaName, setHoaName] = useState<string>("St. Joseph Village 6 Phase 4 HOA");
+  const [hoaName, setHoaName] = useState<string>("Residential Masterlist");
   const [hoaAddress, setHoaAddress] = useState<string>("");
   const [hoaTinNumber, setHoaTinNumber] = useState<string>("");
   const [hoaRegistrationNumber, setHoaRegistrationNumber] = useState<string>("");

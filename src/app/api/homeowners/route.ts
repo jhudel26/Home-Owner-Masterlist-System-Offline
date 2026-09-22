@@ -123,8 +123,8 @@ export async function POST(request: NextRequest) {
     const homeownerId = randomUUID();
 
     // Process and save images to file system
-    const photoPath = await saveUploadedFile(photoFile);
-    const gaProxyPath = await saveUploadedFile(gaProxyPhotoFile);
+    const photoPath = photoFile ? await saveUploadedFile(photoFile) : "";
+    const gaProxyPath = gaProxyPhotoFile ? await saveUploadedFile(gaProxyPhotoFile) : "";
 
     // Combine name parts for full_name
     const fullName = [homeowner.first_name, homeowner.middle_name, homeowner.last_name, homeowner.suffix]
@@ -228,7 +228,7 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    const address = homeowner.street_name || (homeowner.block_number ? `Block ${homeowner.block_number} Lot ${homeowner.lot_number}` : 'Phase 4');
+    const address = homeowner.street_name || (homeowner.block_number ? `Block ${homeowner.block_number} Lot ${homeowner.lot_number}` : 'Residential Masterlist');
     const activityId = randomUUID();
     await dbExecute(
       "INSERT INTO activity_logs (id, user_id, user_name, action, details) VALUES (?, ?, ?, ?, ?)",

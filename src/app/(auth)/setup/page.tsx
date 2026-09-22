@@ -16,6 +16,9 @@ import {
   ArrowRight,
   Sparkles,
   CheckCircle,
+  Upload,
+  Building2,
+  X,
 } from "lucide-react";
 
 export default function SetupPage() {
@@ -26,10 +29,21 @@ export default function SetupPage() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
+  const [villageName, setVillageName] = useState("");
+  const [villageLogo, setVillageLogo] = useState<File | null>(null);
+  const [logoPreview, setLogoPreview] = useState<string | null>(null);
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [loading, setLoading] = useState(false);
   const [step, setStep] = useState<"form" | "success">("form");
+  const [displayVillageName, setDisplayVillageName] = useState("Residential Masterlist");
+
+  // Update display name as user types
+  useEffect(() => {
+    if (villageName.trim()) {
+      setDisplayVillageName(villageName.trim());
+    }
+  }, [villageName]);
 
   useEffect(() => {
     const checkSetupNeeded = async () => {
@@ -48,6 +62,10 @@ export default function SetupPage() {
   }, [router]);
 
   const validateForm = () => {
+    if (!villageName.trim()) {
+      toastError("Required Field", "Please enter the village name.");
+      return false;
+    }
     if (!fullName.trim()) {
       toastError("Required Field", "Please enter your full name.");
       return false;
@@ -75,20 +93,52 @@ export default function SetupPage() {
     return true;
   };
 
+  const handleLogoUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      // Validate file type
+      if (!file.type.startsWith('image/')) {
+        toastError("Invalid File", "Please upload an image file (PNG, JPG, etc.).");
+        return;
+      }
+      // Validate file size (max 5MB)
+      if (file.size > 5 * 1024 * 1024) {
+        toastError("File Too Large", "Please upload an image smaller than 5MB.");
+        return;
+      }
+      setVillageLogo(file);
+      // Create preview
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setLogoPreview(reader.result as string);
+      };
+      reader.readAsDataURL(file);
+    }
+  };
+
+  const handleRemoveLogo = () => {
+    setVillageLogo(null);
+    setLogoPreview(null);
+  };
+
   const handleSetup = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!validateForm()) return;
 
     setLoading(true);
     try {
+      const formData = new FormData();
+      formData.append("village_name", villageName.trim());
+      formData.append("full_name", fullName.trim());
+      formData.append("email", email.trim());
+      formData.append("password", password);
+      if (villageLogo) {
+        formData.append("village_logo", villageLogo);
+      }
+
       const response = await fetch("/api/auth/setup", {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          full_name: fullName.trim(),
-          email: email.trim(),
-          password,
-        }),
+        body: formData,
       });
       const result = await response.json();
       if (!response.ok) {
@@ -97,7 +147,7 @@ export default function SetupPage() {
         return;
       }
       setStep("success");
-      success("Setup Complete", "Your admin account has been created successfully.");
+      success("Setup Complete", "Your admin account and village settings have been created successfully.");
     } catch (err: any) {
       toastError("Error", err.message || "An unexpected error occurred during setup.");
       setLoading(false);
@@ -112,7 +162,7 @@ export default function SetupPage() {
           <div className="flex items-center gap-3">
             <div className="relative h-10 w-10 rounded-xl bg-white/10 border border-white/20 p-1 flex items-center justify-center shadow-md overflow-hidden shrink-0">
               <Image
-                src="/icon.png"
+                src={logoPreview || "/icon.png"}
                 alt="Logo"
                 width={40}
                 height={40}
@@ -122,7 +172,7 @@ export default function SetupPage() {
             </div>
             <div>
               <span className="text-xs font-bold tracking-wider uppercase text-emerald-400 block">
-                St. Joseph Village 6 Phase 4
+                {displayVillageName}
               </span>
               <span className="text-[10px] text-slate-400 font-medium tracking-wide">
                 HOA Homeowners Registry System
@@ -160,7 +210,7 @@ export default function SetupPage() {
         {/* Footer */}
         <footer className="relative w-full max-w-7xl mx-auto px-6 sm:px-12 py-6 flex flex-col sm:flex-row items-center justify-between gap-3 text-xs text-slate-400 border-t border-slate-800/60 z-20">
           <p>
-            &copy; {new Date().getFullYear()} St. Joseph Village 6 Phase 4 HOA Board. All rights reserved.
+            &copy; {new Date().getFullYear()} {displayVillageName}. All rights reserved.
           </p>
           <p className="flex items-center gap-1.5 font-medium">
             <span>Developed by</span>
@@ -178,7 +228,7 @@ export default function SetupPage() {
         <div className="flex items-center gap-3">
           <div className="relative h-10 w-10 rounded-xl bg-white/10 border border-white/20 p-1 flex items-center justify-center shadow-md overflow-hidden shrink-0">
             <Image
-              src="/icon.png"
+              src={logoPreview || "/icon.png"}
               alt="Logo"
               width={40}
               height={40}
@@ -188,7 +238,7 @@ export default function SetupPage() {
           </div>
           <div>
             <span className="text-xs font-bold tracking-wider uppercase text-emerald-400 block">
-              St. Joseph Village 6 Phase 4
+              {displayVillageName}
             </span>
             <span className="text-[10px] text-slate-400 font-medium tracking-wide">
               HOA Homeowners Registry System
@@ -221,15 +271,83 @@ export default function SetupPage() {
           {/* Heading */}
           <div>
             <h1 className="text-4xl font-serif tracking-tight text-white mb-2">
-              Create Admin Account
+              Village Setup
             </h1>
             <p className="text-xs text-slate-300 leading-relaxed">
-              Set up your administrator account to manage the St. Joseph Village 6 Phase 4 homeowner masterlist.
+              Configure your village name and logo, then create your administrator account.
             </p>
           </div>
 
           {/* Form */}
           <form onSubmit={handleSetup} className="space-y-5 pt-2">
+            {/* Village Name */}
+            <div className="space-y-1.5">
+              <label className="block text-sm font-semibold text-white tracking-wide">
+                Village Name
+              </label>
+              <div className="relative">
+                <Building2 className="absolute left-3.5 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-400" />
+                <input
+                  type="text"
+                  required
+                  placeholder="e.g. Residential Masterlist"
+                  value={villageName}
+                  onChange={(e) => setVillageName(e.target.value)}
+                  className="w-full h-11 pl-10 pr-3.5 rounded-xl border border-slate-600 bg-[#0a1b38]/50 text-sm text-white placeholder:text-slate-500 focus:outline-none focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 transition-all"
+                />
+              </div>
+            </div>
+
+            {/* Village Logo Upload */}
+            <div className="space-y-1.5">
+              <label className="block text-sm font-semibold text-white tracking-wide">
+                Village Logo (Optional)
+              </label>
+              <div className="relative">
+                {logoPreview ? (
+                  <div className="relative h-32 rounded-xl border-2 border-emerald-500/30 bg-[#0a1b38]/50 overflow-hidden">
+                    <Image
+                      src={logoPreview}
+                      alt="Logo preview"
+                      fill
+                      className="object-contain"
+                    />
+                    <button
+                      type="button"
+                      onClick={handleRemoveLogo}
+                      className="absolute top-2 right-2 h-8 w-8 rounded-full bg-red-500/80 hover:bg-red-500 text-white flex items-center justify-center transition-colors"
+                    >
+                      <X className="h-4 w-4" />
+                    </button>
+                  </div>
+                ) : (
+                  <div className="relative h-32 rounded-xl border-2 border-dashed border-slate-600 bg-[#0a1b38]/30 flex flex-col items-center justify-center cursor-pointer hover:border-emerald-500/50 hover:bg-[#0a1b38]/50 transition-all">
+                    <input
+                      type="file"
+                      accept="image/*"
+                      onChange={handleLogoUpload}
+                      className="absolute inset-0 opacity-0 cursor-pointer"
+                    />
+                    <Upload className="h-8 w-8 text-slate-400 mb-2" />
+                    <p className="text-xs text-slate-400 text-center px-4">
+                      Click to upload village logo<br />
+                      <span className="text-[10px] text-slate-500">PNG, JPG (max 5MB)</span>
+                    </p>
+                  </div>
+                )}
+              </div>
+            </div>
+
+            {/* Divider */}
+            <div className="relative py-2">
+              <div className="absolute inset-0 flex items-center">
+                <div className="w-full border-t border-slate-700"></div>
+              </div>
+              <div className="relative flex justify-center">
+                <span className="bg-[#1f3151] px-3 text-xs text-slate-400 font-medium">Admin Account</span>
+              </div>
+            </div>
+
             {/* Full Name */}
             <div className="space-y-1.5">
               <label className="block text-sm font-semibold text-white tracking-wide">
@@ -328,7 +446,7 @@ export default function SetupPage() {
                   <div className="h-5 w-5 border-2 border-white/30 border-t-white rounded-full animate-spin" />
                 ) : (
                   <>
-                    <span>Create Admin Account</span>
+                    <span>Complete Setup</span>
                     <ArrowRight className="h-4 w-4" />
                   </>
                 )}
@@ -337,7 +455,7 @@ export default function SetupPage() {
 
             {/* Note */}
             <p className="text-center text-[11px] text-slate-400 font-medium pt-2">
-              This account will have full administrative access to the system
+              This will configure your village settings and create the admin account
             </p>
           </form>
         </div>
@@ -346,7 +464,7 @@ export default function SetupPage() {
       {/* Footer */}
       <footer className="relative w-full max-w-7xl mx-auto px-6 sm:px-12 py-6 flex flex-col sm:flex-row items-center justify-between gap-3 text-xs text-slate-400 border-t border-slate-800/60 z-20">
         <p>
-          &copy; {new Date().getFullYear()} St. Joseph Village 6 Phase 4 HOA Board. All rights reserved.
+          &copy; {new Date().getFullYear()} {displayVillageName}. All rights reserved.
         </p>
         <p className="flex items-center gap-1.5 font-medium">
           <span>Developed by</span>

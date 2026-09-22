@@ -124,7 +124,7 @@ export function DemographicsCharts({ homeowners }: DemographicsChartProps) {
             Community Demographic Analytics
           </h3>
           <p className="text-[10px] sm:text-xs text-slate-500 dark:text-slate-400 mt-0.5">
-            Real-time visual breakdown of registered St. Joseph Village 6 Phase 4 residents
+            Real-time visual breakdown of registered residents
           </p>
         </div>
 

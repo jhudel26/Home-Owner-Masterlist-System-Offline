@@ -15,7 +15,7 @@ const montserrat = Montserrat({
 
 
 export const metadata: Metadata = {
-  title: "St. Joseph Village 6 Phase 4 — Homeowners Masterlist",
+  title: "Residential Masterlist — Homeowners Masterlist",
   description: "Official Homeowners Association Registry and Resident Information System",
   icons: {
     icon: [

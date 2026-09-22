@@ -22,8 +22,9 @@ async function ensureSettingsTable(): Promise<void> {
     await dbExecute(`
       INSERT IGNORE INTO system_settings (setting_key, setting_value) VALUES 
         ('monthly_dues_amount', '100.00'),
-        ('hoa_name', 'St. Joseph Village 6 Phase 4 HOA'),
-        ('hoa_currency', '₱');
+        ('hoa_name', 'Residential Masterlist'),
+        ('hoa_currency', '₱'),
+        ('village_logo', '');
     `);
     settingsTableEnsured = true;
   } catch (error) {
@@ -42,8 +43,9 @@ export async function GET() {
 
     const settings: Record<string, string> = {
       monthly_dues_amount: "100.00",
-      hoa_name: "St. Joseph Village 6 Phase 4 HOA",
+      hoa_name: "Residential Masterlist",
       hoa_currency: "₱",
+      village_logo: "",
       total_houses_available: "100",
       hoa_address: "",
       hoa_tin_number: "",
@@ -61,8 +63,9 @@ export async function GET() {
       success: true,
       settings: {
         monthly_dues_amount: "100.00",
-        hoa_name: "St. Joseph Village 6 Phase 4 HOA",
+        hoa_name: "Residential Masterlist",
         hoa_currency: "₱",
+        village_logo: "",
         total_houses_available: "100",
         hoa_address: "",
         hoa_tin_number: "",

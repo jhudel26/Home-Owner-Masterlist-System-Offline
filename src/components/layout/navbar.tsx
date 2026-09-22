@@ -32,7 +32,7 @@ export function Navbar() {
         <span className="text-slate-300 dark:text-slate-700">&bull;</span>
         <div className="inline-flex items-center gap-2 text-sm font-semibold text-emerald-800 dark:text-emerald-300 bg-emerald-50/90 dark:bg-emerald-950/60 px-3.5 py-1.5 rounded-full border border-emerald-200/90 dark:border-emerald-800/70 shadow-xs">
           <Shield className="h-4 w-4 text-emerald-600 dark:text-emerald-400 shrink-0" />
-          <span>St. Joseph Village 6 Phase 4 HOA</span>
+          <span>Residential Masterlist</span>
         </div>
       </div>
 

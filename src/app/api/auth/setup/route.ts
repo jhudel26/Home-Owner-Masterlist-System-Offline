@@ -2,16 +2,21 @@ import { NextResponse, NextRequest } from "next/server";
 import { randomUUID } from "crypto";
 import { dbExecute, dbQuery } from "@/lib/db/mysql";
 import { hashPassword } from "@/lib/auth/local-auth";
+import { saveUploadedFile } from "@/lib/file-upload";
 
 export const dynamic = "force-dynamic";
 
 export async function POST(request: NextRequest) {
   try {
-    const body = await request.json();
-    const { full_name, email, password } = body;
+    const formData = await request.formData();
+    const villageName = formData.get("village_name") as string;
+    const fullName = formData.get("full_name") as string;
+    const email = formData.get("email") as string;
+    const password = formData.get("password") as string;
+    const villageLogo = formData.get("village_logo") as File | null;
 
     // Validate input
-    if (!full_name || !email || !password) {
+    if (!villageName || !fullName || !email || !password) {
       return NextResponse.json({ error: "Missing required fields" }, { status: 400 });
     }
 
@@ -32,6 +37,25 @@ export async function POST(request: NextRequest) {
     const existingEmail = await dbQuery<any>("SELECT id FROM profiles WHERE email = ?", [email]);
     if (existingEmail && (Array.isArray(existingEmail) ? existingEmail.length > 0 : existingEmail)) {
       return NextResponse.json({ error: "Email already registered" }, { status: 400 });
+    }
+
+    // Save village logo if provided
+    let logoPath = "";
+    if (villageLogo) {
+      logoPath = await saveUploadedFile(villageLogo);
+    }
+
+    // Save village settings to system_settings
+    await dbExecute(
+      "INSERT INTO system_settings (setting_key, setting_value) VALUES (?, ?) ON DUPLICATE KEY UPDATE setting_value = VALUES(setting_value)",
+      ["hoa_name", villageName.trim()]
+    );
+
+    if (logoPath) {
+      await dbExecute(
+        "INSERT INTO system_settings (setting_key, setting_value) VALUES (?, ?) ON DUPLICATE KEY UPDATE setting_value = VALUES(setting_value)",
+        ["village_logo", logoPath]
+      );
     }
 
     // Hash password
@@ -55,22 +79,22 @@ export async function POST(request: NextRequest) {
 
     await dbExecute(
       `INSERT INTO profiles (id, full_name, email, password_hash, role, permissions, status) VALUES (?, ?, ?, ?, ?, ?, ?)`,
-      [adminId, full_name.trim(), email.trim().toLowerCase(), passwordHash, 'super_admin', permissions, 'Active']
+      [adminId, fullName.trim(), email.trim().toLowerCase(), passwordHash, 'super_admin', permissions, 'Active']
     );
 
     // Log the setup activity
     const activityId = randomUUID();
     await dbExecute(
       "INSERT INTO activity_logs (id, user_id, user_name, action, details) VALUES (?, ?, ?, ?, ?)",
-      [activityId, adminId, full_name, "SYSTEM_SETUP", JSON.stringify({ action: "Initial admin account created" })]
+      [activityId, adminId, fullName, "SYSTEM_SETUP", JSON.stringify({ action: "Initial admin account created", village_name: villageName, has_logo: !!logoPath })]
     );
 
     return NextResponse.json({ 
       success: true,
-      message: "Admin account created successfully"
+      message: "Admin account and village settings created successfully"
     });
   } catch (error) {
     console.error("Setup error:", error);
-    return NextResponse.json({ error: "Failed to create admin account" }, { status: 500 });
+    return NextResponse.json({ error: "Failed to create admin account or save village settings" }, { status: 500 });
   }
 }

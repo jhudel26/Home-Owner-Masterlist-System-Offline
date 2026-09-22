@@ -253,7 +253,7 @@ export function HomeownerDetailsModal({
       isOpen={isOpen}
       onClose={onClose}
       title="Homeowner Resident Record"
-      description="Official St. Joseph Village 6 Phase 4 residential record"
+      description="Official residential record"
       icon={
         <div className="h-11 w-11 rounded-xl bg-white dark:bg-[#0e192d] p-1 border border-slate-200/80 dark:border-white/10 shadow-xs flex items-center justify-center shrink-0">
           <Image
@@ -336,7 +336,7 @@ export function HomeownerDetailsModal({
                 <p className="text-sm font-bold text-slate-900 dark:text-slate-100 font-mono">
                   {homeowner.hoa_number || "Pending Assignment"}
                 </p>
-                <p className="text-xs text-slate-400 dark:text-slate-500 mt-0.5">Phase 4 Official ID</p>
+                <p className="text-xs text-slate-400 dark:text-slate-500 mt-0.5">Official ID</p>
               </div>
 
               <div className="p-3.5 rounded-xl border border-slate-200/80 dark:border-[#1e2f4d] bg-slate-50/50 dark:bg-[#0a1526]">

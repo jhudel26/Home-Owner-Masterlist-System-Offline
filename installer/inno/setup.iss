@@ -12,7 +12,7 @@
 ; ============================================================================
 
 #define AppName        "Residential Masterlist"
-#define AppVersion     "1.1.0"
+#define AppVersion     "1.2.0"
 #define AppPublisher   "Eru Studio"
 #define AppURL         "http://127.0.0.1:3000"
 #define AppExeName     "launcher.exe"
@@ -29,7 +29,7 @@ AppPublisherURL={#AppURL}
 AppCopyright=Copyright (C) Eru Studio
 VersionInfoCompany=Eru Studio
 VersionInfoDescription=Residential Masterlist Setup
-VersionInfoVersion=1.1.0.0
+VersionInfoVersion=1.2.0.0
 VersionInfoCopyright=Copyright (C) Eru Studio
 VersionInfoProductName=Residential Masterlist
 DefaultDirName={autopf}\{#AppName}

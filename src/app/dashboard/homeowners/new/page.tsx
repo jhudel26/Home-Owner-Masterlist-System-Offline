@@ -35,7 +35,7 @@ export default function NewHomeownerPage() {
     <div className="space-y-6">
       <PageHeader
         title="Register New Homeowner"
-        description="Add a new resident or property owner to St. Joseph Village 6 Phase 4 records"
+        description="Add a new resident or property owner to the records"
       />
 
       <HomeownerForm onSubmit={handleSubmit} />

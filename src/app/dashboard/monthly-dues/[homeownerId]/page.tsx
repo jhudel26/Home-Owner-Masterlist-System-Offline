@@ -503,7 +503,7 @@ export default function HomeownerDuesDetailPage() {
               Association
             </span>
             <span className="text-xs font-extrabold text-slate-800 dark:text-slate-200 block">
-              St. Joseph Village 6 Phase 4
+              Residential Masterlist
             </span>
           </div>
         </div>

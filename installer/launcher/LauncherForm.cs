@@ -680,7 +680,7 @@ namespace ResidentialMasterlist.Launcher
 
             // ── TOP HEADER ────────────────────────────────────────────────────
             Label tagPill = new Label();
-            tagPill.Text = "ST. JOSEPH VILLAGE 6 PHASE 4 • OFFICIAL HOA REGISTRY";
+            tagPill.Text = "HOA • OFFICIAL REGISTRY";
             tagPill.Font = new Font("Segoe UI", 7.5F, FontStyle.Bold);
             tagPill.ForeColor = Color.FromArgb(45, 212, 191);
             tagPill.BackColor = Color.Transparent;

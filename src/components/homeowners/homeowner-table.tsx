@@ -440,7 +440,7 @@ export function HomeownerTable({ homeowners }: HomeownerTableProps) {
                     className="py-3.5 px-4 cursor-pointer hover:bg-slate-100 dark:hover:bg-[#13233d] transition-colors select-none hidden sm:table-cell"
                   >
                     <div className="flex items-center gap-1.5">
-                      <span>Phase 4 Address</span>
+                      <span>Address</span>
                       <ArrowUpDown className="h-3 w-3 text-slate-400" />
                     </div>
                   </th>

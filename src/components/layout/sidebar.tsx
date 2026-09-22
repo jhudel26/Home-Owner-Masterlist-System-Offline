@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { usePathname } from "next/navigation";
@@ -23,11 +23,27 @@ import {
 import { useApp } from "@/context/app-context";
 import { hasPermission } from "@/lib/permissions";
 import { ThemeToggle } from "./theme-toggle";
+import { getVillageSettingsClient } from "@/lib/village-settings-client";
 
 export function Sidebar({ onNavigate }: { onNavigate?: () => void }) {
   const pathname = usePathname();
   const { currentUser, logout } = useApp();
   const [mobileOpen, setMobileOpen] = useState(false);
+  const [villageName, setVillageName] = useState("Residential Masterlist");
+  const [villageLogo, setVillageLogo] = useState("/icon.png");
+
+  useEffect(() => {
+    const loadSettings = async () => {
+      const settings = await getVillageSettingsClient();
+      if (settings.hoa_name) {
+        setVillageName(settings.hoa_name);
+      }
+      if (settings.village_logo) {
+        setVillageLogo(settings.village_logo);
+      }
+    };
+    loadSettings();
+  }, []);
 
   const canViewDashboard = hasPermission(currentUser, "can_view_dashboard_stats");
   const canViewHomeowners = hasPermission(currentUser, "can_view_homeowner");
@@ -107,8 +123,8 @@ export function Sidebar({ onNavigate }: { onNavigate?: () => void }) {
         <div className="flex items-center gap-4 px-6 py-6 border-b border-slate-200/90 dark:border-white/10 bg-slate-50/70 dark:bg-[#050a14]/60">
           <div className="relative flex h-12 w-12 items-center justify-center rounded-2xl bg-white dark:bg-[#0e192d] shadow-md border border-slate-200/80 dark:border-white/10 shrink-0 p-1 overflow-hidden">
             <Image
-              src="/icon.png"
-              alt="St. Joseph Village 6 Phase 4 Logo"
+              src={villageLogo}
+              alt="Village Logo"
               width={48}
               height={48}
               className="h-full w-full object-contain"
@@ -116,11 +132,11 @@ export function Sidebar({ onNavigate }: { onNavigate?: () => void }) {
             />
           </div>
           <div className="flex flex-col min-w-0">
-            <h2 className="text-base font-bold text-slate-900 dark:text-white leading-tight font-sans truncate">
-              St. Joseph Village 6
+            <h2 className="text-base font-bold text-slate-900 dark:text-white leading-tight font-sans whitespace-normal">
+              {villageName}
             </h2>
             <span className="text-xs font-semibold text-emerald-600 dark:text-emerald-400 mt-0.5">
-              Phase 4 Masterlist
+              Masterlist
             </span>
             <span className="text-[11px] font-medium text-slate-500 dark:text-slate-400">
               Homeowners Association
@@ -239,10 +255,10 @@ export function Sidebar({ onNavigate }: { onNavigate?: () => void }) {
             />
           </div>
           <div>
-            <span className="font-bold text-sm text-slate-900 dark:text-white block">
-              St. Joseph Village 6
+            <span className="font-bold text-sm text-slate-900 dark:text-white block whitespace-normal">
+              {villageName}
             </span>
-            <span className="text-xs text-emerald-600 dark:text-emerald-400 font-semibold">Phase 4 Masterlist</span>
+            <span className="text-xs text-emerald-600 dark:text-emerald-400 font-semibold">Masterlist</span>
           </div>
         </div>
         <div className="flex items-center gap-2.5">

@@ -260,7 +260,7 @@ export function HomeownerForm({ initialData, onSubmit, isEditing = false }: Home
       if (res.success) {
         success(
           isEditing ? "Homeowner Updated" : "Homeowner Registered",
-          `${firstName} ${lastName} is successfully saved to the St. Joseph Village 6 Phase 4 records.`
+          `${firstName} ${lastName} is successfully saved to the records.`
         );
         router.push("/dashboard/homeowners");
       } else {
@@ -329,7 +329,7 @@ export function HomeownerForm({ initialData, onSubmit, isEditing = false }: Home
     if (blockNumber && lotNumber) {
       address += "Blk " + blockNumber + " Lot " + lotNumber + ", ";
     }
-    address += "Phase 4 Joseph Village 6";
+    address += "Joseph Village 6";
     if (barangay) {
       address += ", " + barangay;
     }
@@ -399,7 +399,7 @@ export function HomeownerForm({ initialData, onSubmit, isEditing = false }: Home
                 1. Head of Household / Principal Registrant
               </h3>
               <p className="text-xs text-slate-500 dark:text-slate-400">
-                Primary titleholder or lessee details residing in Phase 4
+                Primary titleholder or lessee details
               </p>
             </div>
           </div>
@@ -611,12 +611,12 @@ export function HomeownerForm({ initialData, onSubmit, isEditing = false }: Home
           </div>
         </div>
 
-        {/* Phase 4 Address Quick Builder */}
+        {/* Address Quick Builder */}
         <div className="md:col-span-2 p-4 rounded-2xl bg-emerald-50/40 dark:bg-emerald-950/30 border border-emerald-200/70 dark:border-emerald-800/60 space-y-3">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-2 text-xs font-bold text-emerald-900 dark:text-emerald-200 uppercase tracking-wider">
               <MapPin className="h-4 w-4 text-emerald-600 dark:text-emerald-400" />
-              <span>Phase 4 Address Quick Builder</span>
+              <span>Address Quick Builder</span>
             </div>
             <span className="text-[10px] text-emerald-600 dark:text-emerald-400 font-medium">Format: Home #, Blk, Lot, Brgy</span>
           </div>
@@ -677,11 +677,11 @@ export function HomeownerForm({ initialData, onSubmit, isEditing = false }: Home
           <Input
             label="Official Subdivision Address"
             required
-            placeholder="e.g. St. Joseph Village 6 Phase 4"
+            placeholder="e.g. Joseph Village 6"
             value={streetName}
             onChange={(e) => setStreetName(e.target.value)}
             error={errors.streetName}
-            helperText="Format: Home # (if available), Blk Lot, Phase 4 Joseph Village 6 Brgy, Cabuyao, Laguna"
+            helperText="Format: Home # (if available), Blk Lot, Joseph Village 6 Brgy, Cabuyao, Laguna"
           />
         </div>
 

@@ -31,7 +31,7 @@ export function BulkImportModal({ isOpen, onClose }: BulkImportModalProps) {
   const handleDownloadTemplate = async () => {
     try {
       const workbook = new ExcelJS.Workbook();
-      workbook.creator = "St. Joseph Village 6 Phase 4 HOA";
+      workbook.creator = "Residential Masterlist";
       workbook.created = new Date();
 
       const worksheet = workbook.addWorksheet("Homeowners Import Template", {
@@ -41,7 +41,7 @@ export function BulkImportModal({ isOpen, onClose }: BulkImportModalProps) {
       // Title Banner
       worksheet.mergeCells("A1:W1");
       const titleCell = worksheet.getCell("A1");
-      titleCell.value = "ST. JOSEPH VILLAGE 6 PHASE 4 — HOMEOWNERS IMPORT TEMPLATE";
+      titleCell.value = "RESIDENTIAL MASTERLIST — HOMEOWNERS IMPORT TEMPLATE";
       titleCell.font = { name: "Arial", size: 12, bold: true, color: { argb: "FFFFFFFF" } };
       titleCell.fill = {
         type: "pattern",
@@ -105,7 +105,7 @@ export function BulkImportModal({ isOpen, onClose }: BulkImportModalProps) {
           "12A",
           "12",
           "5",
-          "Phase 4 Joseph Village 6",
+          "Joseph Village 6",
           "Timalan",
           "0917-123-4567",
           "juan@example.com",
@@ -130,7 +130,7 @@ export function BulkImportModal({ isOpen, onClose }: BulkImportModalProps) {
           "8B",
           "8",
           "14",
-          "Phase 4 Joseph Village 6",
+          "Joseph Village 6",
           "Timalan",
           "0918-987-6543",
           "elena.reyes@example.com",

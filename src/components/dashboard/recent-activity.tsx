@@ -136,7 +136,7 @@ export function RecentActivity({ logs, fullPage = false }: RecentActivityProps) 
     }
 
     const hoName = details?.name || details?.full_name || "a homeowner";
-    const hoAddress = details?.address || details?.street_name || "Phase 4";
+    const hoAddress = details?.address || details?.street_name || "Residential Masterlist";
 
     switch (log.action) {
       case "CREATED_HOMEOWNER":

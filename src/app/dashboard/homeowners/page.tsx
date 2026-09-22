@@ -27,7 +27,7 @@ export default function HomeownersPage() {
     <div className="space-y-6">
       <PageHeader
         title="Homeowners Masterlist Registry"
-        description="Official residential census and member directory of St. Joseph Village 6 Phase 4"
+        description="Official residential census and member directory"
       />
 
       <HomeownerTable homeowners={homeowners} />
